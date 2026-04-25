@@ -10,6 +10,13 @@ const COMPOSITIONS = [
     icon: "🎵",
   },
   {
+    id: "FutureOfDesign",
+    title: "Future of Design",
+    description: "Physics-based typography animation with blur and glow effects.",
+    color: "#0f172a",
+    icon: "✨",
+  },
+  {
     id: "ComingSoon1",
     title: "Cinematic Titles",
     description: "Dynamic text animations with cinematic lighting effects.",
