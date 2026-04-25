@@ -1,38 +1,46 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import React from "react";
+import { z } from "zod";
+import { zColor } from "@remotion/zod-types";
 
-export const SCENE_PARAMS = {
-  // Text content
-  smallText: { type: "text", label: "Small Text", value: "the" },
-  mainText: { type: "text", label: "Main Text", value: "future" },
-  subText: { type: "text", label: "Sub Text", value: "of design" },
-  
-  // Colors
-  textColor: { type: "color", label: "Text Color", value: "#FFFFFF" },
-  glowColor: { type: "color", label: "Glow Color", value: "#FFFFFF" },
-  backgroundColor: { type: "color", label: "Background", value: "#0f172a" },
-  
-  // Transform
-  scale: { type: "number", label: "Scale", value: 1.45, min: 0.5, max: 2, step: 0.05 },
-  
-  // Animation
-  animationSpeed: { type: "number", label: "Animation Speed", value: 0.6, min: 0.5, max: 2, step: 0.1 },
-  blurAmount: { type: "number", label: "Initial Blur", value: 30, min: 0, max: 50, step: 5 },
-  slideDistance: { type: "number", label: "Slide Distance", value: 400, min: 50, max: 400, step: 25 },
-  glowIntensity: { type: "number", label: "Glow Intensity", value: 6, min: 0, max: 10, step: 1 },
-  
-  // Style
-  letterSpacing: { type: "number", label: "Letter Spacing", value: -2, min: -20, max: 10, step: 2 },
+export const futureOfDesignSchema = z.object({
+  smallText: z.string(),
+  mainText: z.string(),
+  subText: z.string(),
+  textColor: zColor(),
+  glowColor: zColor(),
+  backgroundColor: zColor(),
+  scale: z.number().min(0.5).max(2).step(0.05),
+  animationSpeed: z.number().min(0.5).max(2).step(0.1),
+  blurAmount: z.number().min(0).max(50).step(5),
+  slideDistance: z.number().min(50).max(400).step(25),
+  glowIntensity: z.number().min(0).max(10).step(1),
+  letterSpacing: z.number().min(-20).max(10).step(2),
+});
+
+export const defaultFutureOfDesignProps: z.infer<typeof futureOfDesignSchema> = {
+  smallText: "the",
+  mainText: "future",
+  subText: "of design",
+  textColor: "#FFFFFF",
+  glowColor: "#FFFFFF",
+  backgroundColor: "#0f172a",
+  scale: 1.45,
+  animationSpeed: 0.6,
+  blurAmount: 30,
+  slideDistance: 400,
+  glowIntensity: 6,
+  letterSpacing: -2,
 };
 
-export const Scene: React.FC = () => {
+export const Scene: React.FC<z.infer<typeof futureOfDesignSchema>> = (props) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = props.animationSpeed;
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = props.scale;
   
   // Main "future" text — blur + slide from left
   const mainProgress = spring({
@@ -41,8 +49,8 @@ export const Scene: React.FC = () => {
     config: { damping: 22, stiffness: 70 },
   });
   
-  const mainX      = interpolate(mainProgress, [0, 1], [-SCENE_PARAMS.slideDistance.value, 0]);
-  const mainBlur   = interpolate(mainProgress, [0, 0.6, 1], [SCENE_PARAMS.blurAmount.value, 5, 0]);
+  const mainX      = interpolate(mainProgress, [0, 1], [-props.slideDistance, 0]);
+  const mainBlur   = interpolate(mainProgress, [0, 0.6, 1], [props.blurAmount, 5, 0]);
   const mainOpacity = interpolate(mainProgress, [0, 0.3, 1], [0, 0.8, 1]);
   
   // Secondary text ("the" + "of design") — delayed fade/slide
@@ -59,7 +67,7 @@ export const Scene: React.FC = () => {
     <AbsoluteFill style={{
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: props.backgroundColor,
     }}>
       <div style={{
         transform: `scale(${scaleValue})`,
@@ -73,7 +81,7 @@ export const Scene: React.FC = () => {
           {/* Small "the" — floats above the "u" in "future" */}
           <div style={{
             position: "absolute",
-            color: SCENE_PARAMS.textColor.value,
+            color: props.textColor,
             fontSize: minDim * 0.055,
             fontFamily: "system-ui, -apple-system, sans-serif",
             fontWeight: 400,
@@ -84,30 +92,30 @@ export const Scene: React.FC = () => {
             left: "50%",
             marginLeft: minDim * -0.11,
           }}>
-            {SCENE_PARAMS.smallText.value}
+            {props.smallText}
           </div>
 
           {/* Main "future" — italic serif, blur + slide in from left */}
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: props.textColor,
             fontSize: minDim * 0.18,
             fontFamily: "Georgia, serif",
             fontWeight: 400,
             fontStyle: "italic",
             margin: 0,
-            letterSpacing: `${SCENE_PARAMS.letterSpacing.value}px`,
+            letterSpacing: `${props.letterSpacing}px`,
             opacity: mainOpacity,
             transform: `translateX(${mainX}px)`,
-            filter: `blur(${mainBlur}px) drop-shadow(0 0 ${SCENE_PARAMS.glowIntensity.value}px ${SCENE_PARAMS.glowColor.value})`,
-            textShadow: `0 0 ${SCENE_PARAMS.glowIntensity.value * 0.5}px ${SCENE_PARAMS.glowColor.value}`,
+            filter: `blur(${mainBlur}px) drop-shadow(0 0 ${props.glowIntensity}px ${props.glowColor})`,
+            textShadow: `0 0 ${props.glowIntensity * 0.5}px ${props.glowColor}`,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.mainText.value}
+            {props.mainText}
           </h1>
 
           {/* Sub text "of design" — slides up from below */}
           <div style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: props.textColor,
             fontSize: minDim * 0.042,
             fontFamily: "system-ui, -apple-system, sans-serif",
             fontWeight: 600,
@@ -117,7 +125,7 @@ export const Scene: React.FC = () => {
             letterSpacing: minDim * 0.008,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.subText.value}
+            {props.subText}
           </div>
 
         </div>

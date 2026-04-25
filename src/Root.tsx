@@ -1,8 +1,8 @@
 import "./index.css";
 import { Composition } from "remotion";
-import { Scene as SpotifyPlayer } from "./compositions/SpotifyPlayer";
+import { Scene as SpotifyPlayer, spotifyPlayerSchema, defaultSpotifyPlayerProps } from "./compositions/SpotifyPlayer";
 import { Home } from "./compositions/Gallery";
-import { Scene as FutureOfDesign } from "./compositions/FutureOfDesign";
+import { Scene as FutureOfDesign, futureOfDesignSchema, defaultFutureOfDesignProps } from "./compositions/FutureOfDesign";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Home"
         component={Home}
-        durationInFrames={150}
+        durationInFrames={300}
         fps={30}
         width={1080}
         height={1920}
@@ -22,6 +22,8 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1080}
         height={1920}
+        schema={spotifyPlayerSchema}
+        defaultProps={defaultSpotifyPlayerProps}
       />
       <Composition
         id="FutureOfDesign"
@@ -30,6 +32,8 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1080}
         height={1920}
+        schema={futureOfDesignSchema}
+        defaultProps={defaultFutureOfDesignProps}
       />
     </>
   );
