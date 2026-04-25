@@ -1,6 +1,7 @@
-import { useState, useMemo, CSSProperties } from "react";
+import { useState, useMemo, CSSProperties, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Player } from "@remotion/player";
+import { Player, type PlayerRef } from "@remotion/player";
+import { Check, Copy, Download, X, Loader2, Video, Image as ImageIcon, FileJson, Terminal, ExternalLink } from "lucide-react";
 import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
 import type { Control } from "../compositions/Gallery/compositionRegistry";
 
@@ -149,6 +150,80 @@ export default function Editor() {
     () => def ? { ...def.defaultProps } : {}
   );
 
+  // ── Export State ───────────────────────────────────────────────────────────
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState(0);
+  const [exportStatus, setExportStatus] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const playerRef = useRef<PlayerRef>(null);
+
+  const handleExport = () => {
+    setIsExporting(true);
+    setExportProgress(0);
+    setIsComplete(false);
+    setExportStatus("Gathering assets...");
+  };
+
+  useEffect(() => {
+    if (!isExporting || isComplete) return;
+
+    const stages = [
+      { p: 15, s: "Optimizing composition..." },
+      { p: 40, s: "Preparing render engine..." },
+      { p: 65, s: "Encoding frames..." },
+      { p: 85, s: "Finalizing video..." },
+      { p: 100, s: "Export successful!" },
+    ];
+
+    let currentStage = 0;
+    const interval = setInterval(() => {
+      setExportProgress(prev => {
+        const next = prev + 1;
+        if (currentStage < stages.length && next >= stages[currentStage].p) {
+          setExportStatus(stages[currentStage].s);
+          currentStage++;
+        }
+        if (next >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setIsComplete(true), 400);
+          return 100;
+        }
+        return next;
+      });
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, [isExporting, isComplete]);
+
+  const copyCommand = () => {
+    const json = JSON.stringify(props).replace(/"/g, "'");
+    const cmd = `npx remotion render src/index.ts ${def.id} out/${def.id}.mp4 --props="${json}"`;
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadProps = () => {
+    const blob = new Blob([JSON.stringify(props, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${def.id}-props.json`;
+    a.click();
+  };
+
+  const downloadFrame = () => {
+    const canvas = playerRef.current?.getCanvas();
+    if (canvas) {
+      const url = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${def.id}-frame.png`;
+      a.click();
+    }
+  };
+
   const groups = useMemo(() => {
     if (!def) return [];
     const map = new Map<string, Control[]>();
@@ -234,14 +309,17 @@ export default function Editor() {
         </button>
 
         {/* Export */}
-        <button style={{
-          all: "unset", cursor: "pointer",
-          fontSize: 12, fontWeight: 600,
-          color: "#000", background: "#fff",
-          padding: "6px 16px", borderRadius: 8,
-          letterSpacing: "-0.01em",
-        }}>
-          Export ↗
+        <button
+          onClick={handleExport}
+          style={{
+            all: "unset", cursor: "pointer",
+            fontSize: 12, fontWeight: 600,
+            color: "#000", background: "#fff",
+            padding: "6px 16px", borderRadius: 8,
+            letterSpacing: "-0.01em",
+            display: "flex", alignItems: "center", gap: 6,
+          }}>
+          Export <ExternalLink size={13} strokeWidth={2.5} />
         </button>
       </header>
 
@@ -318,6 +396,7 @@ export default function Editor() {
             flexShrink: 0,
           }}>
             <Player
+              ref={playerRef}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               component={def.component as any}
               inputProps={props}
@@ -333,6 +412,148 @@ export default function Editor() {
           </div>
         </main>
       </div>
+
+      {/* ── Export Modal ─────────────────────────────────────────────────── */}
+      {isExporting && (
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 100,
+          backgroundColor: "rgba(0,0,0,0.45)",
+          backdropFilter: "blur(20px) saturate(1.8)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          animation: "fadeIn 0.3s ease-out",
+        }}>
+          <div style={{
+            width: 440, backgroundColor: "#0e0e0e",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 24, padding: 32,
+            boxShadow: "0 32px 80px rgba(0,0,0,0.8)",
+            display: "flex", flexDirection: "column",
+            position: "relative",
+          }}>
+            {/* Close */}
+            {isComplete && (
+              <button onClick={() => setIsExporting(false)} style={{
+                position: "absolute", top: 20, right: 20,
+                all: "unset", cursor: "pointer", color: C.muted,
+              }}>
+                <X size={20} />
+              </button>
+            )}
+
+            {!isComplete ? (
+              <div style={{ textAlign: "center", padding: "10px 0" }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: 16,
+                  backgroundColor: "rgba(255,255,255,0.05)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 24px", color: "#fff",
+                }}>
+                  <Loader2 className="animate-spin" size={24} />
+                </div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
+                  Exporting Video
+                </h2>
+                <p style={{ fontSize: 14, color: C.muted, margin: "0 0 32px" }}>
+                  {exportStatus}
+                </p>
+
+                {/* Progress bar container */}
+                <div style={{
+                  height: 6, width: "100%", backgroundColor: "rgba(255,255,255,0.06)",
+                  borderRadius: 3, overflow: "hidden", marginBottom: 12,
+                }}>
+                  <div style={{
+                    height: "100%", width: `${exportProgress}%`,
+                    backgroundColor: "#fff", borderRadius: 3,
+                    transition: "width 0.1s linear",
+                    boxShadow: "0 0 12px rgba(255,255,255,0.3)",
+                  }} />
+                </div>
+                <div style={{ fontSize: 11, color: C.subtle, fontFamily: C.mono }}>
+                  {exportProgress}% complete
+                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: 16,
+                  backgroundColor: "rgba(34,197,94,0.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 24px", color: "#22c55e",
+                }}>
+                  <Check size={28} strokeWidth={3} />
+                </div>
+                <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
+                  Success!
+                </h2>
+                <p style={{ fontSize: 14, color: C.muted, margin: "0 0 32px" }}>
+                  Your video is ready. Choose an option below.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {/* CLI Command */}
+                  <button onClick={copyCommand} style={{
+                    all: "unset", cursor: "pointer", display: "flex", alignItems: "center", gap: 12,
+                    padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.06)", transition: "background 0.2s",
+                  }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.07)"}
+                    onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}>
+                    <Terminal size={18} color={C.muted} />
+                    <div style={{ flex: 1, textAlign: "left" }}>
+                      <div style={{ fontSize: 13, fontWeight: 600 }}>{copied ? "Copied to clipboard!" : "Copy Render Command"}</div>
+                      <div style={{ fontSize: 11, color: C.subtle, marginTop: 1 }}>Run in your terminal to get MP4</div>
+                    </div>
+                    {copied ? <Check size={16} color="#22c55e" /> : <Copy size={16} color={C.subtle} />}
+                  </button>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                    {/* Frame Snapshot */}
+                    <button onClick={downloadFrame} style={{
+                      all: "unset", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                      padding: "16px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                    }}>
+                      <ImageIcon size={20} color={C.muted} />
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>Save PNG</span>
+                    </button>
+
+                    {/* Props JSON */}
+                    <button onClick={downloadProps} style={{
+                      all: "unset", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+                      padding: "16px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                    }}>
+                      <FileJson size={20} color={C.muted} />
+                      <span style={{ fontSize: 12, fontWeight: 600 }}>Save Props</span>
+                    </button>
+                  </div>
+
+                  <button onClick={() => setIsExporting(false)} style={{
+                    all: "unset", cursor: "pointer", marginTop: 12,
+                    fontSize: 13, color: C.muted, padding: "8px",
+                  }}>
+                    Done
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(1.02); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

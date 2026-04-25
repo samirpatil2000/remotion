@@ -1,4 +1,8 @@
-import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img, Audio, Sequence } from "remotion";
+// Template: motivational
+// Description: No description available
+// Scene: Scene 3
+
+import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img, Audio, Sequence, Loop, OffthreadVideo } from "remotion";
 import React from "react";
 
 const SCENE_PARAMS = {

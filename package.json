@@ -37,6 +37,7 @@
     "build": "remotion bundle",
     "build:web": "vite build",
     "upgrade": "remotion upgrade",
+    "render": "remotion render src/index.ts",
     "lint": "eslint src && tsc"
   },
   "sideEffects": [

@@ -1,0 +1,1257 @@
+import { Scene as N3dCubeScene } from "../Swishy/3d-cube/Scene";
+import { Scene as AstoryabouttheworldScene } from "../Swishy/AStoryAboutTheWorld/Scene";
+import { Scene as AdSpendScene } from "../Swishy/ad-spend/Scene";
+import { Scene as AnimatedBlobScene } from "../Swishy/animated-blob/Scene";
+import { Scene as AppVideoShowcaseScene } from "../Swishy/app-video-showcase/Scene";
+import { Scene as AppleStyle30SecCounter1Scene } from "../Swishy/apple-style-30-sec-counter-1/Scene";
+import { Scene as BouncingImageScene } from "../Swishy/bouncing-image/Scene";
+import { Scene as CharmingLettingScene } from "../Swishy/charming-letting/Scene";
+import { Scene as ConcertAnimationScene } from "../Swishy/concert-animation/Scene";
+import { Scene as CreateScene } from "../Swishy/create/Scene";
+import { Scene as ExplainerSpheresScene } from "../Swishy/explainer-spheres/Scene";
+import { Scene as FolderGallery1Scene } from "../Swishy/folder-gallery-1/Scene";
+import { Scene as FunnelTextAnimationScene } from "../Swishy/funnel-text-animation/Scene";
+import { Scene as GenerateAiVoiceAnimationScene } from "../Swishy/generate-ai-voice-animation/Scene";
+import { Scene as GithubStarComparisonScene } from "../Swishy/github-star-comparison/Scene";
+import { Scene as GithubStars1Scene } from "../Swishy/github-stars-1/Scene";
+import { Scene as GravityThoughtScene } from "../Swishy/gravity-thought/Scene";
+import { Scene as HeartCrushButtonScene } from "../Swishy/heart-crush-button/Scene";
+import { Scene as IWantASmoothAnimationWhereTheTextWith2LiScene } from "../Swishy/i-want-a-smooth-animation-where-the-text-with-2-li/Scene";
+import { Scene as ImageShuffle1Scene } from "../Swishy/image-shuffle-1/Scene";
+import { Scene as InstagramProfileScene } from "../Swishy/instagram-profile/Scene";
+import { Scene as InstagramUpdateNotificationAnimationScene } from "../Swishy/instagram-update-notification-animation/Scene";
+import { Scene as InteractivePixelArtWavesScene } from "../Swishy/interactive-pixel-art-waves/Scene";
+import { Scene as JanuaryScene } from "../Swishy/january/Scene";
+import { Scene as LikeScene } from "../Swishy/like/Scene";
+import { Scene as ListOfThingsScene } from "../Swishy/list-of-things/Scene";
+import { Scene as LoadingScene } from "../Swishy/loading/Scene";
+import { Scene as LogoCodeScene } from "../Swishy/logo-code/Scene";
+import { Scene as LogoReveal1Scene } from "../Swishy/logo-reveal-1/Scene";
+import { Scene as LogoSpinScene } from "../Swishy/logo-spin/Scene";
+import { Scene as MakeWithNotionScene } from "../Swishy/make-with-notion/Scene";
+import { Scene as MobileBookshelfScene } from "../Swishy/mobile-bookshelf/Scene";
+import { Scene as MoneyFallingScene } from "../Swishy/money-falling/Scene";
+import { Scene as MoneyyyyScene } from "../Swishy/moneyyyy/Scene";
+import { Scene as NewspaperAnimationScene } from "../Swishy/newspaper-animation/Scene";
+import { Scene as NightStreetMarketScene } from "../Swishy/night-street-market/Scene";
+import { Scene as NotepadScene } from "../Swishy/notepad/Scene";
+import { Scene as OutsidelandsPosterScene } from "../Swishy/outsidelands-poster/Scene";
+import { Scene as ParticleExplosionScene } from "../Swishy/particle-explosion/Scene";
+import { Scene as PhoneNotificationPopUpScene } from "../Swishy/phone-notification-pop-up/Scene";
+import { Scene as PhotoboothAnimation1Scene } from "../Swishy/photobooth-animation-1/Scene";
+import { Scene as PinsScene } from "../Swishy/pins/Scene";
+import { Scene as PopUpMessageBubbleScene } from "../Swishy/pop-up-message-bubble/Scene";
+import { Scene as PopulationScene } from "../Swishy/population/Scene";
+import { Scene as PremiereProAnimationScene } from "../Swishy/premiere-pro-animation/Scene";
+import { Scene as RetroPhoneScene } from "../Swishy/retro-phone/Scene";
+import { Scene as SaasSecurityScene } from "../Swishy/saas-security/Scene";
+import { Scene as ScatteredTextScene } from "../Swishy/scattered-text/Scene";
+import { Scene as ScienceClubScene } from "../Swishy/science-club/Scene";
+import { Scene as SimpleChartScene } from "../Swishy/simple-chart/Scene";
+import { Scene as SimpleTimelapseScene } from "../Swishy/simple-timelapse/Scene";
+import { Scene as SimpleTimelapse2Scene } from "../Swishy/simple-timelapse-2/Scene";
+import { Scene as SimulationTerminatedScene } from "../Swishy/simulation-terminated/Scene";
+import { Scene as SpillWordScene } from "../Swishy/spill-word/Scene";
+import { Scene as StickyNotesScene } from "../Swishy/sticky-notes/Scene";
+import { Scene as StickyNotesAnimationScene } from "../Swishy/sticky-notes-animation/Scene";
+import { Scene as TechYoutube1Scene } from "../Swishy/tech-youtube-1/Scene";
+import { Scene as TerminalShowcaseScene } from "../Swishy/terminal-showcase/Scene";
+import { Scene as ThinkingScene } from "../Swishy/thinking/Scene";
+import { Scene as TimelineScene } from "../Swishy/timeline/Scene";
+import { Scene as TypewriterScene } from "../Swishy/typewriter/Scene";
+import { Scene as WhatsappConvoScene } from "../Swishy/whatsapp-convo/Scene";
+import { Scene as WiggleTextScene } from "../Swishy/wiggle-text/Scene";
+import { Scene as WorkingOnAComputerScene } from "../Swishy/working-on-a-computer/Scene";
+import { Scene as WritingDiary1Scene } from "../Swishy/writing-diary-1/Scene";
+import { Scene as YearsRollingTextScene } from "../Swishy/years-rolling-text/Scene";
+
+// --- ENTRIES ---
+
+  {
+    id: "SwishyN3dCube",
+    title: "3d-cube",
+    description: "Swishy template",
+    color: "#ae80ec",
+    icon: "🎬",
+    component: N3dCubeScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyAstoryabouttheworld",
+    title: "AStoryAboutTheWorld",
+    description: "Swishy template",
+    color: "#a8c8b4",
+    icon: "🎬",
+    component: AstoryabouttheworldScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyAdSpend",
+    title: "ad-spend",
+    description: "Swishy template",
+    color: "#d444ad",
+    icon: "🎬",
+    component: AdSpendScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyAnimatedBlob",
+    title: "animated-blob",
+    description: "Swishy template",
+    color: "#4a604a",
+    icon: "🎬",
+    component: AnimatedBlobScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyAppVideoShowcase",
+    title: "app-video-showcase",
+    description: "Swishy template",
+    color: "#b56594",
+    icon: "🎬",
+    component: AppVideoShowcaseScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyAppleStyle30SecCounter1",
+    title: "apple-style-30-sec-counter-1",
+    description: "Swishy template",
+    color: "#0665e7",
+    icon: "🎬",
+    component: AppleStyle30SecCounter1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyBouncingImage",
+    title: "bouncing-image",
+    description: "Swishy template",
+    color: "#71093f",
+    icon: "🎬",
+    component: BouncingImageScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyCharmingLetting",
+    title: "charming-letting",
+    description: "Swishy template",
+    color: "#14e903",
+    icon: "🎬",
+    component: CharmingLettingScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyConcertAnimation",
+    title: "concert-animation",
+    description: "Swishy template",
+    color: "#a85223",
+    icon: "🎬",
+    component: ConcertAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyCreate",
+    title: "create",
+    description: "Swishy template",
+    color: "#45d0b7",
+    icon: "🎬",
+    component: CreateScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyExplainerSpheres",
+    title: "explainer-spheres",
+    description: "Swishy template",
+    color: "#2572b6",
+    icon: "🎬",
+    component: ExplainerSpheresScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyFolderGallery1",
+    title: "folder-gallery-1",
+    description: "Swishy template",
+    color: "#355e1e",
+    icon: "🎬",
+    component: FolderGallery1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyFunnelTextAnimation",
+    title: "funnel-text-animation",
+    description: "Swishy template",
+    color: "#56186e",
+    icon: "🎬",
+    component: FunnelTextAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyGenerateAiVoiceAnimation",
+    title: "generate-ai-voice-animation",
+    description: "Swishy template",
+    color: "#68b53a",
+    icon: "🎬",
+    component: GenerateAiVoiceAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyGithubStarComparison",
+    title: "github-star-comparison",
+    description: "Swishy template",
+    color: "#6f89c6",
+    icon: "🎬",
+    component: GithubStarComparisonScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyGithubStars1",
+    title: "github-stars-1",
+    description: "Swishy template",
+    color: "#c761b5",
+    icon: "🎬",
+    component: GithubStars1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyGravityThought",
+    title: "gravity-thought",
+    description: "Swishy template",
+    color: "#74170d",
+    icon: "🎬",
+    component: GravityThoughtScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyHeartCrushButton",
+    title: "heart-crush-button",
+    description: "Swishy template",
+    color: "#445064",
+    icon: "🎬",
+    component: HeartCrushButtonScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyIWantASmoothAnimationWhereTheTextWith2Li",
+    title: "i-want-a-smooth-animation-where-the-text-with-2-li",
+    description: "Swishy template",
+    color: "#692cb0",
+    icon: "🎬",
+    component: IWantASmoothAnimationWhereTheTextWith2LiScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyImageShuffle1",
+    title: "image-shuffle-1",
+    description: "Swishy template",
+    color: "#213185",
+    icon: "🎬",
+    component: ImageShuffle1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyInstagramProfile",
+    title: "instagram-profile",
+    description: "Swishy template",
+    color: "#636381",
+    icon: "🎬",
+    component: InstagramProfileScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyInstagramUpdateNotificationAnimation",
+    title: "instagram-update-notification-animation",
+    description: "Swishy template",
+    color: "#9e0184",
+    icon: "🎬",
+    component: InstagramUpdateNotificationAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyInteractivePixelArtWaves",
+    title: "interactive-pixel-art-waves",
+    description: "Swishy template",
+    color: "#e1a6cc",
+    icon: "🎬",
+    component: InteractivePixelArtWavesScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyJanuary",
+    title: "january",
+    description: "Swishy template",
+    color: "#6551cd",
+    icon: "🎬",
+    component: JanuaryScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyLike",
+    title: "like",
+    description: "Swishy template",
+    color: "#0f9baa",
+    icon: "🎬",
+    component: LikeScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyListOfThings",
+    title: "list-of-things",
+    description: "Swishy template",
+    color: "#f16ac6",
+    icon: "🎬",
+    component: ListOfThingsScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyLoading",
+    title: "loading",
+    description: "Swishy template",
+    color: "#41449a",
+    icon: "🎬",
+    component: LoadingScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyLogoCode",
+    title: "logo-code",
+    description: "Swishy template",
+    color: "#4d0241",
+    icon: "🎬",
+    component: LogoCodeScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyLogoReveal1",
+    title: "logo-reveal-1",
+    description: "Swishy template",
+    color: "#a0814b",
+    icon: "🎬",
+    component: LogoReveal1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyLogoSpin",
+    title: "logo-spin",
+    description: "Swishy template",
+    color: "#de1a1f",
+    icon: "🎬",
+    component: LogoSpinScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyMakeWithNotion",
+    title: "make-with-notion",
+    description: "Swishy template",
+    color: "#f4ec22",
+    icon: "🎬",
+    component: MakeWithNotionScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyMobileBookshelf",
+    title: "mobile-bookshelf",
+    description: "Swishy template",
+    color: "#b56893",
+    icon: "🎬",
+    component: MobileBookshelfScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyMoneyFalling",
+    title: "money-falling",
+    description: "Swishy template",
+    color: "#083248",
+    icon: "🎬",
+    component: MoneyFallingScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyMoneyyyy",
+    title: "moneyyyy",
+    description: "Swishy template",
+    color: "#e435ae",
+    icon: "🎬",
+    component: MoneyyyyScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyNewspaperAnimation",
+    title: "newspaper-animation",
+    description: "Swishy template",
+    color: "#dacf69",
+    icon: "🎬",
+    component: NewspaperAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyNightStreetMarket",
+    title: "night-street-market",
+    description: "Swishy template",
+    color: "#9feeb5",
+    icon: "🎬",
+    component: NightStreetMarketScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyNotepad",
+    title: "notepad",
+    description: "Swishy template",
+    color: "#175bd6",
+    icon: "🎬",
+    component: NotepadScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyOutsidelandsPoster",
+    title: "outsidelands-poster",
+    description: "Swishy template",
+    color: "#d9de7f",
+    icon: "🎬",
+    component: OutsidelandsPosterScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyParticleExplosion",
+    title: "particle-explosion",
+    description: "Swishy template",
+    color: "#5f8aeb",
+    icon: "🎬",
+    component: ParticleExplosionScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPhoneNotificationPopUp",
+    title: "phone-notification-pop-up",
+    description: "Swishy template",
+    color: "#9276a3",
+    icon: "🎬",
+    component: PhoneNotificationPopUpScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPhotoboothAnimation1",
+    title: "photobooth-animation-1",
+    description: "Swishy template",
+    color: "#66fe31",
+    icon: "🎬",
+    component: PhotoboothAnimation1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPins",
+    title: "pins",
+    description: "Swishy template",
+    color: "#94eb26",
+    icon: "🎬",
+    component: PinsScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPopUpMessageBubble",
+    title: "pop-up-message-bubble",
+    description: "Swishy template",
+    color: "#124d64",
+    icon: "🎬",
+    component: PopUpMessageBubbleScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPopulation",
+    title: "population",
+    description: "Swishy template",
+    color: "#b6ac8a",
+    icon: "🎬",
+    component: PopulationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyPremiereProAnimation",
+    title: "premiere-pro-animation",
+    description: "Swishy template",
+    color: "#ee693f",
+    icon: "🎬",
+    component: PremiereProAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyRetroPhone",
+    title: "retro-phone",
+    description: "Swishy template",
+    color: "#a50bb2",
+    icon: "🎬",
+    component: RetroPhoneScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySaasSecurity",
+    title: "saas-security",
+    description: "Swishy template",
+    color: "#1bb9e0",
+    icon: "🎬",
+    component: SaasSecurityScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyScatteredText",
+    title: "scattered-text",
+    description: "Swishy template",
+    color: "#707f20",
+    icon: "🎬",
+    component: ScatteredTextScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyScienceClub",
+    title: "science-club",
+    description: "Swishy template",
+    color: "#e1d488",
+    icon: "🎬",
+    component: ScienceClubScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySimpleChart",
+    title: "simple-chart",
+    description: "Swishy template",
+    color: "#e4467a",
+    icon: "🎬",
+    component: SimpleChartScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySimpleTimelapse",
+    title: "simple-timelapse",
+    description: "Swishy template",
+    color: "#ba78a9",
+    icon: "🎬",
+    component: SimpleTimelapseScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySimpleTimelapse2",
+    title: "simple-timelapse-2",
+    description: "Swishy template",
+    color: "#3f64e7",
+    icon: "🎬",
+    component: SimpleTimelapse2Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySimulationTerminated",
+    title: "simulation-terminated",
+    description: "Swishy template",
+    color: "#d96a5d",
+    icon: "🎬",
+    component: SimulationTerminatedScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishySpillWord",
+    title: "spill-word",
+    description: "Swishy template",
+    color: "#ea502f",
+    icon: "🎬",
+    component: SpillWordScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyStickyNotes",
+    title: "sticky-notes",
+    description: "Swishy template",
+    color: "#2d2fdd",
+    icon: "🎬",
+    component: StickyNotesScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyStickyNotesAnimation",
+    title: "sticky-notes-animation",
+    description: "Swishy template",
+    color: "#c18a1f",
+    icon: "🎬",
+    component: StickyNotesAnimationScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyTechYoutube1",
+    title: "tech-youtube-1",
+    description: "Swishy template",
+    color: "#b28e80",
+    icon: "🎬",
+    component: TechYoutube1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyTerminalShowcase",
+    title: "terminal-showcase",
+    description: "Swishy template",
+    color: "#4a8d7b",
+    icon: "🎬",
+    component: TerminalShowcaseScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyThinking",
+    title: "thinking",
+    description: "Swishy template",
+    color: "#0b2024",
+    icon: "🎬",
+    component: ThinkingScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyTimeline",
+    title: "timeline",
+    description: "Swishy template",
+    color: "#1a11cb",
+    icon: "🎬",
+    component: TimelineScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyTypewriter",
+    title: "typewriter",
+    description: "Swishy template",
+    color: "#db480f",
+    icon: "🎬",
+    component: TypewriterScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyWhatsappConvo",
+    title: "whatsapp-convo",
+    description: "Swishy template",
+    color: "#e7efbd",
+    icon: "🎬",
+    component: WhatsappConvoScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyWiggleText",
+    title: "wiggle-text",
+    description: "Swishy template",
+    color: "#b1b5b9",
+    icon: "🎬",
+    component: WiggleTextScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyWorkingOnAComputer",
+    title: "working-on-a-computer",
+    description: "Swishy template",
+    color: "#1ae737",
+    icon: "🎬",
+    component: WorkingOnAComputerScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyWritingDiary1",
+    title: "writing-diary-1",
+    description: "Swishy template",
+    color: "#3dbb9e",
+    icon: "🎬",
+    component: WritingDiary1Scene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
+  {
+    id: "SwishyYearsRollingText",
+    title: "years-rolling-text",
+    description: "Swishy template",
+    color: "#d5fa98",
+    icon: "🎬",
+    component: YearsRollingTextScene,
+    defaultProps: {
+      scale: 1,
+      animationSpeed: 1,
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
