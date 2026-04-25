@@ -4,7 +4,7 @@ import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
 
-const PLACEHOLDER = `import { useCurrentFrame, AbsoluteFill, interpolate } from 'remotion';
+const CODE_PLACEHOLDER = `import { useCurrentFrame, AbsoluteFill, interpolate } from 'remotion';
 
 export default function MyAnimation() {
   const frame = useCurrentFrame();
@@ -16,12 +16,72 @@ export default function MyAnimation() {
   );
 }`;
 
+function buildClaudePrompt(url: string): string {
+  return `Visit and carefully read the page at this URL: **${url}**
+
+Understand the product — what it does, its key features, its tone, and its target audience.
+
+Then write a compelling 30–45 second product video script with a clear hook, 2–3 key benefits, and a strong call to action.
+
+Then convert that script into a complete, self-contained Remotion component (.jsx file) that follows ALL of these rules strictly:
+
+**Remotion rules:**
+- \`export default function\` as the root component
+- Import ONLY \`{ AbsoluteFill, useCurrentFrame, interpolate }\` from 'remotion' — do NOT import \`Easing\` or \`spring\` from remotion, they are not available
+- Do NOT declare any variable named \`spring\` — it conflicts with Remotion internals
+- Run at 30 fps for 180–300 frames total
+- Register composition externally; do NOT use \`registerRoot\` or \`<Composition>\` inside this file
+
+**Easing rules (critical):**
+- Do NOT use \`Easing\` from remotion — it does not exist
+- Define all easing as plain JS functions, for example:
+  \`\`\`js
+  const easeOut   = (t) => 1 - Math.pow(1 - t, 3);
+  const easeInOut = (t) => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+  const backEase  = (t) => { const c1=1.70158, c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); };
+  \`\`\`
+- Pass these directly into \`interpolate\`'s \`easing\` option
+
+**Animation rules:**
+- Animate each scene with smooth entrances (fade + slide or scale), holds, and exits
+- Cross-fade between scenes using per-scene opacity calculated from \`useCurrentFrame()\`
+- Use only inline CSS styles — no external assets, no image URLs, no CSS files
+
+**Design rules:**
+- Use only inline CSS — no className, no external stylesheets
+- Match the brand tone of the product (colors, typography, energy)
+- All visual elements must be pure CSS/SVG — no \`<img>\` tags, no external URLs
+
+Return ONLY the complete .jsx code — no explanation, no markdown fences. The file must be paste-ready to drop straight into a Remotion player.`;
+}
+
+async function resolveUrl(raw: string): Promise<string> {
+  const url = raw.trim().startsWith("http") ? raw.trim() : `https://${raw.trim()}`;
+  try {
+    const res = await fetch(url, { method: "HEAD", redirect: "follow" });
+    return res.url || url;
+  } catch {
+    return url;
+  }
+}
+
 function ImportModal({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate();
-  const [code, setCode] = useState<string>("");
+  const [url, setUrl] = useState("");
+  const [resolving, setResolving] = useState(false);
+  const [code, setCode] = useState("");
+
+  const handleReadUrl = async () => {
+    if (!url.trim()) return;
+    setResolving(true);
+    const finalUrl = await resolveUrl(url);
+    setResolving(false);
+    const prompt = buildClaudePrompt(finalUrl);
+    window.open(`https://claude.ai/new?q=${encodeURIComponent(prompt)}`, "_blank");
+  };
 
   const animate = () => {
-    sessionStorage.setItem("customJsx", code.trim() || PLACEHOLDER);
+    sessionStorage.setItem("customJsx", code.trim() || CODE_PLACEHOLDER);
     sessionStorage.setItem("customJsxName", "Custom");
     onClose();
     navigate("/editor/custom");
@@ -50,51 +110,132 @@ function ImportModal({ onClose }: { onClose: () => void }) {
       >
         {/* Header */}
         <div style={{
-          padding: "22px 24px",
+          padding: "20px 24px",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           flexShrink: 0,
         }}>
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", letterSpacing: "-0.01em" }}>
-              Paste Component
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 3 }}>
-              Paste a React component — export default a function
-            </div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", letterSpacing: "-0.01em" }}>
+            New Animation
           </div>
           <button
             onClick={onClose}
             style={{
               all: "unset", cursor: "pointer",
-              width: 30, height: 30, borderRadius: 8,
+              width: 28, height: 28, borderRadius: 7,
               background: "rgba(255,255,255,0.06)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              color: "rgba(255,255,255,0.5)", fontSize: 16, lineHeight: 1,
+              color: "rgba(255,255,255,0.45)", fontSize: 15, lineHeight: 1,
             }}
           >×</button>
         </div>
 
-        {/* Code textarea */}
-        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        {/* ── Generate from URL ── */}
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
+          <div style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+            textTransform: "uppercase" as const,
+            color: "rgba(255,255,255,0.3)", marginBottom: 10,
+          }}>
+            Generate from URL
+          </div>
+
+          {/* URL input row */}
+          <div style={{ display: "flex", gap: 8 }}>
+            <div style={{
+              flex: 1,
+              display: "flex", alignItems: "center",
+              background: "#070707",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 10,
+              padding: "0 14px",
+              gap: 8,
+            }}>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.2)", flexShrink: 0 }}>🌐</span>
+              <input
+                type="url"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleReadUrl()}
+                placeholder="https://yourproduct.com"
+                style={{
+                  flex: 1, border: "none", outline: "none",
+                  background: "transparent",
+                  color: "#fff",
+                  fontSize: 13,
+                  lineHeight: 1,
+                  padding: "11px 0",
+                }}
+              />
+            </div>
+            <button
+              onClick={handleReadUrl}
+              disabled={resolving || !url.trim()}
+              style={{
+                all: "unset",
+                cursor: url.trim() && !resolving ? "pointer" : "default",
+                padding: "0 16px",
+                borderRadius: 10,
+                fontSize: 12, fontWeight: 600,
+                background: url.trim() && !resolving ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)",
+                color: url.trim() && !resolving ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)",
+                transition: "background 0.15s, color 0.15s",
+                whiteSpace: "nowrap" as const,
+                height: 42,
+                display: "flex", alignItems: "center", gap: 6,
+              }}
+            >
+              {resolving ? (
+                <>
+                  <span style={{
+                    width: 10, height: 10, borderRadius: "50%",
+                    border: "1.5px solid rgba(255,255,255,0.3)",
+                    borderTopColor: "rgba(255,255,255,0.8)",
+                    display: "inline-block",
+                    animation: "spin 0.7s linear infinite",
+                  }} />
+                  Resolving…
+                </>
+              ) : (
+                <>Read URL →</>
+              )}
+            </button>
+          </div>
+
+          {/* Helper text */}
+          <div style={{ marginTop: 9, fontSize: 11.5, color: "rgba(255,255,255,0.22)", lineHeight: 1.5 }}>
+            Opens Claude with a prompt to generate a Remotion video script from your product page. Paste the returned code below.
+          </div>
+        </div>
+
+        {/* ── Divider ── */}
+        <div style={{
+          padding: "14px 24px",
+          display: "flex", alignItems: "center", gap: 12,
+          flexShrink: 0,
+        }}>
+          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", whiteSpace: "nowrap" as const }}>
+            or paste code manually
+          </span>
+          <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+        </div>
+
+        {/* ── Code textarea ── */}
+        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", minHeight: 0 }}>
           <textarea
-            autoFocus
             value={code}
             onChange={e => setCode(e.target.value)}
-            placeholder={PLACEHOLDER}
+            placeholder={CODE_PLACEHOLDER}
             spellCheck={false}
             style={{
-              flex: 1,
-              resize: "none",
-              border: "none",
-              outline: "none",
+              flex: 1, resize: "none", border: "none", outline: "none",
               background: "#070707",
               color: "rgba(255,255,255,0.8)",
               fontFamily: "'JetBrains Mono', 'SF Mono', ui-monospace, monospace",
-              fontSize: 12.5,
-              lineHeight: 1.7,
-              padding: "18px 20px",
-              minHeight: 300,
+              fontSize: 12, lineHeight: 1.7,
+              padding: "14px 20px",
+              minHeight: 200,
               caretColor: "#fff",
             }}
           />
@@ -102,18 +243,18 @@ function ImportModal({ onClose }: { onClose: () => void }) {
 
         {/* Footer */}
         <div style={{
-          padding: "16px 20px",
+          padding: "14px 20px",
           borderTop: "1px solid rgba(255,255,255,0.07)",
-          display: "flex", justifyContent: "flex-end", gap: 10,
+          display: "flex", justifyContent: "flex-end", gap: 8,
           flexShrink: 0,
         }}>
           <button
             onClick={onClose}
             style={{
               all: "unset", cursor: "pointer",
-              padding: "9px 18px", borderRadius: 9,
+              padding: "8px 16px", borderRadius: 8,
               fontSize: 13, fontWeight: 500,
-              color: "rgba(255,255,255,0.45)",
+              color: "rgba(255,255,255,0.4)",
               background: "rgba(255,255,255,0.05)",
             }}
           >
@@ -123,16 +264,17 @@ function ImportModal({ onClose }: { onClose: () => void }) {
             onClick={animate}
             style={{
               all: "unset", cursor: "pointer",
-              padding: "9px 22px", borderRadius: 9,
+              padding: "8px 20px", borderRadius: 8,
               fontSize: 13, fontWeight: 600,
               color: "#000", background: "#fff",
-              transition: "opacity 0.15s",
             }}
           >
             Animate →
           </button>
         </div>
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
@@ -270,10 +412,40 @@ const GoodMoodPreview = () => (
   </div>
 );
 
+const SwishyPreview = ({ icon, color, title }: { icon: string, color: string, title: string }) => (
+  <div style={{
+    width: "100%", height: "100%",
+    background: `linear-gradient(135deg, ${color}22 0%, ${color}05 100%)`,
+    display: "flex", flexDirection: "column",
+    alignItems: "center", justifyContent: "center",
+    gap: 12,
+  }}>
+    <div style={{
+      width: 80, height: 80, borderRadius: 24,
+      background: color,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: 40,
+      boxShadow: `0 20px 40px ${color}33`,
+    }}>
+      {icon}
+    </div>
+    <div style={{
+      fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
+      textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+    }}>
+      {title}
+    </div>
+  </div>
+);
+
 const PREVIEWS: Record<string, React.FC> = {
   SpotifyPlayer: SpotifyPreview,
   FutureOfDesign: FuturePreview,
   GoodMood: GoodMoodPreview,
+  SwishyMotivational: () => <SwishyPreview icon="🔥" color="#f97316" title="Motivational" />,
+  SwishyStorytime: () => <SwishyPreview icon="📖" color="#8b5cf6" title="Storytime" />,
+  SwishyWorldStory: () => <SwishyPreview icon="🌍" color="#0ea5e9" title="World Story" />,
+  SwishyAnimateCharacters: () => <SwishyPreview icon="🦄" color="#a855f7" title="Characters" />,
 };
 
 // Coming-soon placeholders
