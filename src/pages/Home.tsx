@@ -1,39 +1,28 @@
-import { useState, useRef, useCallback } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
 
+const PLACEHOLDER = `import { useCurrentFrame, AbsoluteFill, interpolate } from 'remotion';
+
+export default function MyAnimation() {
+  const frame = useCurrentFrame();
+  const opacity = interpolate(frame, [0, 30], [0, 1]);
+  return (
+    <AbsoluteFill style={{ background: '#111', opacity, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <h1 style={{ color: 'white', fontSize: 80 }}>Hello!</h1>
+    </AbsoluteFill>
+  );
+}`;
+
 function ImportModal({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
   const [code, setCode] = useState<string>("");
-  const [dragging, setDragging] = useState(false);
-  const [error, setError] = useState<string>("");
-
-  const handleFile = useCallback((f: File) => {
-    if (!f.name.endsWith(".jsx") && !f.name.endsWith(".tsx")) {
-      setError("Please upload a .jsx or .tsx file.");
-      return;
-    }
-    setError("");
-    setFile(f);
-    const reader = new FileReader();
-    reader.onload = (e) => setCode((e.target?.result as string) ?? "");
-    reader.readAsText(f);
-  }, []);
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragging(false);
-    const f = e.dataTransfer.files[0];
-    if (f) handleFile(f);
-  }, [handleFile]);
 
   const animate = () => {
-    sessionStorage.setItem("customJsx", code);
-    sessionStorage.setItem("customJsxName", file?.name ?? "Custom");
+    sessionStorage.setItem("customJsx", code.trim() || PLACEHOLDER);
+    sessionStorage.setItem("customJsxName", "Custom");
     onClose();
     navigate("/editor/custom");
   };
@@ -54,9 +43,9 @@ function ImportModal({ onClose }: { onClose: () => void }) {
           background: "#0d0d0d",
           border: "1px solid rgba(255,255,255,0.1)",
           borderRadius: 20,
-          width: "100%", maxWidth: 560,
-          overflow: "hidden",
+          width: "100%", maxWidth: 600,
           display: "flex", flexDirection: "column",
+          maxHeight: "90vh",
         }}
       >
         {/* Header */}
@@ -64,13 +53,14 @@ function ImportModal({ onClose }: { onClose: () => void }) {
           padding: "22px 24px",
           borderBottom: "1px solid rgba(255,255,255,0.07)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
         }}>
           <div>
             <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", letterSpacing: "-0.01em" }}>
-              Import Component
+              Paste Component
             </div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 3 }}>
-              Upload a .jsx or .tsx file to animate it
+              Paste a React component — export default a function
             </div>
           </div>
           <button
@@ -85,98 +75,37 @@ function ImportModal({ onClose }: { onClose: () => void }) {
           >×</button>
         </div>
 
-        {/* Drop zone */}
-        {!file && (
-          <div style={{ padding: "24px 24px 0" }}>
-            <div
-              onDrop={onDrop}
-              onDragOver={e => { e.preventDefault(); setDragging(true); }}
-              onDragLeave={() => setDragging(false)}
-              onClick={() => inputRef.current?.click()}
-              style={{
-                border: `2px dashed ${dragging ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.12)"}`,
-                borderRadius: 14,
-                padding: "44px 32px",
-                textAlign: "center",
-                cursor: "pointer",
-                background: dragging ? "rgba(255,255,255,0.03)" : "transparent",
-                transition: "all 0.18s",
-              }}
-            >
-              <div style={{ fontSize: 36, marginBottom: 14 }}>⬆️</div>
-              <div style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
-                Drop your file here or click to browse
-              </div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", marginTop: 6 }}>
-                .jsx or .tsx · exports a default React component
-              </div>
-              <input
-                ref={inputRef}
-                type="file"
-                accept=".jsx,.tsx"
-                style={{ display: "none" }}
-                onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
-              />
-            </div>
-            {error && (
-              <div style={{ fontSize: 12, color: "#ff5a5a", marginTop: 10, textAlign: "center" }}>{error}</div>
-            )}
-          </div>
-        )}
-
-        {/* Code preview */}
-        {file && (
-          <div style={{ padding: "20px 24px 0" }}>
-            <div style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              marginBottom: 10,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: 7,
-                  background: "rgba(255,255,255,0.07)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 14,
-                }}>📄</div>
-                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>
-                  {file.name}
-                </span>
-              </div>
-              <button
-                onClick={() => { setFile(null); setCode(""); }}
-                style={{
-                  all: "unset", cursor: "pointer",
-                  fontSize: 12, color: "rgba(255,255,255,0.3)",
-                }}
-              >
-                Change file
-              </button>
-            </div>
-            <div style={{
+        {/* Code textarea */}
+        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <textarea
+            autoFocus
+            value={code}
+            onChange={e => setCode(e.target.value)}
+            placeholder={PLACEHOLDER}
+            spellCheck={false}
+            style={{
+              flex: 1,
+              resize: "none",
+              border: "none",
+              outline: "none",
               background: "#070707",
-              border: "1px solid rgba(255,255,255,0.07)",
-              borderRadius: 10,
-              padding: "14px 16px",
-              maxHeight: 220,
-              overflowY: "auto",
-            }}>
-              <pre style={{
-                margin: 0, fontSize: 11.5,
-                fontFamily: "'JetBrains Mono', 'SF Mono', ui-monospace, monospace",
-                color: "rgba(255,255,255,0.62)",
-                lineHeight: 1.65,
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-all",
-              }}>{code}</pre>
-            </div>
-          </div>
-        )}
+              color: "rgba(255,255,255,0.8)",
+              fontFamily: "'JetBrains Mono', 'SF Mono', ui-monospace, monospace",
+              fontSize: 12.5,
+              lineHeight: 1.7,
+              padding: "18px 20px",
+              minHeight: 300,
+              caretColor: "#fff",
+            }}
+          />
+        </div>
 
         {/* Footer */}
         <div style={{
-          padding: "20px 24px",
+          padding: "16px 20px",
+          borderTop: "1px solid rgba(255,255,255,0.07)",
           display: "flex", justifyContent: "flex-end", gap: 10,
-          marginTop: 4,
+          flexShrink: 0,
         }}>
           <button
             onClick={onClose}
@@ -192,15 +121,12 @@ function ImportModal({ onClose }: { onClose: () => void }) {
           </button>
           <button
             onClick={animate}
-            disabled={!file}
             style={{
-              all: "unset",
-              cursor: file ? "pointer" : "default",
+              all: "unset", cursor: "pointer",
               padding: "9px 22px", borderRadius: 9,
               fontSize: 13, fontWeight: 600,
-              color: file ? "#000" : "rgba(255,255,255,0.25)",
-              background: file ? "#fff" : "rgba(255,255,255,0.07)",
-              transition: "background 0.15s",
+              color: "#000", background: "#fff",
+              transition: "opacity 0.15s",
             }}
           >
             Animate →
