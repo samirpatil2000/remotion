@@ -32,8 +32,8 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "web": "vite",
-    "dev": "remotion studio",
+    "dev": "vite",
+    "studio": "remotion studio",
     "build": "remotion bundle",
     "build:web": "vite build",
     "upgrade": "remotion upgrade",
