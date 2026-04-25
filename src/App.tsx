@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Editor from "./pages/Editor";
+import CustomEditor from "./pages/CustomEditor";
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/editor/:templateId" element={<Editor />} />
+        <Route path="/editor/custom" element={<CustomEditor />} />
       </Routes>
     </div>
   );

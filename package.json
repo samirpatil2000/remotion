@@ -6,10 +6,12 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@babel/standalone": "^7.29.2",
     "@remotion/cli": "4.0.451",
     "@remotion/player": "^4.0.451",
     "@remotion/tailwind-v4": "4.0.451",
     "@remotion/zod-types": "^4.0.451",
+    "@types/babel__standalone": "^7.1.9",
     "@vitejs/plugin-react": "^6.0.1",
     "lucide-react": "^1.11.0",
     "react": "19.2.3",
