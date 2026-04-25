@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Player } from "@remotion/player";
 import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
@@ -297,27 +296,18 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
       <div style={{
         position: "absolute",
         inset: 0,
-        background: `radial-gradient(circle at center, ${def.color}22 0%, transparent 70%)`,
-        opacity: 0.6,
+        background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${def.color}15 0%, transparent 50%)`,
       }} />
 
-      <Player
-        component={def.component}
-        inputProps={def.defaultProps}
-        durationInFrames={def.durationInFrames}
-        fps={def.fps}
-        compositionWidth={1080}
-        compositionHeight={1920}
-        style={{
-          width: "100%",
-          height: "100%",
-          aspectRatio: "9 / 16",
-          boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
-        }}
-        autoPlay
-        loop
-        controls={false}
-      />
+      {/* Icon */}
+      <span style={{
+        fontSize: 52,
+        opacity: 0.45,
+        filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.4))",
+        zIndex: 1,
+      }}>
+        {def.icon}
+      </span>
     </div>
   );
 };
