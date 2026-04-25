@@ -1,6 +1,7 @@
 import React from "react";
 import { Scene as SpotifyScene, defaultSpotifyPlayerProps } from "../SpotifyPlayer/Scene";
 import { Scene as FutureScene, defaultFutureOfDesignProps } from "../FutureOfDesign/Scene";
+import { Scene as GoodMoodScene, defaultGoodMoodProps } from "../GoodMood/Scene";
 
 export type ControlType = "color" | "text" | "url" | "number" | "boolean" | "font";
 
@@ -91,6 +92,31 @@ export const REGISTRY: CompositionDef[] = [
       { key: "slideDistance", label: "Slide Distance", type: "number", group: "Animation", min: 50,  max: 400, step: 25   },
       { key: "glowIntensity", label: "Glow Intensity", type: "number", group: "Animation", min: 0,   max: 10,  step: 1    },
       { key: "letterSpacing", label: "Letter Spacing", type: "number", group: "Animation", min: -20, max: 10,  step: 2    },
+    ],
+  },
+  {
+    id: "GoodMood",
+    title: "Good Mood",
+    description: "Vibrant high-contrast typography with elastic spring-based animations.",
+    color: "#ff1d1d",
+    icon: "😊",
+    component: GoodMoodScene,
+    defaultProps: defaultGoodMoodProps as unknown as Record<string, unknown>,
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "scale",            label: "Scale",            type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",   label: "Animation Speed",  type: "number", group: "Animation", min: 0.1, max: 2,   step: 0.1  },
+      { key: "stretchIntensity", label: "Stretch Intensity",type: "number", group: "Animation", min: 0,   max: 0.5, step: 0.01 },
+      
+      { key: "topRowColor",    label: "Top Row Color",    type: "color", group: "Colors" },
+      { key: "colorO1",        label: "Color O1",         type: "color", group: "Colors" },
+      { key: "colorO2",        label: "Color O2",         type: "color", group: "Colors" },
+      { key: "colorM",         label: "Color M",          type: "color", group: "Colors" },
+      { key: "colorD",         label: "Color D",          type: "color", group: "Colors" },
+      { key: "backgroundColor",label: "Background",       type: "color", group: "Colors" },
+      
+      { key: "fontFamily",     label: "Font Family",      type: "font",  group: "Content" },
     ],
   },
 ];

@@ -105,9 +105,39 @@ const FuturePreview = () => (
   </div>
 );
 
+const GoodMoodPreview = () => (
+  <div style={{
+    width: "100%", height: "100%",
+    background: "#000",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    gap: 6, padding: "0 20px", boxSizing: "border-box",
+  }}>
+    {[
+      { t: "G", b: "M", c: "#006eff", r: 1.4 },
+      { t: "O", b: "O", c: "#ff1d1d", r: 0.8 },
+      { t: "O", b: "O", c: "#ffbd14", r: 1.2 },
+      { t: "D", b: "D", c: "#ff7fa1", r: 0.6 },
+    ].map((col, i) => (
+      <div key={i} style={{ display: "flex", flexDirection: "column", height: 100, width: 34 }}>
+        <div style={{ 
+          height: `${col.r * 50}%`, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" 
+        }}>
+          <span style={{ color: "white", fontSize: 54, fontWeight: 900, fontFamily: "Bebas Neue, Impact, sans-serif", transform: `scaleY(${col.r})` }}>{col.t}</span>
+        </div>
+        <div style={{ 
+          height: `${(2 - col.r) * 50}%`, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" 
+        }}>
+          <span style={{ color: col.c, fontSize: 54, fontWeight: 900, fontFamily: "Bebas Neue, Impact, sans-serif", transform: `scaleY(${2 - col.r})` }}>{col.b}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const PREVIEWS: Record<string, React.FC> = {
   SpotifyPlayer: SpotifyPreview,
   FutureOfDesign: FuturePreview,
+  GoodMood: GoodMoodPreview,
 };
 
 // Coming-soon placeholders
