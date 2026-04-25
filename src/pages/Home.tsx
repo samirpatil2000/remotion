@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
+import { Player } from "@remotion/player";
+import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
 
@@ -279,173 +280,46 @@ function ImportModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Visual preview for each template ─────────────────────────────────────────
-
-const SpotifyPreview = () => (
-  <div style={{
-    width: "100%", height: "100%",
-    background: "#111111",
-    display: "flex", flexDirection: "column",
-    alignItems: "center", justifyContent: "center",
-    gap: 20, padding: "32px 28px", boxSizing: "border-box",
-  }}>
-    {/* Vinyl record */}
+const CompositionPreview = ({ def }: { def: CompositionDef }) => {
+  return (
     <div style={{
-      width: 108, height: 108,
-      borderRadius: "50%",
-      background: "radial-gradient(circle at center, transparent 0px, transparent 10px, rgba(255,255,255,0.015) 10px, rgba(255,255,255,0.015) 11px, transparent 11px, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px, transparent 21px, transparent 30px, rgba(255,255,255,0.015) 30px, rgba(255,255,255,0.015) 31px, transparent 31px), #1a1a1a",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.7)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      position: "relative",
-      flexShrink: 0,
-    }}>
-      <div style={{
-        width: 38, height: 38, borderRadius: "50%",
-        background: "#1DB954",
-        boxShadow: "0 0 16px #1DB95455",
-      }} />
-    </div>
-
-    {/* Track info */}
-    <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 7 }}>
-      <div style={{ height: 7, borderRadius: 99, background: "rgba(255,255,255,0.85)", width: "72%" }} />
-      <div style={{ height: 5, borderRadius: 99, background: "rgba(255,255,255,0.25)", width: "52%" }} />
-    </div>
-
-    {/* Progress */}
-    <div style={{ width: "100%", height: 2, background: "rgba(255,255,255,0.1)", borderRadius: 99, position: "relative" }}>
-      <div style={{ position: "absolute", left: 0, width: "38%", height: "100%", background: "rgba(255,255,255,0.85)", borderRadius: 99 }} />
-      <div style={{ position: "absolute", left: "38%", top: "50%", width: 10, height: 10, background: "white", borderRadius: "50%", transform: "translate(-50%, -50%)" }} />
-    </div>
-
-    {/* Controls */}
-    <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-      {[
-        { w: 18, h: 14, r: 3 },
-        { w: 14, h: 14, r: 3 },
-        { w: 30, h: 30, r: "50%", bright: true },
-        { w: 14, h: 14, r: 3 },
-        { w: 18, h: 14, r: 3 },
-      ].map((s, i) => (
-        <div key={i} style={{
-          width: s.w, height: s.h,
-          borderRadius: s.r,
-          background: (s as { bright?: boolean }).bright ? "white" : "rgba(255,255,255,0.3)",
-        }} />
-      ))}
-    </div>
-  </div>
-);
-
-const FuturePreview = () => (
-  <div style={{
-    width: "100%", height: "100%",
-    background: "linear-gradient(160deg, #0f172a 0%, #0a0f1e 100%)",
-    display: "flex", flexDirection: "column",
-    alignItems: "center", justifyContent: "center",
-    gap: 6,
-    position: "relative",
-    overflow: "hidden",
-  }}>
-    {/* Ambient glow */}
-    <div style={{
-      position: "absolute",
-      width: 300, height: 300,
-      borderRadius: "50%",
-      background: "radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)",
-      top: "50%", left: "50%",
-      transform: "translate(-50%, -50%)",
+      width: "100%",
+      height: "100%",
       pointerEvents: "none",
-    }} />
-    <div style={{
-      fontSize: 68,
-      fontFamily: "Georgia, 'Times New Roman', serif",
-      fontStyle: "italic",
-      color: "white",
-      lineHeight: 1,
-      letterSpacing: "-2px",
-      filter: "drop-shadow(0 0 20px rgba(255,255,255,0.35))",
+      background: "#000",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
       position: "relative",
+      overflow: "hidden",
     }}>
-      future
-    </div>
-    <div style={{
-      fontSize: 10,
-      fontFamily: "system-ui, sans-serif",
-      fontWeight: 600,
-      letterSpacing: "0.38em",
-      color: "rgba(255,255,255,0.45)",
-      textTransform: "uppercase" as const,
-      position: "relative",
-    }}>
-      of design
-    </div>
-  </div>
-);
+      {/* Background brand color wash */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: `radial-gradient(circle at center, ${def.color}22 0%, transparent 70%)`,
+        opacity: 0.6,
+      }} />
 
-const GoodMoodPreview = () => (
-  <div style={{
-    width: "100%", height: "100%",
-    background: "#000",
-    display: "flex", alignItems: "center", justifyContent: "center",
-    gap: 6, padding: "0 20px", boxSizing: "border-box",
-  }}>
-    {[
-      { t: "G", b: "M", c: "#006eff", r: 1.4 },
-      { t: "O", b: "O", c: "#ff1d1d", r: 0.8 },
-      { t: "O", b: "O", c: "#ffbd14", r: 1.2 },
-      { t: "D", b: "D", c: "#ff7fa1", r: 0.6 },
-    ].map((col, i) => (
-      <div key={i} style={{ display: "flex", flexDirection: "column", height: 100, width: 34 }}>
-        <div style={{ 
-          height: `${col.r * 50}%`, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" 
-        }}>
-          <span style={{ color: "white", fontSize: 54, fontWeight: 900, fontFamily: "Bebas Neue, Impact, sans-serif", transform: `scaleY(${col.r})` }}>{col.t}</span>
-        </div>
-        <div style={{ 
-          height: `${(2 - col.r) * 50}%`, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" 
-        }}>
-          <span style={{ color: col.c, fontSize: 54, fontWeight: 900, fontFamily: "Bebas Neue, Impact, sans-serif", transform: `scaleY(${2 - col.r})` }}>{col.b}</span>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-const SwishyPreview = ({ icon, color, title }: { icon: string, color: string, title: string }) => (
-  <div style={{
-    width: "100%", height: "100%",
-    background: `linear-gradient(135deg, ${color}22 0%, ${color}05 100%)`,
-    display: "flex", flexDirection: "column",
-    alignItems: "center", justifyContent: "center",
-    gap: 12,
-  }}>
-    <div style={{
-      width: 80, height: 80, borderRadius: 24,
-      background: color,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: 40,
-      boxShadow: `0 20px 40px ${color}33`,
-    }}>
-      {icon}
+      <Player
+        component={def.component}
+        inputProps={def.defaultProps}
+        durationInFrames={def.durationInFrames}
+        fps={def.fps}
+        compositionWidth={1080}
+        compositionHeight={1920}
+        style={{
+          width: "100%",
+          height: "100%",
+          aspectRatio: "9 / 16",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+        }}
+        autoPlay
+        loop
+        controls={false}
+      />
     </div>
-    <div style={{
-      fontSize: 12, fontWeight: 700, letterSpacing: "0.1em",
-      textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
-    }}>
-      {title}
-    </div>
-  </div>
-);
-
-const PREVIEWS: Record<string, React.FC> = {
-  SpotifyPlayer: SpotifyPreview,
-  FutureOfDesign: FuturePreview,
-  GoodMood: GoodMoodPreview,
-  SwishyMotivational: () => <SwishyPreview icon="🔥" color="#f97316" title="Motivational" />,
-  SwishyStorytime: () => <SwishyPreview icon="📖" color="#8b5cf6" title="Storytime" />,
-  SwishyWorldStory: () => <SwishyPreview icon="🌍" color="#0ea5e9" title="World Story" />,
-  SwishyAnimateCharacters: () => <SwishyPreview icon="🦄" color="#a855f7" title="Characters" />,
+  );
 };
 
 // Coming-soon placeholders
@@ -588,7 +462,6 @@ export default function Home() {
 
         {/* Active templates from registry */}
         {REGISTRY.map((def) => {
-          const Preview = PREVIEWS[def.id];
           return (
             <button
               key={def.id}
@@ -614,14 +487,7 @@ export default function Home() {
             >
               {/* Preview thumbnail */}
               <div style={{ height: 240, width: "100%", overflow: "hidden" }}>
-                {Preview ? <Preview /> : (
-                  <div style={{
-                    width: "100%", height: "100%",
-                    background: def.color + "22",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 48,
-                  }}>{def.icon}</div>
-                )}
+                <CompositionPreview def={def} />
               </div>
 
               {/* Info */}
