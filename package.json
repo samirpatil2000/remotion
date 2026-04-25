@@ -33,6 +33,7 @@
     "web": "vite",
     "dev": "remotion studio",
     "build": "remotion bundle",
+    "build:web": "vite build",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

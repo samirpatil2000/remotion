@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Player } from "@remotion/player";
-import { ArrowLeft, Play, Pause } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 // Import compositions and their props
 import { Scene as SpotifyPlayer, defaultSpotifyPlayerProps } from "../compositions/SpotifyPlayer";
@@ -119,7 +119,8 @@ export default function Editor() {
       <div className="flex-1 flex justify-center items-center p-8 pt-24 bg-gradient-to-br from-[#050505] to-[#121212]">
         <div className="shadow-2xl rounded-2xl overflow-hidden border border-white/10" style={{ height: "80vh", aspectRatio: "9/16" }}>
           <Player
-            component={template.component}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            component={template.component as any}
             inputProps={inputProps}
             durationInFrames={template.durationInFrames}
             fps={template.fps}
