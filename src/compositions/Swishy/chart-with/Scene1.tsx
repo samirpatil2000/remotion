@@ -20,17 +20,17 @@ const SCENE_PARAMS = {
   showDollarSymbols: { type: "boolean", label: "Show Dollar Symbols", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   const isPortrait = height > width;
   
   // Gauge animation (0-80 frames)
-  const gaugeProgress = interpolate(adjustedFrame, [10, 80], [0, SCENE_PARAMS.winRate.value / 100], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
+  const gaugeProgress = interpolate(adjustedFrame, [10, 80], [0, (props.winRate ?? SCENE_PARAMS.winRate.value) / 100], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
   const gaugeOpacity = interpolate(adjustedFrame, [0, 15], [0, 1], { extrapolateRight: "clamp" });
   
   // Gauge dimensions
@@ -71,7 +71,7 @@ function Scene() {
   const checkmarkScale = interpolate(checkmarkProgress, [0, 1], [0.5, 1]);
   
   // Glow pulse
-  const glowPulse = interpolate(Math.sin((adjustedFrame - 100) * 0.08), [-1, 1], [0.3, 1]) * SCENE_PARAMS.glowIntensity.value;
+  const glowPulse = interpolate(Math.sin((adjustedFrame - 100) * 0.08), [-1, 1], [0.3, 1]) * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   const showGlow = adjustedFrame > 100;
   
   // Dollar symbols
@@ -93,8 +93,8 @@ function Scene() {
   const chartHeight = isPortrait ? height * 0.25 : height * 0.6;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: width, height: height, position: "relative" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: width, height: height, position: "relative" }}>
         
         {/* Circular Gauge */}
         <div style={{
@@ -112,7 +112,7 @@ function Scene() {
               cy={gaugeSize / 2}
               r={radius}
               fill="none"
-              stroke={SCENE_PARAMS.gaugeTrackColor.value}
+              stroke={(props.gaugeTrackColor ?? SCENE_PARAMS.gaugeTrackColor.value)}
               strokeWidth={strokeWidth}
               strokeDasharray={circumference}
               strokeLinecap="round"
@@ -123,13 +123,13 @@ function Scene() {
               cy={gaugeSize / 2}
               r={radius}
               fill="none"
-              stroke={SCENE_PARAMS.accentColor.value}
+              stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
               strokeWidth={strokeWidth}
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
               style={{
-                filter: showGlow ? "drop-shadow(0 0 " + (8 * glowPulse) + "px " + SCENE_PARAMS.accentColor.value + ")" : "none",
+                filter: showGlow ? "drop-shadow(0 0 " + (8 * glowPulse) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")" : "none",
               }}
             />
           </svg>
@@ -194,14 +194,14 @@ function Scene() {
                 <div style={{
                   width: wickWidth,
                   height: (candleHeight - bodyHeight) / 2,
-                  backgroundColor: SCENE_PARAMS.candleGreen.value,
+                  backgroundColor: (props.candleGreen ?? SCENE_PARAMS.candleGreen.value),
                   borderRadius: wickWidth / 2,
                 }} />
                 {/* Body */}
                 <div style={{
                   width: bodyWidth,
                   height: bodyHeight,
-                  backgroundColor: SCENE_PARAMS.candleGreen.value,
+                  backgroundColor: (props.candleGreen ?? SCENE_PARAMS.candleGreen.value),
                   borderRadius: bodyWidth * 0.15,
                   boxShadow: "0 2px 8px rgba(34, 197, 94, 0.3)",
                 }} />
@@ -209,7 +209,7 @@ function Scene() {
                 <div style={{
                   width: wickWidth,
                   height: (candleHeight - bodyHeight) / 2,
-                  backgroundColor: SCENE_PARAMS.candleGreen.value,
+                  backgroundColor: (props.candleGreen ?? SCENE_PARAMS.candleGreen.value),
                   borderRadius: wickWidth / 2,
                 }} />
               </div>
@@ -229,8 +229,8 @@ function Scene() {
         }}>
           <defs>
             <linearGradient id="curveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.curveColor.value} stopOpacity="0.6" />
-              <stop offset="100%" stopColor={SCENE_PARAMS.curveColor.value} stopOpacity="1" />
+              <stop offset="0%" stopColor={(props.curveColor ?? SCENE_PARAMS.curveColor.value)} stopOpacity="0.6" />
+              <stop offset="100%" stopColor={(props.curveColor ?? SCENE_PARAMS.curveColor.value)} stopOpacity="1" />
             </linearGradient>
             <filter id="curveGlow">
               <feGaussianBlur stdDeviation={showGlow ? 4 * glowPulse : 0} result="coloredBlur" />
@@ -261,16 +261,16 @@ function Scene() {
               cx={curvePoints[curvePoints.length - 1].x * chartWidth}
               cy={curvePoints[curvePoints.length - 1].y * chartHeight}
               r={6}
-              fill={SCENE_PARAMS.curveColor.value}
+              fill={(props.curveColor ?? SCENE_PARAMS.curveColor.value)}
               style={{
-                filter: showGlow ? "drop-shadow(0 0 " + (6 * glowPulse) + "px " + SCENE_PARAMS.curveColor.value + ")" : "none",
+                filter: showGlow ? "drop-shadow(0 0 " + (6 * glowPulse) + "px " + (props.curveColor ?? SCENE_PARAMS.curveColor.value) + ")" : "none",
               }}
             />
           )}
         </svg>
         
         {/* Floating Dollar Symbols */}
-        {SCENE_PARAMS.showDollarSymbols.value && dollarSymbols.map((dollar, i) => {
+        {(props.showDollarSymbols ?? SCENE_PARAMS.showDollarSymbols.value) && dollarSymbols.map((dollar, i) => {
           const dollarStart = dollar.delay;
           const dollarEnd = dollar.delay + dollar.duration;
           const dollarProgress = interpolate(adjustedFrame, [dollarStart, dollarEnd], [0, 1], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
@@ -285,7 +285,7 @@ function Scene() {
               top: dollarY,
               fontSize: minDim * 0.04,
               fontWeight: 700,
-              color: SCENE_PARAMS.dollarColor.value,
+              color: (props.dollarColor ?? SCENE_PARAMS.dollarColor.value),
               fontFamily: "system-ui, sans-serif",
               opacity: dollarOpacity,
               transform: "scale(" + dollarScale + ")",
@@ -297,7 +297,7 @@ function Scene() {
         })}
         
         {/* Checkmark */}
-        {SCENE_PARAMS.showCheckmark.value && adjustedFrame > 95 && (
+        {(props.showCheckmark ?? SCENE_PARAMS.showCheckmark.value) && adjustedFrame > 95 && (
           <div style={{
             position: "absolute",
             left: gaugeX - minDim * 0.06,
@@ -305,7 +305,7 @@ function Scene() {
             width: minDim * 0.12,
             height: minDim * 0.12,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

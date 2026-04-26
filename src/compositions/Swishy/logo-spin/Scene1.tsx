@@ -22,15 +22,15 @@ const SCENE_PARAMS = {
   rotationAmount: { type: "number", label: "Logo Rotation", value: 360, min: 0, max: 720, step: 45 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const logoSize = minDim * SCENE_PARAMS.logoSize.value;
+  const logoSize = minDim * (props.logoSize ?? SCENE_PARAMS.logoSize.value);
   
   // Logo entrance - scale up with rotation
   const logoEntrance = spring({
@@ -40,7 +40,7 @@ function Scene() {
   });
   
   const logoScale = interpolate(logoEntrance, [0, 1], [0, 1]);
-  const logoRotation = interpolate(logoEntrance, [0, 1], [SCENE_PARAMS.rotationAmount.value, 0]);
+  const logoRotation = interpolate(logoEntrance, [0, 1], [(props.rotationAmount ?? SCENE_PARAMS.rotationAmount.value), 0]);
   const logoOpacity = interpolate(adjustedFrame, [0, 15], [0, 1], { extrapolateRight: "clamp" });
   
   // Glow pulse animation
@@ -90,7 +90,7 @@ function Scene() {
           width: particleSize,
           height: particleSize,
           borderRadius: "50%",
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           transform: "translate(" + particleX + "px, " + particleY + "px)",
           opacity: particleOpacity,
         }
@@ -102,7 +102,7 @@ function Scene() {
     AbsoluteFill,
     {
       style: {
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
       }
@@ -111,7 +111,7 @@ function Scene() {
       "div",
       {
         style: {
-          transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformOrigin: "center center",
           display: "flex",
           flexDirection: "column",
@@ -131,14 +131,14 @@ function Scene() {
           }
         },
         // Glow effect
-        SCENE_PARAMS.showGlow.value && React.createElement("div", {
+        (props.showGlow ?? SCENE_PARAMS.showGlow.value) && React.createElement("div", {
           style: {
             position: "absolute",
             width: logoSize * 1.5,
             height: logoSize * 1.5,
             borderRadius: "50%",
-            background: "radial-gradient(circle, " + SCENE_PARAMS.accentColor.value + "40 0%, transparent 70%)",
-            opacity: logoEntrance * SCENE_PARAMS.glowIntensity.value * glowPulse,
+            background: "radial-gradient(circle, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40 0%, transparent 70%)",
+            opacity: logoEntrance * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * glowPulse,
             transform: "scale(" + (1 + logoEntrance * 0.2) + ")",
           }
         }),
@@ -157,7 +157,7 @@ function Scene() {
         ),
         // Logo image
         React.createElement(Img, {
-          src: SCENE_PARAMS.logoImage.value,
+          src: (props.logoImage ?? SCENE_PARAMS.logoImage.value),
           style: {
             width: logoSize,
             height: logoSize,
@@ -165,8 +165,8 @@ function Scene() {
             objectFit: "contain",
             transform: "scale(" + logoScale + ") rotate(" + logoRotation + "deg)",
             opacity: logoOpacity,
-            boxShadow: SCENE_PARAMS.showGlow.value 
-              ? "0 0 " + (minDim * 0.05) + "px " + SCENE_PARAMS.accentColor.value + "60"
+            boxShadow: (props.showGlow ?? SCENE_PARAMS.showGlow.value) 
+              ? "0 0 " + (minDim * 0.05) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "60"
               : "none",
           }
         })
@@ -187,24 +187,24 @@ function Scene() {
           "h1",
           {
             style: {
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.08,
               fontWeight: 700,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               margin: 0,
               opacity: titleProgress,
               transform: "translateY(" + titleY + "px)",
               letterSpacing: "-0.02em",
             }
           },
-          SCENE_PARAMS.title.value
+          (props.title ?? SCENE_PARAMS.title.value)
         ),
         // Accent line
         React.createElement("div", {
           style: {
             width: minDim * 0.15,
             height: 3,
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             borderRadius: 2,
             transform: "scaleX(" + (lineWidth / 100) + ")",
             transformOrigin: "center",
@@ -215,17 +215,17 @@ function Scene() {
           "p",
           {
             style: {
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.035,
               fontWeight: 400,
-              color: SCENE_PARAMS.secondaryTextColor.value,
+              color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value),
               margin: 0,
               opacity: subtitleProgress,
               transform: "translateY(" + subtitleY + "px)",
               letterSpacing: "0.02em",
             }
           },
-          SCENE_PARAMS.subtitle.value
+          (props.subtitle ?? SCENE_PARAMS.subtitle.value)
         )
       )
     )

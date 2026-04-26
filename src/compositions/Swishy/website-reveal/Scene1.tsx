@@ -18,12 +18,12 @@ const SCENE_PARAMS = {
   borderRadius: { type: "number", label: "Border Radius", value: 12, min: 0, max: 30, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const isPortrait = height > width;
@@ -32,7 +32,7 @@ function Scene() {
   const browserWidth = isPortrait ? width * 0.88 : width * 0.75;
   const browserHeight = isPortrait ? height * 0.65 : height * 0.8;
   const toolbarHeight = minDim * 0.04;
-  const borderRadius = SCENE_PARAMS.borderRadius.value;
+  const borderRadius = (props.borderRadius ?? SCENE_PARAMS.borderRadius.value);
   
   // Main entrance animation - smooth spring
   const entranceProgress = spring({
@@ -45,14 +45,14 @@ function Scene() {
   const yOffset = interpolate(
     entranceProgress,
     [0, 1],
-    [SCENE_PARAMS.entranceOffset.value, 0]
+    [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0]
   );
   
   // Blur animation - starts blurry, becomes sharp
   const blurAmount = interpolate(
     adjustedFrame,
     [0, 35],
-    [SCENE_PARAMS.maxBlur.value, 0],
+    [(props.maxBlur ?? SCENE_PARAMS.maxBlur.value), 0],
     { extrapolateRight: "clamp" }
   );
   
@@ -71,7 +71,7 @@ function Scene() {
     [0.92, 1]
   );
   
-  const finalScale = scaleAnim * SCENE_PARAMS.scale.value;
+  const finalScale = scaleAnim * (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Traffic light buttons
   const trafficLights = [
@@ -82,7 +82,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
@@ -94,7 +94,7 @@ function Scene() {
         left: 0,
         right: 0,
         bottom: 0,
-        background: "radial-gradient(ellipse at center, transparent 0%, " + SCENE_PARAMS.backgroundColor.value + " 70%)",
+        background: "radial-gradient(ellipse at center, transparent 0%, " + (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) + " 70%)",
         opacity: 0.5,
       }} />
       
@@ -111,17 +111,17 @@ function Scene() {
         <div style={{
           width: "100%",
           height: "100%",
-          backgroundColor: SCENE_PARAMS.browserFrameColor.value,
+          backgroundColor: (props.browserFrameColor ?? SCENE_PARAMS.browserFrameColor.value),
           borderRadius: borderRadius,
           overflow: "hidden",
-          boxShadow: "0 " + (minDim * 0.05) + "px " + (minDim * 0.15) + "px rgba(0, 0, 0, " + SCENE_PARAMS.shadowIntensity.value + "), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+          boxShadow: "0 " + (minDim * 0.05) + "px " + (minDim * 0.15) + "px rgba(0, 0, 0, " + (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) + "), 0 0 0 1px rgba(255, 255, 255, 0.05)",
           display: "flex",
           flexDirection: "column",
         }}>
           {/* Browser toolbar */}
           <div style={{
             height: toolbarHeight,
-            backgroundColor: SCENE_PARAMS.browserFrameColor.value,
+            backgroundColor: (props.browserFrameColor ?? SCENE_PARAMS.browserFrameColor.value),
             display: "flex",
             alignItems: "center",
             padding: "0 " + (minDim * 0.015) + "px",

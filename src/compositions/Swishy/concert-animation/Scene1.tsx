@@ -18,18 +18,18 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Using width for font sizes so the logo stays perfectly proportioned
   // and fits horizontally on any screen ratio.
   const linesConfig = [
     {
-      text: SCENE_PARAMS.topText.value,
-      color: SCENE_PARAMS.topColor.value,
+      text: (props.topText ?? SCENE_PARAMS.topText.value),
+      color: (props.topColor ?? SCENE_PARAMS.topColor.value),
       fontSize: width * 0.045,
       letterSpacing: "0.05em",
       marginBottom: -width * 0.015,
@@ -39,8 +39,8 @@ function Scene() {
       scaleY: 1
     },
     {
-      text: SCENE_PARAMS.mainText.value,
-      color: SCENE_PARAMS.mainColor.value,
+      text: (props.mainText ?? SCENE_PARAMS.mainText.value),
+      color: (props.mainColor ?? SCENE_PARAMS.mainColor.value),
       fontSize: width * 0.14,
       letterSpacing: "-0.01em",
       marginBottom: width * 0.01,
@@ -50,8 +50,8 @@ function Scene() {
       scaleY: 1.15 // Slightly tall aspect ratio to match the logo font
     },
     {
-      text: SCENE_PARAMS.bottomText.value,
-      color: SCENE_PARAMS.bottomColor.value,
+      text: (props.bottomText ?? SCENE_PARAMS.bottomText.value),
+      color: (props.bottomColor ?? SCENE_PARAMS.bottomColor.value),
       fontSize: width * 0.038,
       letterSpacing: "0.08em",
       marginBottom: 0,
@@ -72,9 +72,9 @@ function Scene() {
   let globalWordIndex = 0;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         display: "flex", 
         flexDirection: "column", 
         alignItems: "center", 
@@ -126,7 +126,7 @@ function Scene() {
                         display: "inline-block",
                         fontSize: line.fontSize,
                         fontWeight: 900,
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", Impact, system-ui, sans-serif",
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Impact, system-ui, sans-serif",
                         color: line.color,
                         letterSpacing: line.letterSpacing,
                         lineHeight: 1,

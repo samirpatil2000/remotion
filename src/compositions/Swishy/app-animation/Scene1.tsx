@@ -46,11 +46,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const isPortrait = height > width;
 
   const contentWidth = width * 0.88;
@@ -62,15 +62,15 @@ function Scene() {
   const statsProgress = spring({ frame: Math.max(0, adjustedFrame - 28), fps, config: { damping: 20, stiffness: 90 } });
   const navProgress = spring({ frame: Math.max(0, adjustedFrame - 40), fps, config: { damping: 20, stiffness: 90 } });
 
-  const slideTop = interpolate(topProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const slideGreeting = interpolate(greetingProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const slideCard = interpolate(cardProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const slideStats = interpolate(statsProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const slideNav = interpolate(navProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const slideTop = interpolate(topProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const slideGreeting = interpolate(greetingProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const slideCard = interpolate(cardProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const slideStats = interpolate(statsProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const slideNav = interpolate(navProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "top left" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "top left" }}>
         {/* Top Row */}
         <div style={{
           position: "absolute",
@@ -82,15 +82,15 @@ function Scene() {
           justifyContent: "space-between",
           opacity: topProgress,
           transform: "translateY(" + slideTop + "px)",
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
         }}>
           <div style={{
             fontSize: minDim * 0.03,
             fontWeight: 700,
-            color: SCENE_PARAMS.accentColor.value,
+            color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             letterSpacing: minDim * 0.002,
           }}>
-            {SCENE_PARAMS.dateLabel.value}
+            {(props.dateLabel ?? SCENE_PARAMS.dateLabel.value)}
           </div>
           <div style={{ display: "flex", gap: minDim * 0.02, alignItems: "center" }}>
             {["moon", "search", "bell"].map((icon, i) => (
@@ -104,7 +104,7 @@ function Scene() {
                 justifyContent: "center",
                 boxShadow: "0 2px 6px rgba(17,24,39,0.08)",
               }}>
-                <svg width={minDim * 0.032} height={minDim * 0.032} viewBox="0 0 24 24" fill="none" stroke={SCENE_PARAMS.mutedIcon.value} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width={minDim * 0.032} height={minDim * 0.032} viewBox="0 0 24 24" fill="none" stroke={(props.mutedIcon ?? SCENE_PARAMS.mutedIcon.value)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {icon === "moon" && <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79" />}
                   {icon === "search" && (<><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></>)}
                   {icon === "bell" && (<><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></>)}
@@ -118,7 +118,7 @@ function Scene() {
               overflow: "hidden",
               boxShadow: "0 2px 6px rgba(17,24,39,0.12)",
             }}>
-              <Img src={SCENE_PARAMS.avatarUrl.value} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <Img src={(props.avatarUrl ?? SCENE_PARAMS.avatarUrl.value)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
           </div>
         </div>
@@ -129,14 +129,14 @@ function Scene() {
           left: sidePad,
           top: height * 0.15,
           width: contentWidth,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
           fontSize: minDim * 0.06,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: greetingProgress,
           transform: "translateY(" + slideGreeting + "px)",
         }}>
-          {SCENE_PARAMS.greeting.value}
+          {(props.greeting ?? SCENE_PARAMS.greeting.value)}
         </div>
 
         {/* Verse Card */}
@@ -147,20 +147,20 @@ function Scene() {
           width: contentWidth,
           padding: minDim * 0.05,
           borderRadius: minDim * 0.04,
-          background: "linear-gradient(135deg, " + SCENE_PARAMS.accentColor.value + ", " + SCENE_PARAMS.accentDeep.value + ")",
-          color: SCENE_PARAMS.cardTextColor.value,
+          background: "linear-gradient(135deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", " + (props.accentDeep ?? SCENE_PARAMS.accentDeep.value) + ")",
+          color: (props.cardTextColor ?? SCENE_PARAMS.cardTextColor.value),
           boxShadow: "0 12px 28px rgba(59,52,139,0.25)",
           opacity: cardProgress,
           transform: "translateY(" + slideCard + "px)",
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
         }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", gap: minDim * 0.02, alignItems: "center" }}>
-              <svg width={minDim * 0.04} height={minDim * 0.04} viewBox="0 0 24 24" fill="none" stroke={SCENE_PARAMS.cardTextColor.value} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width={minDim * 0.04} height={minDim * 0.04} viewBox="0 0 24 24" fill="none" stroke={(props.cardTextColor ?? SCENE_PARAMS.cardTextColor.value)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z" />
               </svg>
               <div style={{ fontSize: minDim * 0.025, fontWeight: 700, letterSpacing: minDim * 0.003 }}>
-                {SCENE_PARAMS.cardLabel.value}
+                {(props.cardLabel ?? SCENE_PARAMS.cardLabel.value)}
               </div>
             </div>
             <div style={{
@@ -172,7 +172,7 @@ function Scene() {
               justifyContent: "center",
               backgroundColor: "rgba(255,255,255,0.18)",
             }}>
-              <svg width={minDim * 0.028} height={minDim * 0.028} viewBox="0 0 24 24" fill="none" stroke={SCENE_PARAMS.cardTextColor.value} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width={minDim * 0.028} height={minDim * 0.028} viewBox="0 0 24 24" fill="none" stroke={(props.cardTextColor ?? SCENE_PARAMS.cardTextColor.value)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M23 4v6h-6" />
                 <path d="M1 20v-6h6" />
                 <path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10" />
@@ -182,23 +182,23 @@ function Scene() {
           </div>
           <div style={{
             marginTop: minDim * 0.035,
-            fontFamily: SCENE_PARAMS.serifFont.value + ", serif",
+            fontFamily: (props.serifFont ?? SCENE_PARAMS.serifFont.value) + ", serif",
             fontSize: minDim * 0.055,
             lineHeight: 1.35,
             fontWeight: 500,
             whiteSpace: "pre-line",
           }}>
-            {SCENE_PARAMS.verseText.value}
+            {(props.verseText ?? SCENE_PARAMS.verseText.value)}
           </div>
           <div style={{
             marginTop: minDim * 0.04,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
           }}>
             <div style={{ fontSize: minDim * 0.03, fontWeight: 700 }}>
-              {SCENE_PARAMS.verseRef.value}
+              {(props.verseRef ?? SCENE_PARAMS.verseRef.value)}
             </div>
             <div style={{
               padding: minDim * 0.02,
@@ -212,14 +212,14 @@ function Scene() {
               fontSize: minDim * 0.026,
               fontWeight: 600,
             }}>
-              <svg width={minDim * 0.026} height={minDim * 0.026} viewBox="0 0 24 24" fill="none" stroke={SCENE_PARAMS.cardTextColor.value} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width={minDim * 0.026} height={minDim * 0.026} viewBox="0 0 24 24" fill="none" stroke={(props.cardTextColor ?? SCENE_PARAMS.cardTextColor.value)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3" />
                 <circle cx="6" cy="12" r="3" />
                 <circle cx="18" cy="19" r="3" />
                 <path d="M8.59 13.51L15.42 17.49" />
                 <path d="M15.41 6.51L8.59 10.49" />
               </svg>
-              {SCENE_PARAMS.shareLabel.value}
+              {(props.shareLabel ?? SCENE_PARAMS.shareLabel.value)}
             </div>
           </div>
         </div>
@@ -234,7 +234,7 @@ function Scene() {
           gap: minDim * 0.04,
           opacity: statsProgress,
           transform: "translateY(" + slideStats + "px)",
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
         }}>
           {[0, 1].map((idx) => (
             <div key={idx} style={{
@@ -246,30 +246,30 @@ function Scene() {
             }}>
               {idx === 0 && (
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.015, color: SCENE_PARAMS.progressOrange.value, fontWeight: 700, fontSize: minDim * 0.03 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.015, color: (props.progressOrange ?? SCENE_PARAMS.progressOrange.value), fontWeight: 700, fontSize: minDim * 0.03 }}>
                     <span style={{ fontSize: minDim * 0.03 }}>🔥</span>
-                    {SCENE_PARAMS.streakLabel.value}
+                    {(props.streakLabel ?? SCENE_PARAMS.streakLabel.value)}
                   </div>
                   <div style={{ marginTop: minDim * 0.025, display: "flex", alignItems: "baseline", gap: minDim * 0.01 }}>
-                    <div style={{ fontSize: minDim * 0.07, fontWeight: 700, color: SCENE_PARAMS.textColor.value }}>{SCENE_PARAMS.streakValue.value}</div>
-                    <div style={{ fontSize: minDim * 0.03, color: SCENE_PARAMS.secondaryColor.value }}>{SCENE_PARAMS.streakUnit.value}</div>
+                    <div style={{ fontSize: minDim * 0.07, fontWeight: 700, color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>{(props.streakValue ?? SCENE_PARAMS.streakValue.value)}</div>
+                    <div style={{ fontSize: minDim * 0.03, color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value) }}>{(props.streakUnit ?? SCENE_PARAMS.streakUnit.value)}</div>
                   </div>
                   <div style={{ marginTop: minDim * 0.035, height: minDim * 0.015, borderRadius: 999, backgroundColor: "#e5e7eb" }}>
-                    <div style={{ width: "65%", height: "100%", borderRadius: 999, backgroundColor: SCENE_PARAMS.progressOrange.value }} />
+                    <div style={{ width: "65%", height: "100%", borderRadius: 999, backgroundColor: (props.progressOrange ?? SCENE_PARAMS.progressOrange.value) }} />
                   </div>
                 </div>
               )}
               {idx === 1 && (
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.015, color: SCENE_PARAMS.progressBlue.value, fontWeight: 700, fontSize: minDim * 0.03 }}>
-                    <svg width={minDim * 0.028} height={minDim * 0.028} viewBox="0 0 24 24" fill="none" stroke={SCENE_PARAMS.progressBlue.value} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.015, color: (props.progressBlue ?? SCENE_PARAMS.progressBlue.value), fontWeight: 700, fontSize: minDim * 0.03 }}>
+                    <svg width={minDim * 0.028} height={minDim * 0.028} viewBox="0 0 24 24" fill="none" stroke={(props.progressBlue ?? SCENE_PARAMS.progressBlue.value)} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="9" />
                       <path d="M9 12l2 2 4-4" />
                     </svg>
-                    {SCENE_PARAMS.weekLabel.value}
+                    {(props.weekLabel ?? SCENE_PARAMS.weekLabel.value)}
                   </div>
                   <div style={{ marginTop: minDim * 0.025, display: "flex", alignItems: "baseline", gap: minDim * 0.01 }}>
-                    <div style={{ fontSize: minDim * 0.07, fontWeight: 700, color: SCENE_PARAMS.textColor.value }}>{SCENE_PARAMS.weekValue.value}</div>
+                    <div style={{ fontSize: minDim * 0.07, fontWeight: 700, color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>{(props.weekValue ?? SCENE_PARAMS.weekValue.value)}</div>
                   </div>
                   <div style={{ marginTop: minDim * 0.035, display: "flex", gap: minDim * 0.012 }}>
                     {Array.from({ length: 7 }).map((_, i) => (
@@ -277,7 +277,7 @@ function Scene() {
                         flex: 1,
                         height: minDim * 0.015,
                         borderRadius: 999,
-                        backgroundColor: i < 6 ? SCENE_PARAMS.progressBlue.value : "#e5e7eb",
+                        backgroundColor: i < 6 ? (props.progressBlue ?? SCENE_PARAMS.progressBlue.value) : "#e5e7eb",
                       }} />
                     ))}
                   </div>
@@ -298,17 +298,17 @@ function Scene() {
           alignItems: "center",
           opacity: navProgress,
           transform: "translateY(" + slideNav + "px)",
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
         }}>
           {[
-            { label: SCENE_PARAMS.navHome.value, active: true, icon: "home" },
-            { label: SCENE_PARAMS.navJournal.value, active: false, icon: "book" },
-            { label: SCENE_PARAMS.navBible.value, active: false, icon: "cap" },
-            { label: SCENE_PARAMS.navSermons.value, active: false, icon: "church" },
-            { label: SCENE_PARAMS.navProgress.value, active: false, icon: "clock" },
+            { label: (props.navHome ?? SCENE_PARAMS.navHome.value), active: true, icon: "home" },
+            { label: (props.navJournal ?? SCENE_PARAMS.navJournal.value), active: false, icon: "book" },
+            { label: (props.navBible ?? SCENE_PARAMS.navBible.value), active: false, icon: "cap" },
+            { label: (props.navSermons ?? SCENE_PARAMS.navSermons.value), active: false, icon: "church" },
+            { label: (props.navProgress ?? SCENE_PARAMS.navProgress.value), active: false, icon: "clock" },
           ].map((item, i) => (
-            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: minDim * 0.012, color: item.active ? SCENE_PARAMS.accentColor.value : "#9ca3af" }}>
-              <svg width={minDim * 0.038} height={minDim * 0.038} viewBox="0 0 24 24" fill="none" stroke={item.active ? SCENE_PARAMS.accentColor.value : "#9ca3af"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: minDim * 0.012, color: item.active ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : "#9ca3af" }}>
+              <svg width={minDim * 0.038} height={minDim * 0.038} viewBox="0 0 24 24" fill="none" stroke={item.active ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : "#9ca3af"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 {item.icon === "home" && <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />}
                 {item.icon === "book" && (<><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20" /><path d="M6.5 7v10" /></>)}
                 {item.icon === "cap" && (<><path d="M22 10L12 4 2 10l10 6 10-6z" /><path d="M6 12v4a6 6 0 0 0 12 0v-4" /></>)}

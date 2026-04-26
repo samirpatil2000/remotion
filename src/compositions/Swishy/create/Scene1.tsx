@@ -15,15 +15,15 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const animationWindow = durationInFrames * 0.7;
   const adjustedFrame = (frame / animationWindow) * 60 * speed;
 
-  const letters = SCENE_PARAMS.coreText.value.split("");
+  const letters = (props.coreText ?? SCENE_PARAMS.coreText.value).split("");
   const offsets = [
     { x: -minDim * 0.12, y: -minDim * 0.05, r: -6 },
     { x: -minDim * 0.06, y: minDim * 0.08, r: 4 },
@@ -38,8 +38,8 @@ function Scene() {
   const blobOpacity = interpolate(blobProgress, [0, 1], [0, 0.12], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ position: "absolute", inset: 0, transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ position: "absolute", inset: 0, transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{
           position: "absolute",
           left: "50%",
@@ -47,7 +47,7 @@ function Scene() {
           width: minDim * 0.42,
           height: minDim * 0.42,
           borderRadius: "50%",
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           transform: "translate(-50%, -50%) scale(" + blobScale + ")",
           opacity: blobOpacity,
           filter: "blur(" + (minDim * 0.02) + "px)"
@@ -68,8 +68,8 @@ function Scene() {
               <span key={i} style={{
                 fontSize: minDim * 0.12,
                 fontWeight: 600,
-                color: SCENE_PARAMS.primaryColor.value,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 display: "inline-block",
                 opacity,
                 transform: "translate(" + x + "px, " + y + "px) rotate(" + r + "deg)",

@@ -22,11 +22,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const clockSize = minDim * 0.85;
@@ -85,10 +85,10 @@ function Scene() {
   
   // Pills falling animation
   const words = [
-    { text: SCENE_PARAMS.word1.value, startFrame: 25 },
-    { text: SCENE_PARAMS.word2.value, startFrame: 35 },
-    { text: SCENE_PARAMS.word3.value, startFrame: 45 },
-    { text: SCENE_PARAMS.word4.value, startFrame: 55 }
+    { text: (props.word1 ?? SCENE_PARAMS.word1.value), startFrame: 25 },
+    { text: (props.word2 ?? SCENE_PARAMS.word2.value), startFrame: 35 },
+    { text: (props.word3 ?? SCENE_PARAMS.word3.value), startFrame: 45 },
+    { text: (props.word4 ?? SCENE_PARAMS.word4.value), startFrame: 55 }
   ];
   
   const pillHeight = minDim * 0.055;
@@ -107,9 +107,9 @@ function Scene() {
   });
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -123,7 +123,7 @@ function Scene() {
           width: clockSize,
           height: clockSize,
           borderRadius: "50%",
-          backgroundColor: SCENE_PARAMS.clockFaceColor.value,
+          backgroundColor: (props.clockFaceColor ?? SCENE_PARAMS.clockFaceColor.value),
           opacity: clockOpacity
         }} />
         
@@ -140,10 +140,10 @@ function Scene() {
           <defs>
             <linearGradient id="hand1Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#c99535" />
-              <stop offset="100%" stopColor={SCENE_PARAMS.handColor1.value} />
+              <stop offset="100%" stopColor={(props.handColor1 ?? SCENE_PARAMS.handColor1.value)} />
             </linearGradient>
             <linearGradient id="hand2Gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.handColor2.value} />
+              <stop offset="0%" stopColor={(props.handColor2 ?? SCENE_PARAMS.handColor2.value)} />
               <stop offset="100%" stopColor="#e87a50" />
             </linearGradient>
           </defs>
@@ -181,9 +181,9 @@ function Scene() {
           width: minDim * 0.05,
           height: minDim * 0.05,
           borderRadius: "50%",
-          backgroundColor: SCENE_PARAMS.centerDotColor.value,
+          backgroundColor: (props.centerDotColor ?? SCENE_PARAMS.centerDotColor.value),
           transform: "scale(" + centerDotScale + ")",
-          border: minDim * 0.008 + "px solid " + SCENE_PARAMS.handColor1.value
+          border: minDim * 0.008 + "px solid " + (props.handColor1 ?? SCENE_PARAMS.handColor1.value)
         }} />
         
         {/* Falling pills */}
@@ -201,7 +201,7 @@ function Scene() {
                 position: "absolute",
                 left: centerX - pillWidth / 2,
                 top: currentY,
-                backgroundColor: SCENE_PARAMS.pillBgColor.value,
+                backgroundColor: (props.pillBgColor ?? SCENE_PARAMS.pillBgColor.value),
                 borderRadius: pillHeight / 2,
                 paddingLeft: minDim * 0.03,
                 paddingRight: minDim * 0.03,
@@ -212,10 +212,10 @@ function Scene() {
               }}
             >
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.038,
                 fontWeight: 500,
-                color: SCENE_PARAMS.pillTextColor.value,
+                color: (props.pillTextColor ?? SCENE_PARAMS.pillTextColor.value),
                 fontStyle: "italic"
               }}>
                 {word.text}

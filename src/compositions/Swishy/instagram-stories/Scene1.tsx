@@ -30,12 +30,12 @@ const SCENE_PARAMS = {
   barGap: { type: "number", label: "Bar Gap", value: 4, min: 2, max: 10, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const slideDuration = SCENE_PARAMS.slideDuration.value;
+  const slideDuration = (props.slideDuration ?? SCENE_PARAMS.slideDuration.value);
   const totalDuration = slideDuration * 3;
   
   // Loop the animation
@@ -49,8 +49,8 @@ function Scene() {
   
   // Layout calculations
   const padding = minDim * 0.04;
-  const barHeight = SCENE_PARAMS.barHeight.value;
-  const barGap = SCENE_PARAMS.barGap.value;
+  const barHeight = (props.barHeight ?? SCENE_PARAMS.barHeight.value);
+  const barGap = (props.barGap ?? SCENE_PARAMS.barGap.value);
   const totalBarWidth = width - (padding * 2);
   const singleBarWidth = (totalBarWidth - (barGap * 2)) / 3;
   
@@ -60,9 +60,9 @@ function Scene() {
   
   // Background images array
   const backgrounds = [
-    SCENE_PARAMS.bgImage1.value,
-    SCENE_PARAMS.bgImage2.value,
-    SCENE_PARAMS.bgImage3.value,
+    (props.bgImage1 ?? SCENE_PARAMS.bgImage1.value),
+    (props.bgImage2 ?? SCENE_PARAMS.bgImage2.value),
+    (props.bgImage3 ?? SCENE_PARAMS.bgImage3.value),
   ];
   
   // Get progress for each bar
@@ -77,7 +77,7 @@ function Scene() {
   };
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       {/* Background Image */}
       {backgrounds[currentSlide] ? (
         <Img
@@ -144,7 +144,7 @@ function Scene() {
                   left: 0,
                   height: "100%",
                   width: (progress * 100) + "%",
-                  backgroundColor: SCENE_PARAMS.progressBarFill.value,
+                  backgroundColor: (props.progressBarFill ?? SCENE_PARAMS.progressBarFill.value),
                   borderRadius: barHeight / 2,
                 }}
               />
@@ -169,9 +169,9 @@ function Scene() {
           gap: minDim * 0.025,
         }}>
           {/* Profile Picture */}
-          {SCENE_PARAMS.profileImage.value ? (
+          {(props.profileImage ?? SCENE_PARAMS.profileImage.value) ? (
             <Img
-              src={SCENE_PARAMS.profileImage.value}
+              src={(props.profileImage ?? SCENE_PARAMS.profileImage.value)}
               style={{
                 width: profileSize,
                 height: profileSize,
@@ -184,7 +184,7 @@ function Scene() {
               width: profileSize,
               height: profileSize,
               borderRadius: "50%",
-              backgroundColor: SCENE_PARAMS.profilePlaceholderColor.value,
+              backgroundColor: (props.profilePlaceholderColor ?? SCENE_PARAMS.profilePlaceholderColor.value),
             }} />
           )}
           
@@ -195,12 +195,12 @@ function Scene() {
             gap: minDim * 0.02,
           }}>
             <span style={{
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               fontSize: minDim * 0.035,
               fontWeight: 600,
               fontFamily: "system-ui, -apple-system, sans-serif",
             }}>
-              {SCENE_PARAMS.username.value}
+              {(props.username ?? SCENE_PARAMS.username.value)}
             </span>
             <span style={{
               color: "rgba(255,255,255,0.7)",
@@ -208,7 +208,7 @@ function Scene() {
               fontWeight: 400,
               fontFamily: "system-ui, -apple-system, sans-serif",
             }}>
-              {SCENE_PARAMS.timestamp.value}
+              {(props.timestamp ?? SCENE_PARAMS.timestamp.value)}
             </span>
           </div>
         </div>
@@ -227,7 +227,7 @@ function Scene() {
                 width: 4,
                 height: 4,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.textColor.value,
+                backgroundColor: (props.textColor ?? SCENE_PARAMS.textColor.value),
               }}
             />
           ))}

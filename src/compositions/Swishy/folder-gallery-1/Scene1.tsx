@@ -29,31 +29,31 @@ const SCENE_PARAMS = {
   imageSpacing: { type: "number", label: "Image Spacing", value: 25, min: 10, max: 40, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
-  const hoverStart = SCENE_PARAMS.hoverDelay.value;
-  const clickStart = SCENE_PARAMS.clickDelay.value;
+  const hoverStart = (props.hoverDelay ?? SCENE_PARAMS.hoverDelay.value);
+  const clickStart = (props.clickDelay ?? SCENE_PARAMS.clickDelay.value);
   const transitionStart = clickStart + 15;
   const windowOpenStart = transitionStart + 20;
   
   const folderImages = [
-    { id: 1, src: SCENE_PARAMS.image1.value, startDelay: 0 },
-    { id: 2, src: SCENE_PARAMS.image2.value, startDelay: 0 },
-    { id: 3, src: SCENE_PARAMS.image3.value, startDelay: 0 },
+    { id: 1, src: (props.image1 ?? SCENE_PARAMS.image1.value), startDelay: 0 },
+    { id: 2, src: (props.image2 ?? SCENE_PARAMS.image2.value), startDelay: 0 },
+    { id: 3, src: (props.image3 ?? SCENE_PARAMS.image3.value), startDelay: 0 },
   ];
   
   const windowImages = [
-    { id: 1, src: SCENE_PARAMS.image1.value },
-    { id: 2, src: SCENE_PARAMS.image2.value },
-    { id: 3, src: SCENE_PARAMS.image3.value },
-    { id: 4, src: SCENE_PARAMS.image4.value },
+    { id: 1, src: (props.image1 ?? SCENE_PARAMS.image1.value) },
+    { id: 2, src: (props.image2 ?? SCENE_PARAMS.image2.value) },
+    { id: 3, src: (props.image3 ?? SCENE_PARAMS.image3.value) },
+    { id: 4, src: (props.image4 ?? SCENE_PARAMS.image4.value) },
   ];
   
   const cursorStartX = width * 0.8;
@@ -94,8 +94,8 @@ function Scene() {
   const folderWidth = minDim * 0.35;
   const folderHeight = minDim * 0.3;
   
-  const initialPeek = SCENE_PARAMS.initialPeekAmount.value;
-  const imageSpacing = SCENE_PARAMS.imageSpacing.value;
+  const initialPeek = (props.initialPeekAmount ?? SCENE_PARAMS.initialPeekAmount.value);
+  const imageSpacing = (props.imageSpacing ?? SCENE_PARAMS.imageSpacing.value);
   
   const getImagePeekStyle = (index) => {
     const approachProg = spring({
@@ -124,7 +124,7 @@ function Scene() {
     };
   };
   
-  const pixelSize = SCENE_PARAMS.pixelSize.value;
+  const pixelSize = (props.pixelSize ?? SCENE_PARAMS.pixelSize.value);
   
   const fillPixels = [
     [1, 1],
@@ -160,7 +160,7 @@ function Scene() {
     [7, 14], [8, 14],
   ];
   
-  const PixelCursor = ({ x, y, size }) => {
+  const PixelCursor = ({ props, x, y, size }: any) => {
     return (
       <div style={{
         position: "absolute",
@@ -177,7 +177,7 @@ function Scene() {
               top: pixel[1] * size,
               width: size,
               height: size,
-              backgroundColor: SCENE_PARAMS.cursorFill.value,
+              backgroundColor: (props.cursorFill ?? SCENE_PARAMS.cursorFill.value),
             }}
           />
         ))}
@@ -190,7 +190,7 @@ function Scene() {
               top: pixel[1] * size,
               width: size,
               height: size,
-              backgroundColor: SCENE_PARAMS.cursorOutline.value,
+              backgroundColor: (props.cursorOutline ?? SCENE_PARAMS.cursorOutline.value),
             }}
           />
         ))}
@@ -198,10 +198,10 @@ function Scene() {
     );
   };
   
-  const ImagePlaceholder = ({ style }) => (
+  const ImagePlaceholder = ({ props, style }: any) => (
     <div style={{
       ...style,
-      backgroundColor: SCENE_PARAMS.placeholderColor.value,
+      backgroundColor: (props.placeholderColor ?? SCENE_PARAMS.placeholderColor.value),
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -216,7 +216,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -252,7 +252,7 @@ function Scene() {
               left: 0,
               width: "100%",
               height: "85%",
-              backgroundColor: SCENE_PARAMS.folderDarkColor.value,
+              backgroundColor: (props.folderDarkColor ?? SCENE_PARAMS.folderDarkColor.value),
               borderRadius: minDim * 0.02,
               boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
             }} />
@@ -263,7 +263,7 @@ function Scene() {
               left: "5%",
               width: "35%",
               height: "15%",
-              backgroundColor: SCENE_PARAMS.folderColor.value,
+              backgroundColor: (props.folderColor ?? SCENE_PARAMS.folderColor.value),
               borderRadius: `${minDim * 0.015}px ${minDim * 0.015}px 0 0`,
             }} />
             
@@ -298,7 +298,7 @@ function Scene() {
                     {img.src ? (
                       <Img src={img.src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
-                      <ImagePlaceholder style={{ width: "100%", height: "100%", borderRadius: minDim * 0.015 }} />
+                      <ImagePlaceholder props={props}  style={{ width: "100%", height: "100%", borderRadius: minDim * 0.015 }} />
                     )}
                   </div>
                 );
@@ -311,21 +311,21 @@ function Scene() {
               left: 0,
               width: "100%",
               height: "75%",
-              backgroundColor: SCENE_PARAMS.folderColor.value,
+              backgroundColor: (props.folderColor ?? SCENE_PARAMS.folderColor.value),
               borderRadius: minDim * 0.02,
               boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
             }} />
           </div>
           
           <p style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.035,
             fontWeight: 500,
             fontFamily: "system-ui, -apple-system, sans-serif",
             marginTop: minDim * 0.02,
             opacity: 0.9,
           }}>
-            {SCENE_PARAMS.folderName.value}
+            {(props.folderName ?? SCENE_PARAMS.folderName.value)}
           </p>
         </div>
         
@@ -334,7 +334,7 @@ function Scene() {
           position: "absolute",
           width: windowWidth,
           height: windowHeight,
-          backgroundColor: SCENE_PARAMS.windowColor.value,
+          backgroundColor: (props.windowColor ?? SCENE_PARAMS.windowColor.value),
           borderRadius: minDim * 0.025,
           boxShadow: "0 25px 80px rgba(0,0,0,0.5)",
           overflow: "hidden",
@@ -361,7 +361,7 @@ function Scene() {
               marginLeft: minDim * 0.05,
               opacity: 0.8,
             }}>
-              {SCENE_PARAMS.folderName.value}
+              {(props.folderName ?? SCENE_PARAMS.folderName.value)}
             </p>
           </div>
           
@@ -396,7 +396,7 @@ function Scene() {
                   {img.src ? (
                     <Img src={img.src} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
-                    <ImagePlaceholder style={{ width: "100%", height: "100%", borderRadius: minDim * 0.015 }} />
+                    <ImagePlaceholder props={props}  style={{ width: "100%", height: "100%", borderRadius: minDim * 0.015 }} />
                   )}
                 </div>
               );
@@ -408,7 +408,7 @@ function Scene() {
         <div style={{
           opacity: interpolate(adjustedFrame, [0, 5], [0, 1], { extrapolateRight: "clamp" }),
         }}>
-          <PixelCursor x={cursorX} y={cursorY} size={pixelSize} />
+          <PixelCursor props={props}  x={cursorX} y={cursorY} size={pixelSize} />
         </div>
         
       </div>

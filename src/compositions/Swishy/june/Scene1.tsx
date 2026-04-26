@@ -25,11 +25,11 @@ const SCENE_PARAMS = {
   staggerDelay: { type: "number", label: "Date Stagger", value: 2, min: 1, max: 8, step: 0.5 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   const animationWindow = durationInFrames * 0.7;
@@ -47,26 +47,26 @@ function Scene() {
   const calWidth = minDim * 0.78;
   const calHeight = calWidth * 1.1;
   const headerHeight = calHeight * 0.22;
-  const radius = minDim * SCENE_PARAMS.cornerRadius.value;
+  const radius = minDim * (props.cornerRadius ?? SCENE_PARAMS.cornerRadius.value);
 
   const gridCols = 7;
   const cellWidth = calWidth / gridCols;
   const cellHeight = (calHeight - headerHeight) / 5;
 
-  const datesList = SCENE_PARAMS.dates.value.split("\n").map((d) => d.trim()).filter(Boolean);
+  const datesList = (props.dates ?? SCENE_PARAMS.dates.value).split("\n").map((d) => d.trim()).filter(Boolean);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ width: "100%", height: "100%", transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ width: "100%", height: "100%", transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
           <div
             style={{
               width: calWidth,
               height: calHeight,
-              backgroundColor: SCENE_PARAMS.calendarColor.value,
+              backgroundColor: (props.calendarColor ?? SCENE_PARAMS.calendarColor.value),
               borderRadius: radius,
-              border: "1px solid " + SCENE_PARAMS.borderColor.value,
-              boxShadow: "0px 18px 40px " + SCENE_PARAMS.shadowColor.value,
+              border: "1px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value),
+              boxShadow: "0px 18px 40px " + (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
               opacity: cardOpacity,
               transform: "scale(" + cardScale + ")",
               position: "relative",
@@ -80,7 +80,7 @@ function Scene() {
                 top: 0,
                 width: "100%",
                 height: headerHeight,
-                backgroundColor: SCENE_PARAMS.headerColor.value,
+                backgroundColor: (props.headerColor ?? SCENE_PARAMS.headerColor.value),
                 transform: "translateY(" + headerY + "px)"
               }}
             />
@@ -98,12 +98,12 @@ function Scene() {
                 style={{
                   fontSize: minDim * 0.06,
                   fontWeight: 700,
-                  color: SCENE_PARAMS.textColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   letterSpacing: "0.01em"
                 }}
               >
-                {SCENE_PARAMS.monthYear.value}
+                {(props.monthYear ?? SCENE_PARAMS.monthYear.value)}
               </div>
             </div>
 
@@ -113,9 +113,9 @@ function Scene() {
                 const isAccent = dayNumber % 7 === 0;
                 const isAccent2 = dayNumber % 5 === 0;
                 const isWeekendStyle = dayNumber % 6 === 0;
-                const bubbleColor = isAccent ? SCENE_PARAMS.accentColor.value : isAccent2 ? SCENE_PARAMS.accentColor2.value : isWeekendStyle ? SCENE_PARAMS.weekendBubbleColor.value : SCENE_PARAMS.dateBubbleColor.value;
+                const bubbleColor = isAccent ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : isAccent2 ? (props.accentColor2 ?? SCENE_PARAMS.accentColor2.value) : isWeekendStyle ? (props.weekendBubbleColor ?? SCENE_PARAMS.weekendBubbleColor.value) : (props.dateBubbleColor ?? SCENE_PARAMS.dateBubbleColor.value);
                 const bubbleOpacity = isAccent || isAccent2 || isWeekendStyle ? 0.95 : 0.35;
-                const cellProgress = spring({ frame: Math.max(0, normalizedFrame - 20 - index * SCENE_PARAMS.staggerDelay.value), fps, config: { damping: 18, stiffness: 120 } });
+                const cellProgress = spring({ frame: Math.max(0, normalizedFrame - 20 - index * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value)), fps, config: { damping: 18, stiffness: 120 } });
                 const cellY = interpolate(cellProgress, [0, 1], [12, 0], { extrapolateRight: "clamp" });
                 const cellOpacity = interpolate(cellProgress, [0, 1], [0, 1], { extrapolateRight: "clamp" });
 
@@ -125,8 +125,8 @@ function Scene() {
                     style={{
                       width: cellWidth,
                       height: cellHeight,
-                      borderRight: ((index + 1) % gridCols === 0) ? "none" : "1px solid " + SCENE_PARAMS.borderColor.value,
-                      borderBottom: (index < gridCols * 4) ? "1px solid " + SCENE_PARAMS.borderColor.value : "none",
+                      borderRight: ((index + 1) % gridCols === 0) ? "none" : "1px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value),
+                      borderBottom: (index < gridCols * 4) ? "1px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value) : "none",
                       boxSizing: "border-box",
                       position: "relative",
                       display: "flex",
@@ -150,8 +150,8 @@ function Scene() {
                       style={{
                         fontSize: minDim * 0.028,
                         fontWeight: 600,
-                        color: SCENE_PARAMS.textColor.value,
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                        color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                         position: "relative"
                       }}
                     >
@@ -162,8 +162,8 @@ function Scene() {
               })}
             </div>
 
-            <div style={{ position: "absolute", left: "12%", top: headerHeight * 0.1, width: "14%", height: headerHeight * 0.35, backgroundColor: SCENE_PARAMS.calendarColor.value, borderRadius: radius * 0.4, border: "1px solid " + SCENE_PARAMS.borderColor.value }} />
-            <div style={{ position: "absolute", right: "12%", top: headerHeight * 0.1, width: "14%", height: headerHeight * 0.35, backgroundColor: SCENE_PARAMS.calendarColor.value, borderRadius: radius * 0.4, border: "1px solid " + SCENE_PARAMS.borderColor.value }} />
+            <div style={{ position: "absolute", left: "12%", top: headerHeight * 0.1, width: "14%", height: headerHeight * 0.35, backgroundColor: (props.calendarColor ?? SCENE_PARAMS.calendarColor.value), borderRadius: radius * 0.4, border: "1px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value) }} />
+            <div style={{ position: "absolute", right: "12%", top: headerHeight * 0.1, width: "14%", height: headerHeight * 0.35, backgroundColor: (props.calendarColor ?? SCENE_PARAMS.calendarColor.value), borderRadius: radius * 0.4, border: "1px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value) }} />
           </div>
         </div>
       </div>

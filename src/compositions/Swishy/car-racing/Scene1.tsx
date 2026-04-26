@@ -18,14 +18,14 @@ const SCENE_PARAMS = {
   showDust: { type: "boolean", label: "Show Dust", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const isPortrait = height > width;
   
@@ -39,7 +39,7 @@ function Scene() {
   const carEntrance = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
   const carX = interpolate(carEntrance, [0, 1], [-carWidth * 1.5, width * 0.35]);
   
-  const bounceAmount = SCENE_PARAMS.carBounce.value;
+  const bounceAmount = (props.carBounce ?? SCENE_PARAMS.carBounce.value);
   const carBounce = Math.sin(adjustedFrame * 0.4) * bounceAmount;
   
   const wheelRotation = adjustedFrame * 12;
@@ -47,7 +47,7 @@ function Scene() {
   const lineOffset = (adjustedFrame * 8) % (width * 0.3);
   
   const dustParticles = [];
-  if (SCENE_PARAMS.showDust.value && adjustedFrame > 15) {
+  if ((props.showDust ?? SCENE_PARAMS.showDust.value) && adjustedFrame > 15) {
     for (let i = 0; i < 5; i++) {
       const particleDelay = i * 4;
       const particleLife = (adjustedFrame - 15 - particleDelay) % 30;
@@ -61,7 +61,7 @@ function Scene() {
     }
   }
   
-  const skyGradient = "linear-gradient(180deg, #1e3a5f 0%, " + SCENE_PARAMS.backgroundColor.value + " 100%)";
+  const skyGradient = "linear-gradient(180deg, #1e3a5f 0%, " + (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) + " 100%)";
   
   const sunProgress = spring({ frame: adjustedFrame, fps, config: { damping: 25, stiffness: 80 } });
   const sunY = interpolate(sunProgress, [0, 1], [-minDim * 0.15, height * 0.15]);
@@ -97,7 +97,7 @@ function Scene() {
           left: 0,
           width: "100%",
           height: roadHeight,
-          backgroundColor: SCENE_PARAMS.roadColor.value,
+          backgroundColor: (props.roadColor ?? SCENE_PARAMS.roadColor.value),
           borderTop: "3px solid #334155",
           borderBottom: "3px solid #0f172a",
         }}>
@@ -115,7 +115,7 @@ function Scene() {
               <div key={i} style={{
                 width: width * 0.08,
                 height: 4,
-                backgroundColor: SCENE_PARAMS.lineColor.value,
+                backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
                 borderRadius: 2,
               }} />
             ))}
@@ -158,7 +158,7 @@ function Scene() {
             left: 0,
             width: "100%",
             height: carHeight * 0.5,
-            backgroundColor: SCENE_PARAMS.carBodyColor.value,
+            backgroundColor: (props.carBodyColor ?? SCENE_PARAMS.carBodyColor.value),
             borderRadius: carHeight * 0.15,
             boxShadow: "0 " + carHeight * 0.1 + "px " + carHeight * 0.2 + "px rgba(0,0,0,0.3)",
           }} />
@@ -169,7 +169,7 @@ function Scene() {
             left: carWidth * 0.2,
             width: carWidth * 0.55,
             height: carHeight * 0.5,
-            backgroundColor: SCENE_PARAMS.carBodyColor.value,
+            backgroundColor: (props.carBodyColor ?? SCENE_PARAMS.carBodyColor.value),
             borderRadius: carHeight * 0.2 + "px " + carHeight * 0.2 + "px 0 0",
           }} />
           
@@ -179,7 +179,7 @@ function Scene() {
             left: carWidth * 0.25,
             width: carWidth * 0.2,
             height: carHeight * 0.35,
-            backgroundColor: SCENE_PARAMS.carWindowColor.value,
+            backgroundColor: (props.carWindowColor ?? SCENE_PARAMS.carWindowColor.value),
             borderRadius: carHeight * 0.1 + "px " + carHeight * 0.05 + "px 0 0",
             opacity: 0.8,
           }} />
@@ -190,7 +190,7 @@ function Scene() {
             left: carWidth * 0.48,
             width: carWidth * 0.22,
             height: carHeight * 0.35,
-            backgroundColor: SCENE_PARAMS.carWindowColor.value,
+            backgroundColor: (props.carWindowColor ?? SCENE_PARAMS.carWindowColor.value),
             borderRadius: carHeight * 0.05 + "px " + carHeight * 0.1 + "px 0 0",
             opacity: 0.8,
           }} />
@@ -224,7 +224,7 @@ function Scene() {
             width: wheelRadius * 2,
             height: wheelRadius * 2,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.wheelColor.value,
+            backgroundColor: (props.wheelColor ?? SCENE_PARAMS.wheelColor.value),
             border: "3px solid #374151",
             transform: "rotate(" + wheelRotation + "deg)",
             display: "flex",
@@ -258,7 +258,7 @@ function Scene() {
             width: wheelRadius * 2,
             height: wheelRadius * 2,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.wheelColor.value,
+            backgroundColor: (props.wheelColor ?? SCENE_PARAMS.wheelColor.value),
             border: "3px solid #374151",
             transform: "rotate(" + wheelRotation + "deg)",
             display: "flex",

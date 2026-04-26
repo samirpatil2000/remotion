@@ -19,13 +19,13 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.6, min: 0.2, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const chaos = SCENE_PARAMS.chaosIntensity.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const chaos = (props.chaosIntensity ?? SCENE_PARAMS.chaosIntensity.value);
   const adjustedFrame = frame * speed;
   
   const isPortrait = height > width;
@@ -51,7 +51,7 @@ function Scene() {
   });
   
   // Glow pulse
-  const glowOpacity = interpolate(adjustedFrame, [glowStart, glowStart + 20, glowStart + 40, glowStart + 60], [0, SCENE_PARAMS.glowIntensity.value, SCENE_PARAMS.glowIntensity.value * 0.7, SCENE_PARAMS.glowIntensity.value], { extrapolateRight: "clamp" });
+  const glowOpacity = interpolate(adjustedFrame, [glowStart, glowStart + 20, glowStart + 40, glowStart + 60], [0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value), (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * 0.7, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)], { extrapolateRight: "clamp" });
   
   // Floating chaos animation helper
   const getFloatOffset = (seed, amplitude) => {
@@ -125,8 +125,8 @@ function Scene() {
   const laptopOpacity = interpolate(adjustedFrame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%", position: "relative" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%", position: "relative" }}>
         
         {/* Clock face */}
         <div style={{
@@ -139,18 +139,18 @@ function Scene() {
           height: minDim * 0.6,
         }}>
           <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
-            <circle cx="50" cy="50" r="45" fill="none" stroke={SCENE_PARAMS.clockColor.value} strokeWidth="1" opacity="0.5" />
+            <circle cx="50" cy="50" r="45" fill="none" stroke={(props.clockColor ?? SCENE_PARAMS.clockColor.value)} strokeWidth="1" opacity="0.5" />
             {[...Array(12)].map((_, i) => {
               const angle = (i * 30 - 90) * Math.PI / 180;
               const x1 = 50 + Math.cos(angle) * 40;
               const y1 = 50 + Math.sin(angle) * 40;
               const x2 = 50 + Math.cos(angle) * 44;
               const y2 = 50 + Math.sin(angle) * 44;
-              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={SCENE_PARAMS.clockColor.value} strokeWidth="1.5" opacity="0.6" />;
+              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={(props.clockColor ?? SCENE_PARAMS.clockColor.value)} strokeWidth="1.5" opacity="0.6" />;
             })}
-            <line x1="50" y1="50" x2="50" y2="20" stroke={SCENE_PARAMS.clockColor.value} strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-            <line x1="50" y1="50" x2="70" y2="50" stroke={SCENE_PARAMS.clockColor.value} strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
-            <circle cx="50" cy="50" r="2" fill={SCENE_PARAMS.clockColor.value} opacity="0.8" />
+            <line x1="50" y1="50" x2="50" y2="20" stroke={(props.clockColor ?? SCENE_PARAMS.clockColor.value)} strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+            <line x1="50" y1="50" x2="70" y2="50" stroke={(props.clockColor ?? SCENE_PARAMS.clockColor.value)} strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+            <circle cx="50" cy="50" r="2" fill={(props.clockColor ?? SCENE_PARAMS.clockColor.value)} opacity="0.8" />
           </svg>
         </div>
         
@@ -182,7 +182,7 @@ function Scene() {
               opacity: entranceOpacity * coinOpacity,
             }}>
               <svg viewBox="0 0 40 40" style={{ width: "100%", height: "100%" }}>
-                <circle cx="20" cy="20" r="18" fill={SCENE_PARAMS.coinColor.value} />
+                <circle cx="20" cy="20" r="18" fill={(props.coinColor ?? SCENE_PARAMS.coinColor.value)} />
                 <circle cx="20" cy="20" r="14" fill="none" stroke="#fcd34d" strokeWidth="2" />
                 <text x="20" y="26" textAnchor="middle" fill="#92400e" fontSize="16" fontWeight="bold">$</text>
               </svg>
@@ -209,7 +209,7 @@ function Scene() {
               top: lineY,
               width: pos.length,
               height: 4,
-              backgroundColor: SCENE_PARAMS.lineColor.value,
+              backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
               transform: "rotate(" + lineRot + "deg)",
               opacity: entranceOpacity * lineOpacity,
               borderRadius: 2,
@@ -238,7 +238,7 @@ function Scene() {
           const entranceDelay = i * 4;
           const entranceOpacity = interpolate(adjustedFrame, [entranceDelay, entranceDelay + 20], [0, 1], { extrapolateRight: "clamp" });
           
-          const candleColor = candle.type === "green" ? SCENE_PARAMS.candleGreen.value : SCENE_PARAMS.candleRed.value;
+          const candleColor = candle.type === "green" ? (props.candleGreen ?? SCENE_PARAMS.candleGreen.value) : (props.candleRed ?? SCENE_PARAMS.candleRed.value);
           
           return (
             <div key={"candle" + i} style={{
@@ -289,7 +289,7 @@ function Scene() {
               top: chartTop + chartHeight * 0.85,
               width: chartWidth * interpolate(snapProgress, [0.3, 0.7], [0, 1], { extrapolateRight: "clamp" }),
               height: 2,
-              backgroundColor: SCENE_PARAMS.candleRed.value,
+              backgroundColor: (props.candleRed ?? SCENE_PARAMS.candleRed.value),
               opacity: interpolate(snapProgress, [0.3, 0.6], [0, 0.8], { extrapolateRight: "clamp" }),
             }} />
             {/* Take Profit Line */}
@@ -299,7 +299,7 @@ function Scene() {
               top: chartTop + chartHeight * 0.15,
               width: chartWidth * interpolate(snapProgress, [0.4, 0.8], [0, 1], { extrapolateRight: "clamp" }),
               height: 2,
-              backgroundColor: SCENE_PARAMS.candleGreen.value,
+              backgroundColor: (props.candleGreen ?? SCENE_PARAMS.candleGreen.value),
               opacity: interpolate(snapProgress, [0.4, 0.7], [0, 0.8], { extrapolateRight: "clamp" }),
             }} />
           </>
@@ -316,9 +316,9 @@ function Scene() {
             opacity: interpolate(snapProgress, [0.5, 0.8], [0, 1], { extrapolateRight: "clamp" }),
           }}>
             <svg viewBox="0 0 20 100" style={{ width: "100%", height: "100%" }}>
-              <rect x="8" y="0" width="4" height="100" fill={SCENE_PARAMS.lineColor.value} rx="2" />
+              <rect x="8" y="0" width="4" height="100" fill={(props.lineColor ?? SCENE_PARAMS.lineColor.value)} rx="2" />
               {[0, 33, 66, 100].map((y, idx) => (
-                <rect key={idx} x="2" y={y - 1} width="16" height="2" fill={SCENE_PARAMS.lineColor.value} />
+                <rect key={idx} x="2" y={y - 1} width="16" height="2" fill={(props.lineColor ?? SCENE_PARAMS.lineColor.value)} />
               ))}
             </svg>
           </div>
@@ -352,7 +352,7 @@ function Scene() {
               <polyline
                 points="10,50 20,45 30,48 40,35 50,30 60,25 70,20 80,15 90,10"
                 fill="none"
-                stroke={SCENE_PARAMS.candleGreen.value}
+                stroke={(props.candleGreen ?? SCENE_PARAMS.candleGreen.value)}
                 strokeWidth="2"
                 strokeLinecap="round"
                 opacity={snapProgress}

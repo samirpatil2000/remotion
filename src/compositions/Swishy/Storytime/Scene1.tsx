@@ -35,12 +35,12 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const smoothConfig = { damping: 20, stiffness: 90 };
@@ -65,7 +65,7 @@ function Scene() {
     return interpolate(adjustedFrame, [endFrame - duration, endFrame], [1, 0], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
   };
   
-  const slideUp = (startFrame, distance = SCENE_PARAMS.entranceOffset.value) => {
+  const slideUp = (startFrame, distance = (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value)) => {
     const progress = spring({ frame: Math.max(0, adjustedFrame - startFrame), fps, config: smoothConfig });
     return interpolate(progress, [0, 1], [distance, 0], { extrapolateRight: "clamp" });
   };
@@ -75,15 +75,15 @@ function Scene() {
     if (!inPhase) return 0;
     const enterOpacity = fadeIn(phase.start);
     const exitOpacity = fadeOut(phase.end);
-    return Math.min(enterOpacity, exitOpacity) * SCENE_PARAMS.opacity.value;
+    return Math.min(enterOpacity, exitOpacity) * (props.opacity ?? SCENE_PARAMS.opacity.value);
   };
   
   const isInPhase = (phase) => adjustedFrame >= phase.start && adjustedFrame < phase.end;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   
   return (
     <AbsoluteFill style={{
-      background: "radial-gradient(ellipse at center, " + SCENE_PARAMS.backgroundColor2.value + " 0%, " + SCENE_PARAMS.backgroundColor1.value + " 70%)",
+      background: "radial-gradient(ellipse at center, " + (props.backgroundColor2 ?? SCENE_PARAMS.backgroundColor2.value) + " 0%, " + (props.backgroundColor1 ?? SCENE_PARAMS.backgroundColor1.value) + " 70%)",
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
@@ -96,7 +96,7 @@ function Scene() {
       }} />
       
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -106,25 +106,25 @@ function Scene() {
         alignItems: "center",
         padding: minDim * 0.08,
         boxSizing: "border-box",
-        filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+        filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
       }}>
         
         {isInPhase(TIMING.day5) && (
           <div style={{
             position: "absolute",
             opacity: getPhaseOpacity(TIMING.day5),
-            transform: "translateY(" + slideUp(TIMING.day5.start, SCENE_PARAMS.entranceOffset.value + 15) + "px)",
+            transform: "translateY(" + slideUp(TIMING.day5.start, (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) + 15) + "px)",
           }}>
             <h1 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.2,
               fontWeight: 900,
-              color: SCENE_PARAMS.primaryColor.value,
+              color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
               letterSpacing: minDim * 0.025,
               margin: 0,
               textTransform: "uppercase",
             }}>
-              {SCENE_PARAMS.heroText1.value}
+              {(props.heroText1 ?? SCENE_PARAMS.heroText1.value)}
             </h1>
           </div>
         )}
@@ -137,15 +137,15 @@ function Scene() {
             transform: "translateY(" + slideUp(TIMING.opening.start) + "px)",
           }}>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.05,
               fontWeight: 300,
-              color: SCENE_PARAMS.emphasisColor.value,
+              color: (props.emphasisColor ?? SCENE_PARAMS.emphasisColor.value),
               letterSpacing: minDim * 0.002,
               lineHeight: 1.5,
               margin: 0,
             }}>
-              {SCENE_PARAMS.openingLine.value}
+              {(props.openingLine ?? SCENE_PARAMS.openingLine.value)}
             </p>
           </div>
         )}
@@ -157,14 +157,14 @@ function Scene() {
             opacity: getPhaseOpacity(TIMING.fearQuote1),
           }}>
             <h2 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.1,
               fontWeight: 700,
-              color: SCENE_PARAMS.emphasisColor.value,
+              color: (props.emphasisColor ?? SCENE_PARAMS.emphasisColor.value),
               margin: 0,
-              transform: "translateY(" + slideUp(TIMING.fearQuote1.start, SCENE_PARAMS.entranceOffset.value - 5) + "px)",
+              transform: "translateY(" + slideUp(TIMING.fearQuote1.start, (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) - 5) + "px)",
             }}>
-              "{SCENE_PARAMS.fearQuote.value}"
+              "{(props.fearQuote ?? SCENE_PARAMS.fearQuote.value)}"
             </h2>
           </div>
         )}
@@ -184,12 +184,12 @@ function Scene() {
               transform: "translateX(" + interpolate(spring({ frame: Math.max(0, adjustedFrame - TIMING.critics.start - 2), fps, config: smoothConfig }), [0, 1], [-30, 0], { extrapolateRight: "clamp" }) + "px)",
             }}>
               <p style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.038,
-                color: SCENE_PARAMS.mutedColor.value,
+                color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
                 margin: 0,
               }}>
-                Some will say — <span style={{ color: SCENE_PARAMS.primaryColor.value, fontWeight: 500 }}>{SCENE_PARAMS.critic1.value}</span>
+                Some will say — <span style={{ color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value), fontWeight: 500 }}>{(props.critic1 ?? SCENE_PARAMS.critic1.value)}</span>
               </p>
             </div>
             
@@ -198,12 +198,12 @@ function Scene() {
               transform: "translateX(" + interpolate(spring({ frame: Math.max(0, adjustedFrame - TIMING.critics.start - stagger), fps, config: smoothConfig }), [0, 1], [30, 0], { extrapolateRight: "clamp" }) + "px)",
             }}>
               <p style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.038,
-                color: SCENE_PARAMS.mutedColor.value,
+                color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
                 margin: 0,
               }}>
-                Others will say — <span style={{ color: SCENE_PARAMS.primaryColor.value, fontWeight: 500 }}>{SCENE_PARAMS.critic2.value}</span>
+                Others will say — <span style={{ color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value), fontWeight: 500 }}>{(props.critic2 ?? SCENE_PARAMS.critic2.value)}</span>
               </p>
             </div>
             
@@ -212,12 +212,12 @@ function Scene() {
               transform: "translateX(" + interpolate(spring({ frame: Math.max(0, adjustedFrame - TIMING.critics.start - stagger * 2), fps, config: smoothConfig }), [0, 1], [-30, 0], { extrapolateRight: "clamp" }) + "px)",
             }}>
               <p style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.038,
-                color: SCENE_PARAMS.mutedColor.value,
+                color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
                 margin: 0,
               }}>
-                Some will just — <span style={{ color: SCENE_PARAMS.primaryColor.value, fontWeight: 500 }}>{SCENE_PARAMS.critic3.value}</span>
+                Some will just — <span style={{ color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value), fontWeight: 500 }}>{(props.critic3 ?? SCENE_PARAMS.critic3.value)}</span>
               </p>
             </div>
           </div>
@@ -235,41 +235,41 @@ function Scene() {
             padding: "0 " + minDim * 0.05 + "px",
           }}>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.04,
               fontWeight: 400,
-              color: SCENE_PARAMS.mutedColor.value,
+              color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
               margin: 0,
               opacity: fadeIn(TIMING.truth.start),
               transform: "translateY(" + slideUp(TIMING.truth.start) + "px)",
             }}>
-              {SCENE_PARAMS.truthIntro.value}
+              {(props.truthIntro ?? SCENE_PARAMS.truthIntro.value)}
             </p>
             
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.048,
               fontWeight: 500,
-              color: SCENE_PARAMS.emphasisColor.value,
+              color: (props.emphasisColor ?? SCENE_PARAMS.emphasisColor.value),
               margin: 0,
               lineHeight: 1.4,
               opacity: fadeIn(TIMING.truth.start + stagger),
               transform: "translateY(" + slideUp(TIMING.truth.start + stagger) + "px)",
             }}>
-              {SCENE_PARAMS.truthMain.value}
+              {(props.truthMain ?? SCENE_PARAMS.truthMain.value)}
             </p>
             
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.06,
               fontWeight: 700,
-              color: SCENE_PARAMS.primaryColor.value,
+              color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
               margin: 0,
               marginTop: minDim * 0.01,
               opacity: fadeIn(TIMING.truth.start + stagger * 2),
-              transform: "translateY(" + slideUp(TIMING.truth.start + stagger * 2, SCENE_PARAMS.entranceOffset.value - 5) + "px)",
+              transform: "translateY(" + slideUp(TIMING.truth.start + stagger * 2, (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) - 5) + "px)",
             }}>
-              {SCENE_PARAMS.truthPunch.value}
+              {(props.truthPunch ?? SCENE_PARAMS.truthPunch.value)}
             </p>
           </div>
         )}
@@ -282,15 +282,15 @@ function Scene() {
             padding: "0 " + minDim * 0.06 + "px",
           }}>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.05,
               fontWeight: 500,
-              color: SCENE_PARAMS.emphasisColor.value,
+              color: (props.emphasisColor ?? SCENE_PARAMS.emphasisColor.value),
               margin: 0,
               lineHeight: 1.5,
               transform: "translateY(" + slideUp(TIMING.dreams.start) + "px)",
             }}>
-              {SCENE_PARAMS.dreamLine.value}
+              {(props.dreamLine ?? SCENE_PARAMS.dreamLine.value)}
             </p>
           </div>
         )}
@@ -302,14 +302,14 @@ function Scene() {
             opacity: getPhaseOpacity(TIMING.fearQuote2),
           }}>
             <h2 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.085,
               fontWeight: 600,
-              color: SCENE_PARAMS.mutedColor.value,
+              color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
               margin: 0,
               transform: "translateY(" + slideUp(TIMING.fearQuote2.start) + "px)",
             }}>
-              "{SCENE_PARAMS.fearQuote.value}"
+              "{(props.fearQuote ?? SCENE_PARAMS.fearQuote.value)}"
             </h2>
           </div>
         )}
@@ -321,15 +321,15 @@ function Scene() {
             opacity: getPhaseOpacity(TIMING.closing),
           }}>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.055,
               fontWeight: 600,
-              color: SCENE_PARAMS.primaryColor.value,
+              color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
               margin: 0,
               lineHeight: 1.4,
               transform: "translateY(" + slideUp(TIMING.closing.start) + "px)",
             }}>
-              {SCENE_PARAMS.closingLine.value}
+              {(props.closingLine ?? SCENE_PARAMS.closingLine.value)}
             </p>
           </div>
         )}
@@ -345,42 +345,42 @@ function Scene() {
             opacity: getPhaseOpacity(TIMING.cta),
           }}>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.038,
               fontWeight: 400,
-              color: SCENE_PARAMS.mutedColor.value,
+              color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value),
               margin: 0,
               lineHeight: 1.5,
-              opacity: fadeIn(TIMING.cta.start) * SCENE_PARAMS.opacity.value,
+              opacity: fadeIn(TIMING.cta.start) * (props.opacity ?? SCENE_PARAMS.opacity.value),
               transform: "translateY(" + slideUp(TIMING.cta.start) + "px)",
             }}>
-              {SCENE_PARAMS.ctaIntro.value}
+              {(props.ctaIntro ?? SCENE_PARAMS.ctaIntro.value)}
             </p>
             
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.075,
               fontWeight: 700,
-              color: SCENE_PARAMS.emphasisColor.value,
+              color: (props.emphasisColor ?? SCENE_PARAMS.emphasisColor.value),
               margin: 0,
-              opacity: fadeIn(TIMING.cta.start + stagger) * SCENE_PARAMS.opacity.value,
-              transform: "translateY(" + slideUp(TIMING.cta.start + stagger, SCENE_PARAMS.entranceOffset.value - 5) + "px)",
+              opacity: fadeIn(TIMING.cta.start + stagger) * (props.opacity ?? SCENE_PARAMS.opacity.value),
+              transform: "translateY(" + slideUp(TIMING.cta.start + stagger, (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) - 5) + "px)",
             }}>
-              {SCENE_PARAMS.ctaText.value}
+              {(props.ctaText ?? SCENE_PARAMS.ctaText.value)}
             </p>
             
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.028,
               fontWeight: 400,
-              color: SCENE_PARAMS.primaryColor.value,
+              color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
               margin: 0,
               marginTop: minDim * 0.015,
-              opacity: fadeIn(TIMING.cta.start + stagger * 2) * 0.6 * SCENE_PARAMS.opacity.value,
+              opacity: fadeIn(TIMING.cta.start + stagger * 2) * 0.6 * (props.opacity ?? SCENE_PARAMS.opacity.value),
               letterSpacing: minDim * 0.006,
               textTransform: "uppercase",
             }}>
-              {SCENE_PARAMS.tagline.value}
+              {(props.tagline ?? SCENE_PARAMS.tagline.value)}
             </p>
           </div>
         )}

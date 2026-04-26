@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@remotion/player";
 import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
@@ -354,10 +355,91 @@ const COMING_SOON = [
   { id: "DataViz",         title: "Data Visualization", description: "Interactive charts and graphs for video dashboards.",       color: "#007AFF", icon: "📊" },
 ];
 
-// ── Component ─────────────────────────────────────────────────────────────────
+function TemplateCard({ def, navigate }: { def: CompositionDef; navigate: (path: string) => void }) {
+  return (
+    <div 
+      onClick={() => navigate(`/editor/${def.id}`)}
+      style={{
+        backgroundColor: "rgba(255,255,255,0.025)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        borderRadius: 20,
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "all 0.2s ease",
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.04)";
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.025)";
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+      }}
+    >
+      <div style={{ height: 200, width: "100%", backgroundColor: "#050505", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <CompositionPreview def={def} />
+      </div>
+      <div style={{ padding: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+          <div style={{
+            width: 24, height: 24, borderRadius: 6,
+            backgroundColor: def.color,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 12,
+          }}>
+            {def.icon}
+          </div>
+          <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0, color: "#fff" }}>{def.title}</h3>
+        </div>
+        <p style={{ 
+          fontSize: 13, 
+          color: "rgba(255,255,255,0.4)", 
+          margin: 0, 
+          lineHeight: 1.5,
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden"
+        }}>
+          {def.description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Component ─────────────────────────────────────────────────────────────
 export default function Home() {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const categories = ["All", "UI & App", "Typography", "Social & Media", "3D & Abstract", "Data & Charts", "Utility", "Miscellaneous"];
+
+  const filteredTemplates = useMemo(() => {
+    return REGISTRY.filter(def => {
+      const matchesSearch = def.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            def.description.toLowerCase().includes(searchQuery.toLowerCase());
+      // Handle missing categories gracefully
+      const defCategory = (def as any).category || "Miscellaneous";
+      const matchesCategory = selectedCategory === "All" || defCategory === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, selectedCategory]);
+
+  const groupedTemplates = useMemo(() => {
+    if (searchQuery || selectedCategory !== "All") return null;
+    const groups: Record<string, typeof REGISTRY> = {};
+    for (const cat of categories.slice(1)) {
+      const items = REGISTRY.filter(d => ((d as any).category || "Miscellaneous") === cat);
+      if (items.length > 0) groups[cat] = items;
+    }
+    return groups;
+  }, [searchQuery, selectedCategory]);
 
   return (
     <div style={{
@@ -389,7 +471,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <div style={{ padding: "72px 48px 52px" }}>
+      <div style={{ padding: "72px 48px 40px" }}>
         <div style={{ maxWidth: 520 }}>
           <div style={{
             display: "inline-block",
@@ -423,181 +505,278 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Template grid */}
-      <div style={{
-        padding: "0 48px 80px",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-        gap: 20,
-        maxWidth: 1400,
-      }}>
-        {/* Import your own component */}
-        <button
-          onClick={() => setModalOpen(true)}
-          style={{
-            all: "unset",
-            cursor: "pointer",
-            display: "block",
-            background: "#0a0a0a",
-            border: "1px dashed rgba(255,255,255,0.12)",
-            borderRadius: 20,
-            overflow: "hidden",
-            transition: "border-color 0.2s, transform 0.2s",
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.3)";
-            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.12)";
-            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
-          }}
-        >
+      {/* Search and Filters */}
+      <div style={{ padding: "0 48px 40px", maxWidth: 1400 }}>
+        {/* Search Bar */}
+        <div style={{ 
+          position: "relative", 
+          maxWidth: 600, 
+          marginBottom: 24,
+        }}>
           <div style={{
-            height: 240, width: "100%",
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center", gap: 12,
+            position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)",
+            color: "rgba(255,255,255,0.4)", pointerEvents: "none"
           }}>
-            <div style={{
-              width: 52, height: 52, borderRadius: "50%",
-              border: "1.5px dashed rgba(255,255,255,0.2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 26, color: "rgba(255,255,255,0.35)",
-            }}>+</div>
-            <span style={{ fontSize: 13, color: "rgba(255,255,255,0.28)", fontWeight: 500 }}>
-              Import component
-            </span>
+            <Search size={20} />
           </div>
-          <div style={{ padding: "22px 24px 24px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{
-                width: 28, height: 28, borderRadius: 8,
-                background: "rgba(255,255,255,0.06)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 14,
-              }}>+</div>
-              <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.5)" }}>
-                Your Component
-              </span>
-            </div>
-            <p style={{ margin: "10px 0 0", fontSize: 13, color: "rgba(255,255,255,0.28)", lineHeight: 1.55 }}>
-              Upload a .jsx or .tsx file and animate it with Remotion.
-            </p>
-          </div>
-        </button>
-
-        {/* Active templates from registry */}
-        {REGISTRY.map((def) => {
-          return (
-            <button
-              key={def.id}
-              onClick={() => navigate(`/editor/${def.id}`)}
+          <input 
+            type="text"
+            placeholder="Search templates..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: "100%",
+              backgroundColor: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 16,
+              padding: "16px 16px 16px 48px",
+              fontSize: 16,
+              color: "#fff",
+              outline: "none",
+              transition: "border-color 0.2s, background-color 0.2s",
+              boxSizing: "border-box"
+            }}
+            onFocus={e => e.target.style.borderColor = "rgba(255,255,255,0.3)"}
+            onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
+          />
+          {searchQuery && (
+            <button 
+              onClick={() => setSearchQuery("")}
               style={{
-                all: "unset",
-                cursor: "pointer",
-                display: "block",
-                background: "#0a0a0a",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 20,
-                overflow: "hidden",
-                transition: "border-color 0.2s, transform 0.2s",
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.16)";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.07)";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)",
+                all: "unset", cursor: "pointer", color: "rgba(255,255,255,0.4)",
+                display: "flex", alignItems: "center", justifyContent: "center"
               }}
             >
-              {/* Preview thumbnail */}
-              <div style={{ height: 240, width: "100%", overflow: "hidden" }}>
-                <CompositionPreview def={def} />
-              </div>
+              <X size={18} />
+            </button>
+          )}
+        </div>
 
-              {/* Info */}
+        {/* Category Pills */}
+        <div style={{ 
+          display: "flex", 
+          gap: 10, 
+          flexWrap: "wrap",
+        }}>
+          {categories.map(cat => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                style={{
+                  all: "unset",
+                  cursor: "pointer",
+                  padding: "8px 18px",
+                  borderRadius: 20,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  transition: "all 0.2s ease",
+                  backgroundColor: isSelected ? "#fff" : "rgba(255,255,255,0.06)",
+                  color: isSelected ? "#000" : "rgba(255,255,255,0.6)",
+                  border: `1px solid ${isSelected ? "transparent" : "rgba(255,255,255,0.08)"}`
+                }}
+                onMouseEnter={e => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(255,255,255,0.1)";
+                    (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.9)";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isSelected) {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(255,255,255,0.06)";
+                    (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.6)";
+                  }
+                }}
+              >
+                {cat}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Template View */}
+      <div style={{ padding: "0 48px 80px", maxWidth: 1400 }}>
+        {groupedTemplates ? (
+          // --- Grouped Sections View ---
+          <div style={{ display: "flex", flexDirection: "column", gap: 64 }}>
+            {categories.slice(1).map(cat => {
+              const items = groupedTemplates[cat];
+              if (!items) return null;
+              
+              return (
+                <div key={cat}>
+                  <div style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.08)"
+                  }}>
+                    <h2 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}>{cat}</h2>
+                    <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>{items.length} templates</span>
+                  </div>
+                  <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                    gap: 20,
+                  }}>
+                    {items.map((def) => (
+                      <TemplateCard key={def.id} def={def} navigate={navigate} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          // --- Filtered Flat Grid View ---
+          <div>
+            <div style={{ marginBottom: 24 }}>
+              <h2 style={{ fontSize: 20, fontWeight: 600, margin: 0, color: "rgba(255,255,255,0.7)" }}>
+                {filteredTemplates.length} result{filteredTemplates.length === 1 ? "" : "s"}
+              </h2>
+            </div>
+            {filteredTemplates.length > 0 ? (
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                gap: 20,
+              }}>
+                {filteredTemplates.map((def) => (
+                  <TemplateCard key={def.id} def={def} navigate={navigate} />
+                ))}
+              </div>
+            ) : (
+              <div style={{ padding: "80px 0", textAlign: "center" }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
+                <h3 style={{ fontSize: 20, fontWeight: 600, margin: "0 0 8px" }}>No templates found</h3>
+                <p style={{ color: "rgba(255,255,255,0.5)" }}>Try adjusting your search or category filter.</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Custom & Coming Soon */}
+      <div style={{ padding: "0 48px 80px", maxWidth: 1400 }}>
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.08)"
+        }}>
+          <h2 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}>More</h2>
+        </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+          gap: 20,
+        }}>
+          {/* Import your own component */}
+          <button
+            onClick={() => setModalOpen(true)}
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              display: "block",
+              background: "#0a0a0a",
+              border: "1px dashed rgba(255,255,255,0.12)",
+              borderRadius: 20,
+              overflow: "hidden",
+              transition: "border-color 0.2s, transform 0.2s",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.3)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.12)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+            }}
+          >
+            <div style={{
+              height: 240, width: "100%",
+              display: "flex", flexDirection: "column",
+              alignItems: "center", justifyContent: "center", gap: 12,
+            }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: "50%",
+                border: "1.5px dashed rgba(255,255,255,0.2)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 26, color: "rgba(255,255,255,0.35)",
+              }}>+</div>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.28)", fontWeight: 500 }}>
+                Import component
+              </span>
+            </div>
+            <div style={{ padding: "22px 24px 24px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: "rgba(255,255,255,0.06)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 14,
+                }}>+</div>
+                <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.5)" }}>
+                  Your Component
+                </span>
+              </div>
+              <p style={{ margin: "10px 0 0", fontSize: 13, color: "rgba(255,255,255,0.28)", lineHeight: 1.55 }}>
+                Upload a .jsx or .tsx file and animate it with Remotion.
+              </p>
+            </div>
+          </button>
+
+          {/* Coming soon */}
+          {COMING_SOON.map((c) => (
+            <div
+              key={c.id}
+              style={{
+                background: "#0a0a0a",
+                border: "1px solid rgba(255,255,255,0.04)",
+                borderRadius: 20,
+                overflow: "hidden",
+                opacity: 0.42,
+                cursor: "default",
+              }}
+            >
+              <div style={{
+                height: 240,
+                background: c.color + "0d",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 52, filter: "grayscale(1)",
+              }}>
+                {c.icon}
+              </div>
               <div style={{ padding: "22px 24px 24px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{
                       width: 28, height: 28, borderRadius: 8,
-                      backgroundColor: def.color,
+                      backgroundColor: c.color,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 14,
-                      boxShadow: `0 2px 8px ${def.color}44`,
+                      fontSize: 14, filter: "grayscale(1)",
                     }}>
-                      {def.icon}
+                      {c.icon}
                     </div>
-                    <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em" }}>
-                      {def.title}
-                    </span>
+                    <span style={{ fontSize: 16, fontWeight: 600 }}>{c.title}</span>
                   </div>
-                  <span style={{ fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>›</span>
+                  <span style={{
+                    fontSize: 10, fontWeight: 600, letterSpacing: "0.08em",
+                    textTransform: "uppercase" as const,
+                    color: "rgba(255,255,255,0.3)",
+                  }}>
+                    Soon
+                  </span>
                 </div>
-                <p style={{
-                  margin: "10px 0 0",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.42)",
-                  lineHeight: 1.55,
-                }}>
-                  {def.description}
+                <p style={{ margin: "10px 0 0", fontSize: 13, color: "rgba(255,255,255,0.3)", lineHeight: 1.55 }}>
+                  {c.description}
                 </p>
               </div>
-            </button>
-          );
-        })}
-
-        {/* Coming soon */}
-        {COMING_SOON.map((c) => (
-          <div
-            key={c.id}
-            style={{
-              background: "#0a0a0a",
-              border: "1px solid rgba(255,255,255,0.04)",
-              borderRadius: 20,
-              overflow: "hidden",
-              opacity: 0.42,
-              cursor: "default",
-            }}
-          >
-            <div style={{
-              height: 240,
-              background: c.color + "0d",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 52, filter: "grayscale(1)",
-            }}>
-              {c.icon}
             </div>
-            <div style={{ padding: "22px 24px 24px" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{
-                    width: 28, height: 28, borderRadius: 8,
-                    backgroundColor: c.color,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 14, filter: "grayscale(1)",
-                  }}>
-                    {c.icon}
-                  </div>
-                  <span style={{ fontSize: 16, fontWeight: 600 }}>{c.title}</span>
-                </div>
-                <span style={{
-                  fontSize: 10, fontWeight: 600, letterSpacing: "0.08em",
-                  textTransform: "uppercase" as const,
-                  color: "rgba(255,255,255,0.3)",
-                }}>
-                  Soon
-                </span>
-              </div>
-              <p style={{ margin: "10px 0 0", fontSize: 13, color: "rgba(255,255,255,0.3)", lineHeight: 1.55 }}>
-                {c.description}
-              </p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
+      {/* Import Modal */}
       {modalOpen && <ImportModal onClose={() => setModalOpen(false)} />}
     </div>
   );

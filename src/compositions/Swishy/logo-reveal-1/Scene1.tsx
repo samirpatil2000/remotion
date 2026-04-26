@@ -44,44 +44,44 @@ const SCENE_PARAMS = {
   showShadow: { type: "boolean", label: "Show Shadow", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const phase1 = interpolate(adjustedFrame, [0, 30], [0, 1], { extrapolateRight: "clamp" });
-  const rotation = SCENE_PARAMS.enableRotation.value ? adjustedFrame * SCENE_PARAMS.rotationSpeed.value : 0;
-  const shapeSize = minDim * SCENE_PARAMS.shapeSize.value;
+  const rotation = (props.enableRotation ?? SCENE_PARAMS.enableRotation.value) ? adjustedFrame * (props.rotationSpeed ?? SCENE_PARAMS.rotationSpeed.value) : 0;
+  const shapeSize = minDim * (props.shapeSize ?? SCENE_PARAMS.shapeSize.value);
   
   const borderRadius = interpolate(
     adjustedFrame, 
     [0, 30, 60, 90], 
-    [0, shapeSize * 0.2, shapeSize * 0.4, shapeSize * SCENE_PARAMS.finalBorderRadius.value], 
+    [0, shapeSize * 0.2, shapeSize * 0.4, shapeSize * (props.finalBorderRadius ?? SCENE_PARAMS.finalBorderRadius.value)], 
     { extrapolateRight: "clamp" }
   );
   
-  const logoDelay = SCENE_PARAMS.logoEntranceDelay.value;
+  const logoDelay = (props.logoEntranceDelay ?? SCENE_PARAMS.logoEntranceDelay.value);
   const logoOpacity = interpolate(adjustedFrame, [logoDelay, logoDelay + 20], [0, 1], { extrapolateRight: "clamp" });
   const logoScale = spring({ 
     frame: Math.max(0, adjustedFrame - logoDelay), 
     fps, 
     config: { 
-      damping: SCENE_PARAMS.springDamping.value, 
-      stiffness: SCENE_PARAMS.springStiffness.value 
+      damping: (props.springDamping ?? SCENE_PARAMS.springDamping.value), 
+      stiffness: (props.springStiffness ?? SCENE_PARAMS.springStiffness.value) 
     } 
   });
   
-  const boxShadow = SCENE_PARAMS.showShadow.value 
-    ? "0 25px 50px -12px rgba(0,0,0," + SCENE_PARAMS.shadowIntensity.value + ")"
+  const boxShadow = (props.showShadow ?? SCENE_PARAMS.showShadow.value) 
+    ? "0 25px 50px -12px rgba(0,0,0," + (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) + ")"
     : "none";
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center" 
     }}>
@@ -96,7 +96,7 @@ function Scene() {
         <div style={{
           width: shapeSize,
           height: shapeSize,
-          backgroundColor: SCENE_PARAMS.shapeColor.value,
+          backgroundColor: (props.shapeColor ?? SCENE_PARAMS.shapeColor.value),
           borderRadius: borderRadius,
           transform: "rotate(" + rotation + "deg) scale(" + (0.8 + phase1 * 0.2) + ")",
           display: "flex",
@@ -105,30 +105,30 @@ function Scene() {
           boxShadow: boxShadow,
         }}>
           <span style={{
-            color: SCENE_PARAMS.textColor.value,
-            fontSize: minDim * SCENE_PARAMS.logoFontSize.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            fontSize: minDim * (props.logoFontSize ?? SCENE_PARAMS.logoFontSize.value),
             fontWeight: 700,
             fontFamily: "system-ui",
             opacity: logoOpacity,
             transform: "rotate(" + (-rotation) + "deg) scale(" + logoScale + ")",
           }}>
-            {SCENE_PARAMS.logoText.value}
+            {(props.logoText ?? SCENE_PARAMS.logoText.value)}
           </span>
         </div>
         
-        {SCENE_PARAMS.showCompanyName.value && (
+        {(props.showCompanyName ?? SCENE_PARAMS.showCompanyName.value) && (
           <div style={{
             opacity: logoOpacity,
             transform: "translateY(" + ((1 - logoScale) * 20) + "px)",
           }}>
             <span style={{
-              fontSize: minDim * SCENE_PARAMS.companyFontSize.value,
+              fontSize: minDim * (props.companyFontSize ?? SCENE_PARAMS.companyFontSize.value),
               fontWeight: 600,
-              color: SCENE_PARAMS.companyTextColor.value,
+              color: (props.companyTextColor ?? SCENE_PARAMS.companyTextColor.value),
               fontFamily: "system-ui",
-              letterSpacing: minDim * SCENE_PARAMS.letterSpacing.value,
+              letterSpacing: minDim * (props.letterSpacing ?? SCENE_PARAMS.letterSpacing.value),
             }}>
-              {SCENE_PARAMS.companyName.value}
+              {(props.companyName ?? SCENE_PARAMS.companyName.value)}
             </span>
           </div>
         )}

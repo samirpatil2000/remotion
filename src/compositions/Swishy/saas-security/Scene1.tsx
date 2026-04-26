@@ -24,14 +24,14 @@ const SCENE_PARAMS = {
   particleCount: { type: "number", label: "Particle Count", value: 12, min: 5, max: 25, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   const isPortrait = height > width;
   
   // Phase timings (at 24fps, 12-15 seconds = 288-360 frames)
@@ -78,7 +78,7 @@ function Scene() {
   
   // Floating particles
   const particles = [];
-  for (let i = 0; i < SCENE_PARAMS.particleCount.value; i++) {
+  for (let i = 0; i < (props.particleCount ?? SCENE_PARAMS.particleCount.value); i++) {
     const seed = i * 137.5;
     const baseX = ((seed * 7) % 100);
     const baseY = ((seed * 13) % 100);
@@ -97,10 +97,10 @@ function Scene() {
           width: particleSize,
           height: particleSize,
           borderRadius: "50%",
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           opacity: particleOpacity,
           transform: "translate(" + floatOffsetX + "px, " + floatOffset + "px)",
-          boxShadow: "0 0 " + (6 * SCENE_PARAMS.glowIntensity.value) + "px " + SCENE_PARAMS.accentColor.value,
+          boxShadow: "0 0 " + (6 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
         }
       })
     );
@@ -120,7 +120,7 @@ function Scene() {
           top: lineY + "%",
           width: "100%",
           height: 1,
-          background: "linear-gradient(90deg, transparent 0%, " + SCENE_PARAMS.accentColor.value + " 50%, transparent 100%)",
+          background: "linear-gradient(90deg, transparent 0%, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + " 50%, transparent 100%)",
           opacity: lineOpacity,
         }
       })
@@ -129,9 +129,9 @@ function Scene() {
   
   // Findings data
   const findings = [
-    { severity: "Critical", color: SCENE_PARAMS.criticalColor.value, count: 3, delay: 0 },
-    { severity: "High", color: SCENE_PARAMS.highColor.value, count: 12, delay: 8 },
-    { severity: "Medium", color: SCENE_PARAMS.mediumColor.value, count: 27, delay: 16 },
+    { severity: "Critical", color: (props.criticalColor ?? SCENE_PARAMS.criticalColor.value), count: 3, delay: 0 },
+    { severity: "High", color: (props.highColor ?? SCENE_PARAMS.highColor.value), count: 12, delay: 8 },
+    { severity: "Medium", color: (props.mediumColor ?? SCENE_PARAMS.mediumColor.value), count: 27, delay: 16 },
   ];
   
   const cardWidth = isPortrait ? width * 0.85 : width * 0.55;
@@ -139,7 +139,7 @@ function Scene() {
   
   return React.createElement(AbsoluteFill, {
     style: {
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
@@ -185,15 +185,15 @@ function Scene() {
       },
         React.createElement("h1", {
           style: {
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * (isPortrait ? 0.055 : 0.07),
             fontWeight: 600,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             margin: 0,
             letterSpacing: "-0.02em",
-            textShadow: "0 0 " + (40 * titleGlow * SCENE_PARAMS.glowIntensity.value) + "px " + SCENE_PARAMS.accentColor.value + ", 0 0 " + (80 * titleGlow * SCENE_PARAMS.glowIntensity.value) + "px " + SCENE_PARAMS.accentColor.value,
+            textShadow: "0 0 " + (40 * titleGlow * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", 0 0 " + (80 * titleGlow * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           }
-        }, SCENE_PARAMS.titleText.value)
+        }, (props.titleText ?? SCENE_PARAMS.titleText.value))
       ),
       
       // Dashboard UI
@@ -202,10 +202,10 @@ function Scene() {
           position: "relative",
           width: cardWidth,
           height: cardHeight,
-          backgroundColor: SCENE_PARAMS.cardColor.value,
+          backgroundColor: (props.cardColor ?? SCENE_PARAMS.cardColor.value),
           borderRadius: minDim * 0.02,
           border: "1px solid rgba(255, 255, 255, 0.08)",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 " + (30 * SCENE_PARAMS.glowIntensity.value) + "px rgba(34, 211, 238, 0.1)",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 " + (30 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)) + "px rgba(34, 211, 238, 0.1)",
           opacity: dashboardProgress * dashboardFadeOut,
           transform: "translateY(" + dashboardY + "px)",
           overflow: "hidden",
@@ -238,18 +238,18 @@ function Scene() {
                 width: minDim * 0.012,
                 height: minDim * 0.012,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.accentColor.value,
-                boxShadow: "0 0 10px " + SCENE_PARAMS.accentColor.value,
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+                boxShadow: "0 0 10px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 animation: scanProgress < 100 ? "pulse 1s infinite" : "none",
                 opacity: scanProgress < 100 ? interpolate(Math.sin(adjustedFrame * 0.2), [-1, 1], [0.5, 1]) : 1,
               }
             }),
             React.createElement("span", {
               style: {
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.018,
                 fontWeight: 500,
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 opacity: 0.9,
               }
             }, scanProgress < 100 ? "Scanning..." : "Scan Complete")
@@ -269,9 +269,9 @@ function Scene() {
               style: {
                 width: scanProgress + "%",
                 height: "100%",
-                background: "linear-gradient(90deg, " + SCENE_PARAMS.secondaryAccent.value + ", " + SCENE_PARAMS.accentColor.value + ")",
+                background: "linear-gradient(90deg, " + (props.secondaryAccent ?? SCENE_PARAMS.secondaryAccent.value) + ", " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")",
                 borderRadius: minDim * 0.004,
-                boxShadow: "0 0 15px " + SCENE_PARAMS.accentColor.value,
+                boxShadow: "0 0 15px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               }
             })
           ),
@@ -324,13 +324,13 @@ function Scene() {
                   position: "absolute",
                   width: "50%",
                   height: 2,
-                  background: "linear-gradient(90deg, " + SCENE_PARAMS.accentColor.value + ", transparent)",
+                  background: "linear-gradient(90deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", transparent)",
                   transformOrigin: "left center",
                   transform: "rotate(" + radarAngle + "deg)",
                   left: "50%",
                   top: "50%",
                   marginTop: -1,
-                  boxShadow: "0 0 10px " + SCENE_PARAMS.accentColor.value,
+                  boxShadow: "0 0 10px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 }
               }),
               // Center dot
@@ -339,8 +339,8 @@ function Scene() {
                   width: minDim * 0.01,
                   height: minDim * 0.01,
                   borderRadius: "50%",
-                  backgroundColor: SCENE_PARAMS.accentColor.value,
-                  boxShadow: "0 0 10px " + SCENE_PARAMS.accentColor.value,
+                  backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+                  boxShadow: "0 0 10px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 }
               })
             )
@@ -359,10 +359,10 @@ function Scene() {
         },
           React.createElement("span", {
             style: {
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.016,
               fontWeight: 600,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               opacity: 0.7,
               textTransform: "uppercase",
               letterSpacing: "0.05em",
@@ -404,12 +404,12 @@ function Scene() {
                     padding: minDim * 0.004 + "px " + minDim * 0.01 + "px",
                     backgroundColor: finding.color,
                     borderRadius: minDim * 0.004,
-                    boxShadow: "0 0 " + (10 * SCENE_PARAMS.glowIntensity.value * pulseOpacity) + "px " + finding.color,
+                    boxShadow: "0 0 " + (10 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * pulseOpacity) + "px " + finding.color,
                   }
                 },
                   React.createElement("span", {
                     style: {
-                      fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                      fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                       fontSize: minDim * 0.013,
                       fontWeight: 600,
                       color: "#fff",
@@ -419,10 +419,10 @@ function Scene() {
               ),
               React.createElement("span", {
                 style: {
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   fontSize: minDim * 0.02,
                   fontWeight: 700,
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 }
               }, countValue)
             );
@@ -451,10 +451,10 @@ function Scene() {
           },
             React.createElement("span", {
               style: {
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.014,
                 fontWeight: 500,
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 opacity: 0.6,
               }
             }, "Risk Score"),
@@ -468,19 +468,19 @@ function Scene() {
             },
               React.createElement("span", {
                 style: {
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   fontSize: minDim * 0.04,
                   fontWeight: 700,
-                  color: SCENE_PARAMS.accentColor.value,
-                  textShadow: "0 0 20px " + SCENE_PARAMS.accentColor.value,
+                  color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+                  textShadow: "0 0 20px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 }
               }, Math.round(riskScoreValue)),
               React.createElement("span", {
                 style: {
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   fontSize: minDim * 0.016,
                   fontWeight: 500,
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                   opacity: 0.5,
                 }
               }, "/ 100")
@@ -500,7 +500,7 @@ function Scene() {
                 style: {
                   width: riskScoreValue + "%",
                   height: "100%",
-                  background: "linear-gradient(90deg, " + SCENE_PARAMS.accentColor.value + ", " + SCENE_PARAMS.highColor.value + ")",
+                  background: "linear-gradient(90deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", " + (props.highColor ?? SCENE_PARAMS.highColor.value) + ")",
                   borderRadius: minDim * 0.003,
                 }
               })
@@ -543,10 +543,10 @@ function Scene() {
               ),
               React.createElement("span", {
                 style: {
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   fontSize: minDim * 0.015,
                   fontWeight: 600,
-                  color: SCENE_PARAMS.accentColor.value,
+                  color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 }
               }, "Fix Guidance")
             ),
@@ -573,9 +573,9 @@ function Scene() {
                 }, "✓"),
                 React.createElement("span", {
                   style: {
-                    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                     fontSize: minDim * 0.013,
-                    color: SCENE_PARAMS.textColor.value,
+                    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                     opacity: 0.8,
                   }
                 }, "Patch available")
@@ -596,9 +596,9 @@ function Scene() {
                 }, "✓"),
                 React.createElement("span", {
                   style: {
-                    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                     fontSize: minDim * 0.013,
-                    color: SCENE_PARAMS.textColor.value,
+                    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                     opacity: 0.8,
                   }
                 }, "Auto-remediation ready")
@@ -621,27 +621,27 @@ function Scene() {
       },
         React.createElement("h2", {
           style: {
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * (isPortrait ? 0.065 : 0.08),
             fontWeight: 700,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             margin: 0,
             opacity: ctaProgress,
             transform: "translateY(" + interpolate(ctaProgress, [0, 1], [25, 0]) + "px)",
           }
-        }, SCENE_PARAMS.ctaLine1.value),
+        }, (props.ctaLine1 ?? SCENE_PARAMS.ctaLine1.value)),
         React.createElement("h2", {
           style: {
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * (isPortrait ? 0.065 : 0.08),
             fontWeight: 700,
-            color: SCENE_PARAMS.accentColor.value,
+            color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             margin: 0,
             opacity: ctaLine2Progress,
             transform: "translateY(" + interpolate(ctaLine2Progress, [0, 1], [25, 0]) + "px)",
-            textShadow: "0 0 30px " + SCENE_PARAMS.accentColor.value + ", 0 0 60px " + SCENE_PARAMS.accentColor.value,
+            textShadow: "0 0 30px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", 0 0 60px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           }
-        }, SCENE_PARAMS.ctaLine2.value)
+        }, (props.ctaLine2 ?? SCENE_PARAMS.ctaLine2.value))
       )
     )
   );

@@ -22,11 +22,11 @@ const SCENE_PARAMS = {
   fontFamily: { type: "font", label: "Font", value: "Open Sans" }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const introProgress = spring({
@@ -37,7 +37,7 @@ function Scene() {
   
   const pulseFrequency = 0.03 * speed;
   const glowPulse = Math.sin(adjustedFrame * pulseFrequency) * 0.3 + 0.7;
-  const scalePulse = 1 + Math.sin(adjustedFrame * pulseFrequency) * SCENE_PARAMS.pulseAmount.value * 0.2;
+  const scalePulse = 1 + Math.sin(adjustedFrame * pulseFrequency) * (props.pulseAmount ?? SCENE_PARAMS.pulseAmount.value) * 0.2;
   
   const glowOpacity = interpolate(
     introProgress,
@@ -60,21 +60,21 @@ function Scene() {
     { extrapolateRight: "clamp" }
   ) * (1 + (glowPulse - 0.7) * 0.3);
   
-  const iconSize = SCENE_PARAMS.iconSize.value * (minDim / 1080);
-  const widthScale = SCENE_PARAMS.widthScale.value;
-  const bgPadding = SCENE_PARAMS.iconBackgroundPadding.value * (minDim / 1080);
+  const iconSize = (props.iconSize ?? SCENE_PARAMS.iconSize.value) * (minDim / 1080);
+  const widthScale = (props.widthScale ?? SCENE_PARAMS.widthScale.value);
+  const bgPadding = (props.iconBackgroundPadding ?? SCENE_PARAMS.iconBackgroundPadding.value) * (minDim / 1080);
   const bgWidth = iconSize * widthScale + bgPadding * 2;
   const bgHeight = iconSize + bgPadding * 2;
-  const bgRadius = SCENE_PARAMS.iconBackgroundRadius.value * (minDim / 1080);
+  const bgRadius = (props.iconBackgroundRadius ?? SCENE_PARAMS.iconBackgroundRadius.value) * (minDim / 1080);
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center"
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center"
       }}>
         <div style={{
@@ -89,19 +89,19 @@ function Scene() {
             position: "absolute",
             width: bgWidth,
             height: bgHeight,
-            backgroundColor: SCENE_PARAMS.iconBackgroundColor.value,
+            backgroundColor: (props.iconBackgroundColor ?? SCENE_PARAMS.iconBackgroundColor.value),
             borderRadius: bgRadius,
             transform: "scale(" + imageScale + ")",
             zIndex: 0
           }} />
 
           <Img
-            src={SCENE_PARAMS.iconImage.value}
+            src={(props.iconImage ?? SCENE_PARAMS.iconImage.value)}
             style={{
               position: "absolute",
               width: "100%",
               height: "100%",
-              filter: "blur(" + SCENE_PARAMS.glowIntensity.value + "px) saturate(" + SCENE_PARAMS.glowSaturation.value + ") drop-shadow(0px 0px 30px " + SCENE_PARAMS.glowColor.value + ")",
+              filter: "blur(" + (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) + "px) saturate(" + (props.glowSaturation ?? SCENE_PARAMS.glowSaturation.value) + ") drop-shadow(0px 0px 30px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + ")",
               opacity: glowOpacity,
               transform: "scale(" + glowScale + ")",
               transition: "none"
@@ -109,7 +109,7 @@ function Scene() {
           />
           
           <Img
-            src={SCENE_PARAMS.iconImage.value}
+            src={(props.iconImage ?? SCENE_PARAMS.iconImage.value)}
             style={{
               position: "relative",
               width: "100%",

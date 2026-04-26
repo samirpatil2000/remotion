@@ -26,11 +26,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   // Card entrance animation
   const cardProgress = spring({ frame: adjustedFrame, fps, config: { damping: 22, stiffness: 85 } });
@@ -47,12 +47,12 @@ function Scene() {
 
   // Tweet text lines entrance with stagger
   const lines = [
-    SCENE_PARAMS.tweetLine1.value,
-    SCENE_PARAMS.tweetLine2.value,
-    SCENE_PARAMS.tweetLine3.value,
+    (props.tweetLine1 ?? SCENE_PARAMS.tweetLine1.value),
+    (props.tweetLine2 ?? SCENE_PARAMS.tweetLine2.value),
+    (props.tweetLine3 ?? SCENE_PARAMS.tweetLine3.value),
     "",
-    SCENE_PARAMS.tweetLine4.value,
-    SCENE_PARAMS.tweetLine5.value,
+    (props.tweetLine4 ?? SCENE_PARAMS.tweetLine4.value),
+    (props.tweetLine5 ?? SCENE_PARAMS.tweetLine5.value),
   ];
 
   const getLineProgress = (index) => {
@@ -70,15 +70,15 @@ function Scene() {
   const avatarSize = minDim * 0.12;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value * cardScale + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) * cardScale + ")",
         opacity: cardOpacity,
         transformOrigin: "center center",
       }}>
         {/* Tweet Card */}
         <div style={{
-          backgroundColor: SCENE_PARAMS.cardBackground.value,
+          backgroundColor: (props.cardBackground ?? SCENE_PARAMS.cardBackground.value),
           borderRadius: minDim * 0.04,
           padding: cardPadding,
           width: cardWidth,
@@ -122,23 +122,23 @@ function Scene() {
                 <span style={{
                   fontSize: minDim * 0.042,
                   fontWeight: 700,
-                  color: SCENE_PARAMS.textColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 }}>
-                  {SCENE_PARAMS.displayName.value}
+                  {(props.displayName ?? SCENE_PARAMS.displayName.value)}
                 </span>
                 {/* Verified badge */}
                 <svg width={minDim * 0.045} height={minDim * 0.045} viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill={SCENE_PARAMS.verifiedColor.value}/>
+                  <circle cx="12" cy="12" r="10" fill={(props.verifiedColor ?? SCENE_PARAMS.verifiedColor.value)}/>
                   <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               <div style={{
                 fontSize: minDim * 0.036,
-                color: SCENE_PARAMS.usernameColor.value,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                color: (props.usernameColor ?? SCENE_PARAMS.usernameColor.value),
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               }}>
-                {SCENE_PARAMS.username.value}
+                {(props.username ?? SCENE_PARAMS.username.value)}
               </div>
             </div>
           </div>
@@ -146,8 +146,8 @@ function Scene() {
           {/* Tweet content */}
           <div style={{
             fontSize: minDim * 0.058,
-            color: SCENE_PARAMS.textColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             lineHeight: 1.35,
             fontWeight: 400,
           }}>
@@ -171,13 +171,13 @@ function Scene() {
               <span style={{
                 opacity: highlightProgress,
                 transform: "translateY(" + interpolate(highlightProgress, [0, 1], [15, 0]) + "px)",
-                color: SCENE_PARAMS.highlightColor.value,
-                background: "linear-gradient(90deg, " + SCENE_PARAMS.highlightColor.value + "22 0%, " + SCENE_PARAMS.highlightColor.value + "11 100%)",
+                color: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value),
+                background: "linear-gradient(90deg, " + (props.highlightColor ?? SCENE_PARAMS.highlightColor.value) + "22 0%, " + (props.highlightColor ?? SCENE_PARAMS.highlightColor.value) + "11 100%)",
                 paddingLeft: minDim * 0.01,
                 paddingRight: minDim * 0.01,
                 borderRadius: minDim * 0.008,
               }}>
-                {SCENE_PARAMS.highlightWord.value}
+                {(props.highlightWord ?? SCENE_PARAMS.highlightWord.value)}
               </span>
             </div>
           </div>

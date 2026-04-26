@@ -19,12 +19,12 @@ const SCENE_PARAMS = {
   waveSpeed: { type: "number", label: "Wave Speed", value: 0.08, min: 0.02, max: 0.15, step: 0.01 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const textEntrance = spring({ 
@@ -40,11 +40,11 @@ function Scene() {
     Math.sin(adjustedFrame * 0.05),
     [-1, 1],
     [0.4, 1]
-  ) * SCENE_PARAMS.glowIntensity.value;
+  ) * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   
   const wavePoints = 100;
-  const waveAmplitude = SCENE_PARAMS.waveIntensity.value;
-  const waveFrequency = SCENE_PARAMS.waveSpeed.value;
+  const waveAmplitude = (props.waveIntensity ?? SCENE_PARAMS.waveIntensity.value);
+  const waveFrequency = (props.waveSpeed ?? SCENE_PARAMS.waveSpeed.value);
   
   const waveEntrance = spring({ 
     frame: Math.max(0, adjustedFrame - 15), 
@@ -72,13 +72,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -101,16 +101,16 @@ function Scene() {
         >
           <defs>
             <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.3" />
-              <stop offset="100%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.05" />
+              <stop offset="0%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.3" />
+              <stop offset="100%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.05" />
             </linearGradient>
             <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.5" />
-              <stop offset="100%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.1" />
+              <stop offset="0%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.5" />
+              <stop offset="100%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.1" />
             </linearGradient>
             <linearGradient id="waveGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.7" />
-              <stop offset="100%" stopColor={SCENE_PARAMS.waveColor.value} stopOpacity="0.15" />
+              <stop offset="0%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.7" />
+              <stop offset="100%" stopColor={(props.waveColor ?? SCENE_PARAMS.waveColor.value)} stopOpacity="0.15" />
             </linearGradient>
             <filter id="waveGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="20" result="blur" />
@@ -149,15 +149,15 @@ function Scene() {
           marginTop: -height * 0.1,
         }}>
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.28,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             margin: 0,
             letterSpacing: minDim * 0.02,
-            textShadow: "0 0 " + (60 * glowPulse) + "px " + SCENE_PARAMS.glowColor.value + ", 0 0 " + (120 * glowPulse) + "px " + SCENE_PARAMS.glowColor.value + "40, 0 0 " + (180 * glowPulse) + "px " + SCENE_PARAMS.glowColor.value + "20",
+            textShadow: "0 0 " + (60 * glowPulse) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + ", 0 0 " + (120 * glowPulse) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "40, 0 0 " + (180 * glowPulse) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "20",
           }}>
-            {SCENE_PARAMS.yearText.value}
+            {(props.yearText ?? SCENE_PARAMS.yearText.value)}
           </h1>
         </div>
         

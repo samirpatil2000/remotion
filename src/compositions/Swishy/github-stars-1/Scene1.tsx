@@ -18,14 +18,14 @@ const SCENE_PARAMS = {
   fontFamily: { type: "font", label: "Font", value: "Inter" },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const targetStars = parseInt(SCENE_PARAMS.targetStars.value) || 275;
+  const targetStars = parseInt((props.targetStars ?? SCENE_PARAMS.targetStars.value)) || 275;
   
   const isPortrait = height > width;
   
@@ -110,8 +110,8 @@ function Scene() {
   const borderDrawProgress = interpolate(adjustedFrame, [5, 40], [0, 1], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
         
         <div style={{
           position: "absolute",
@@ -125,14 +125,14 @@ function Scene() {
           opacity: headerEntrance,
           transform: "translateY(" + headerY + "px)",
         }}>
-          <svg width={minDim * 0.05} height={minDim * 0.05} viewBox="0 0 24 24" fill={SCENE_PARAMS.textColor.value}>
+          <svg width={minDim * 0.05} height={minDim * 0.05} viewBox="0 0 24 24" fill={(props.textColor ?? SCENE_PARAMS.textColor.value)}>
             <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
           </svg>
           <span style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.055,
             fontWeight: 600,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           }}>
             Star History
           </span>
@@ -149,8 +149,8 @@ function Scene() {
           transform: "translateY(" + legendY + "px)",
         }}>
           <div style={{
-            backgroundColor: SCENE_PARAMS.backgroundColor.value,
-            border: "1px solid " + SCENE_PARAMS.gridColor.value,
+            backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
+            border: "1px solid " + (props.gridColor ?? SCENE_PARAMS.gridColor.value),
             borderRadius: minDim * 0.01,
             padding: minDim * 0.012 + "px " + minDim * 0.02 + "px",
             display: "flex",
@@ -161,16 +161,16 @@ function Scene() {
             <div style={{
               width: minDim * 0.02,
               height: minDim * 0.02,
-              backgroundColor: SCENE_PARAMS.lineColor.value,
+              backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
               borderRadius: minDim * 0.003,
             }} />
             <span style={{
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               fontSize: minDim * 0.026,
               fontWeight: 400,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             }}>
-              {SCENE_PARAMS.repoName.value}
+              {(props.repoName ?? SCENE_PARAMS.repoName.value)}
             </span>
           </div>
         </div>
@@ -193,7 +193,7 @@ function Scene() {
               width={graphWidth}
               height={graphHeight}
               fill="none"
-              stroke={SCENE_PARAMS.gridColor.value}
+              stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
               strokeWidth={1}
               strokeDasharray={(graphWidth + graphHeight) * 2}
               strokeDashoffset={(graphWidth + graphHeight) * 2 * (1 - borderDrawProgress)}
@@ -206,7 +206,7 @@ function Scene() {
                 y1={label.y}
                 x2={chartWidth - graphPadding.right}
                 y2={label.y}
-                stroke={SCENE_PARAMS.gridColor.value}
+                stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
@@ -219,10 +219,10 @@ function Scene() {
             top: graphPadding.top + graphHeight / 2,
             transform: "rotate(-90deg)",
             transformOrigin: "center center",
-            color: SCENE_PARAMS.secondaryTextColor.value,
+            color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value),
             fontSize: minDim * 0.022,
             fontWeight: 500,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             whiteSpace: "nowrap",
           }}>
             GitHub Stars
@@ -235,9 +235,9 @@ function Scene() {
               top: label.y - minDim * 0.012,
               width: graphPadding.left - minDim * 0.03,
               textAlign: "right",
-              color: SCENE_PARAMS.secondaryTextColor.value,
+              color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value),
               fontSize: minDim * 0.022,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             }}>
               {label.value}
             </div>
@@ -250,9 +250,9 @@ function Scene() {
               top: chartHeight - graphPadding.bottom + minDim * 0.015,
               width: minDim * 0.08,
               textAlign: "center",
-              color: SCENE_PARAMS.secondaryTextColor.value,
+              color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value),
               fontSize: minDim * 0.018,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             }}>
               {label}
             </div>
@@ -263,10 +263,10 @@ function Scene() {
             left: graphPadding.left + graphWidth / 2,
             top: chartHeight - minDim * 0.015,
             transform: "translateX(-50%)",
-            color: SCENE_PARAMS.secondaryTextColor.value,
+            color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value),
             fontSize: minDim * 0.022,
             fontWeight: 500,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           }}>
             Date
           </div>
@@ -276,7 +276,7 @@ function Scene() {
               <path
                 d={pathD}
                 fill="none"
-                stroke={SCENE_PARAMS.lineColor.value}
+                stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
                 strokeWidth={2.5}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -288,7 +288,7 @@ function Scene() {
                 cx={dotX}
                 cy={dotY}
                 r={minDim * 0.01}
-                fill={SCENE_PARAMS.lineColor.value}
+                fill={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
               />
             )}
           </svg>

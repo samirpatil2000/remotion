@@ -18,11 +18,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Deterministic random function
@@ -32,10 +32,10 @@ function Scene() {
   };
 
   // Money Rain Elements Generation
-  const elements = Array.from({ length: Math.floor(SCENE_PARAMS.itemCount.value) }).map((_, i) => {
+  const elements = Array.from({ length: Math.floor((props.itemCount ?? SCENE_PARAMS.itemCount.value)) }).map((_, i) => {
     const seed = i + 123.45;
     const startX = random(seed) * 100;
-    const fallDuration = SCENE_PARAMS.minFallDuration.value + random(seed + 1) * (SCENE_PARAMS.maxFallDuration.value - SCENE_PARAMS.minFallDuration.value);
+    const fallDuration = (props.minFallDuration ?? SCENE_PARAMS.minFallDuration.value) + random(seed + 1) * ((props.maxFallDuration ?? SCENE_PARAMS.maxFallDuration.value) - (props.minFallDuration ?? SCENE_PARAMS.minFallDuration.value));
     const fallDurationFrames = fallDuration * fps;
     const delay = random(seed + 2) * fallDurationFrames;
     const isCoin = random(seed + 3) > 0.5;
@@ -70,13 +70,13 @@ function Scene() {
   });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, overflow: "hidden" }}>
-      <div style={{ transform: `scale(${SCENE_PARAMS.scale.value})`, width: "100%", height: "100%" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), overflow: "hidden" }}>
+      <div style={{ transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`, width: "100%", height: "100%" }}>
         
         {/* Raining Elements */}
         {elements.map((el, i) => {
           const y = interpolate(el.localProgress, [0, 1], [-10, 110]);
-          const xDrift = Math.sin(el.localProgress * Math.PI * 4) * SCENE_PARAMS.driftAmount.value;
+          const xDrift = Math.sin(el.localProgress * Math.PI * 4) * (props.driftAmount ?? SCENE_PARAMS.driftAmount.value);
           const rotation = el.localProgress * 360 * el.spinDirection;
           
           // Fade out in bottom 15%
@@ -95,10 +95,10 @@ function Scene() {
                 left: `${el.startX}%`,
                 top: `${y}%`,
                 transform: `translate(-50%, -50%) translateX(${xDrift}px) rotate(${rotation}deg)`,
-                fontSize: minDim * SCENE_PARAMS.itemSize.value,
+                fontSize: minDim * (props.itemSize ?? SCENE_PARAMS.itemSize.value),
                 opacity,
                 pointerEvents: "none",
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 userSelect: "none"
               }}
             >
@@ -118,7 +118,7 @@ function Scene() {
               width: minDim * 0.1,
               height: minDim * 0.1,
               borderRadius: "50%",
-              background: `radial-gradient(circle, ${SCENE_PARAMS.flashColor.value} 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${(props.flashColor ?? SCENE_PARAMS.flashColor.value)} 0%, transparent 70%)`,
               opacity: f.opacity,
               transform: `translate(-50%, -50%) scale(${f.scale})`,
               pointerEvents: "none",

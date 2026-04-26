@@ -18,12 +18,12 @@ const SCENE_PARAMS = {
   scale: { type: "number", label: "Scale", value: 1, min: 0.5, max: 2, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Parse time strings to minutes
   const parseTime = (timeStr) => {
@@ -39,8 +39,8 @@ function Scene() {
     return hours * 60 + minutes;
   };
   
-  const startMinutes = parseTime(SCENE_PARAMS.startTime.value);
-  const endMinutes = parseTime(SCENE_PARAMS.endTime.value);
+  const startMinutes = parseTime((props.startTime ?? SCENE_PARAMS.startTime.value));
+  const endMinutes = parseTime((props.endTime ?? SCENE_PARAMS.endTime.value));
   
   // Calculate current time based on animation progress
   const progress = frame / durationInFrames;
@@ -57,7 +57,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center" 
     }}>
@@ -69,7 +69,7 @@ function Scene() {
           fontSize: minDim * 0.15,
           fontWeight: 400,
           fontFamily: "system-ui, -apple-system, sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           letterSpacing: "-0.02em",
         }}>
           {timeString}

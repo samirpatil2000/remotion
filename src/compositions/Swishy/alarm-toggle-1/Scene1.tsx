@@ -26,13 +26,13 @@ const SCENE_PARAMS = {
   toggleStartFrame: { type: "number", label: "Toggle Start Frame", value: 30, min: 10, max: 60, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const toggleStart = SCENE_PARAMS.toggleStartFrame.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const toggleStart = (props.toggleStartFrame ?? SCENE_PARAMS.toggleStartFrame.value);
   const adjustedFrame = frame * speed;
   
   const toggleProgress = spring({
@@ -54,8 +54,8 @@ function Scene() {
   );
   
   const toggleBgColor = toggleProgress > 0.5 
-    ? SCENE_PARAMS.toggleOnColor.value 
-    : SCENE_PARAMS.toggleOffColor.value;
+    ? (props.toggleOnColor ?? SCENE_PARAMS.toggleOnColor.value) 
+    : (props.toggleOffColor ?? SCENE_PARAMS.toggleOffColor.value);
   
   const timeColor = interpolate(
     toggleProgress,
@@ -65,8 +65,8 @@ function Scene() {
   );
   
   const displayTimeColor = timeColor > 0.5 
-    ? SCENE_PARAMS.textColor.value 
-    : SCENE_PARAMS.textOffColor.value;
+    ? (props.textColor ?? SCENE_PARAMS.textColor.value) 
+    : (props.textOffColor ?? SCENE_PARAMS.textOffColor.value);
   
   const knobScale = interpolate(
     toggleProgress,
@@ -84,12 +84,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center", 
       alignItems: "center",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         opacity: fadeIn,
       }}>
@@ -112,34 +112,34 @@ function Scene() {
               gap: minDim * 0.015,
             }}>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, -apple-system, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, -apple-system, sans-serif",
                 fontSize: minDim * 0.11,
                 fontWeight: 300,
                 color: displayTimeColor,
                 letterSpacing: "-0.02em",
                 transition: "color 0.2s ease",
               }}>
-                {SCENE_PARAMS.alarmTime.value}
+                {(props.alarmTime ?? SCENE_PARAMS.alarmTime.value)}
               </span>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, -apple-system, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, -apple-system, sans-serif",
                 fontSize: minDim * 0.045,
                 fontWeight: 400,
                 color: displayTimeColor,
                 transition: "color 0.2s ease",
               }}>
-                {SCENE_PARAMS.amPm.value}
+                {(props.amPm ?? SCENE_PARAMS.amPm.value)}
               </span>
             </div>
             
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, -apple-system, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, -apple-system, sans-serif",
               fontSize: minDim * 0.04,
               fontWeight: 400,
-              color: SCENE_PARAMS.textOffColor.value,
+              color: (props.textOffColor ?? SCENE_PARAMS.textOffColor.value),
               marginTop: minDim * 0.005,
             }}>
-              {SCENE_PARAMS.alarmLabel.value}
+              {(props.alarmLabel ?? SCENE_PARAMS.alarmLabel.value)}
             </span>
           </div>
           
@@ -159,7 +159,7 @@ function Scene() {
               width: knobSize,
               height: knobSize,
               borderRadius: "50%",
-              backgroundColor: SCENE_PARAMS.toggleKnobColor.value,
+              backgroundColor: (props.toggleKnobColor ?? SCENE_PARAMS.toggleKnobColor.value),
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
               transform: "scale(" + knobScale + ")",
               transformOrigin: "center center",

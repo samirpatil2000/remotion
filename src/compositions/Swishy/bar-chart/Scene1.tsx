@@ -18,16 +18,16 @@ const SCENE_PARAMS = {
   showConnectors: { type: "boolean", label: "Show Connectors", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const barCount = Math.round(SCENE_PARAMS.barCount.value);
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const barCount = Math.round((props.barCount ?? SCENE_PARAMS.barCount.value));
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const barHeights = [0.45, 0.72, 0.58, 0.88, 0.65, 0.78, 0.52, 0.68, 0.75, 0.6, 0.82, 0.55];
   
@@ -62,7 +62,7 @@ function Scene() {
       fps,
       config: { damping: 12, stiffness: 150 }
     });
-    const pulse = growProgress > 0.9 ? Math.sin(pulseFrame * 0.15) * SCENE_PARAMS.pulseAmount.value * pulseProgress : 0;
+    const pulse = growProgress > 0.9 ? Math.sin(pulseFrame * 0.15) * (props.pulseAmount ?? SCENE_PARAMS.pulseAmount.value) * pulseProgress : 0;
     const pulseScale = 1 + pulse;
     
     const sweepDelay = delay + 35;
@@ -83,9 +83,9 @@ function Scene() {
       progress: growProgress
     });
     
-    const barColorFinal = isGreen ? SCENE_PARAMS.accentColor.value : SCENE_PARAMS.barColor.value;
-    const glowColor = isGreen ? SCENE_PARAMS.accentColor.value : "rgba(255,255,255,0.5)";
-    const glowIntensity = SCENE_PARAMS.glowIntensity.value * sweepProgress;
+    const barColorFinal = isGreen ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : (props.barColor ?? SCENE_PARAMS.barColor.value);
+    const glowColor = isGreen ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : "rgba(255,255,255,0.5)";
+    const glowIntensity = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * sweepProgress;
     
     bars.push(
       <div key={"bar-" + i} style={{
@@ -109,8 +109,8 @@ function Scene() {
           left: 0,
           right: 0,
           height: Math.min(currentHeight * 0.15, 20),
-          background: "linear-gradient(180deg, " + SCENE_PARAMS.accentColor.value + " 0%, transparent 100%)",
-          opacity: sweepProgress * SCENE_PARAMS.glowIntensity.value,
+          background: "linear-gradient(180deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + " 0%, transparent 100%)",
+          opacity: sweepProgress * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
           borderRadius: barWidth * 0.15 + " " + barWidth * 0.15 + " 0 0",
         }} />
       </div>
@@ -118,7 +118,7 @@ function Scene() {
   }
   
   const connectors = [];
-  if (SCENE_PARAMS.showConnectors.value) {
+  if ((props.showConnectors ?? SCENE_PARAMS.showConnectors.value)) {
     for (let i = 0; i < barPositions.length - 1; i++) {
       const connectorDelay = (i + barCount) * stagger + 10;
       const connectorProgress = spring({
@@ -160,8 +160,8 @@ function Scene() {
               width: 8,
               height: 8,
               borderRadius: "50%",
-              backgroundColor: SCENE_PARAMS.accentColor.value,
-              boxShadow: "0 0 12px " + SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+              boxShadow: "0 0 12px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               opacity: dotProgress,
             }} />
           );
@@ -199,7 +199,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       overflow: "hidden",
     }}>
       <div style={{
@@ -208,7 +208,7 @@ function Scene() {
         left: "30%",
         width: "40%",
         height: "60%",
-        background: "radial-gradient(ellipse at center, " + SCENE_PARAMS.accentColor.value + " 0%, transparent 70%)",
+        background: "radial-gradient(ellipse at center, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + " 0%, transparent 70%)",
         opacity: ambientGlow1,
         filter: "blur(60px)",
       }} />

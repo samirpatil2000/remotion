@@ -18,13 +18,13 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const circleRadius = SCENE_PARAMS.circleRadius.value;
+  const circleRadius = (props.circleRadius ?? SCENE_PARAMS.circleRadius.value);
   const circumference = 2 * Math.PI * circleRadius;
   
   // Circle draw animation - starts immediately, completes around frame 60
@@ -70,10 +70,10 @@ function Scene() {
   
   // Pulsing glow effect after symbol appears
   const pulsePhase = Math.sin((adjustedFrame - symbolDelay) * 0.08) * 0.3 + 1;
-  const glowSize = SCENE_PARAMS.glowIntensity.value * (symbolProgress > 0.5 ? pulsePhase : 1);
+  const glowSize = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * (symbolProgress > 0.5 ? pulsePhase : 1);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         inset: 0,
@@ -83,8 +83,8 @@ function Scene() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        filter: "drop-shadow(0px 0px " + glowSize + "px " + SCENE_PARAMS.accentColor.value + ")",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        filter: "drop-shadow(0px 0px " + glowSize + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center"
       }}>
         {/* Circle SVG */}
@@ -99,8 +99,8 @@ function Scene() {
             cy={height / 2}
             r={circleRadius}
             fill="none"
-            stroke={SCENE_PARAMS.accentColor.value}
-            strokeWidth={SCENE_PARAMS.strokeWidth.value}
+            stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
+            strokeWidth={(props.strokeWidth ?? SCENE_PARAMS.strokeWidth.value)}
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
@@ -112,14 +112,14 @@ function Scene() {
         {/* Dollar Symbol */}
         <div style={{
           position: "absolute",
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           fontWeight: 700,
-          fontSize: SCENE_PARAMS.symbolSize.value,
-          color: SCENE_PARAMS.accentColor.value,
+          fontSize: (props.symbolSize ?? SCENE_PARAMS.symbolSize.value),
+          color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           transform: "scale(" + symbolScale + ")",
           opacity: symbolOpacity,
         }}>
-          {SCENE_PARAMS.symbol.value}
+          {(props.symbol ?? SCENE_PARAMS.symbol.value)}
         </div>
       </div>
     </AbsoluteFill>

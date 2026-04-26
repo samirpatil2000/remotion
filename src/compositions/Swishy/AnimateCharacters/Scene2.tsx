@@ -17,15 +17,15 @@ const SCENE_PARAMS = {
   showTitle: { type: "boolean", label: "Show Title", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const walkSpeed = SCENE_PARAMS.walkSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const walkSpeed = (props.walkSpeed ?? SCENE_PARAMS.walkSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Title entrance animation
   const titleProgress = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
@@ -92,7 +92,7 @@ function Scene() {
   const subtitleY = interpolate(subtitleProgress, [0, 1], [20, 0]);
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center", width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
         
         {/* Deep space gradient background */}
@@ -166,7 +166,7 @@ function Scene() {
                     height: 0,
                     borderLeft: (treeHeight * 0.25) + "px solid transparent",
                     borderRight: (treeHeight * 0.25) + "px solid transparent",
-                    borderBottom: (treeHeight * 0.5) + "px solid " + SCENE_PARAMS.forestColor.value,
+                    borderBottom: (treeHeight * 0.5) + "px solid " + (props.forestColor ?? SCENE_PARAMS.forestColor.value),
                   }} />
                   <div style={{
                     position: "absolute",
@@ -192,7 +192,7 @@ function Scene() {
           left: -mistOffset1,
           width: width * 2,
           height: height * 0.25,
-          background: "linear-gradient(to top, " + SCENE_PARAMS.mistColor.value + "40, transparent)",
+          background: "linear-gradient(to top, " + (props.mistColor ?? SCENE_PARAMS.mistColor.value) + "40, transparent)",
           opacity: 0.6,
           filter: "blur(30px)",
         }} />
@@ -217,7 +217,7 @@ function Scene() {
             height: p.size,
             borderRadius: "50%",
             backgroundColor: i % 2 === 0 ? "#a855f7" : "#06b6d4",
-            opacity: p.opacity * SCENE_PARAMS.glowIntensity.value,
+            opacity: p.opacity * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
             boxShadow: "0 0 " + (p.size * 3) + "px " + (i % 2 === 0 ? "#a855f7" : "#06b6d4"),
           }} />          
         ))}
@@ -239,19 +239,19 @@ function Scene() {
             width: minDim * 0.45,
             height: minDim * 0.45,
             borderRadius: "50%",
-            background: "radial-gradient(circle, " + SCENE_PARAMS.accentColor.value + "40 0%, transparent 70%)",
-            opacity: glowPulse * SCENE_PARAMS.glowIntensity.value,
+            background: "radial-gradient(circle, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40 0%, transparent 70%)",
+            opacity: glowPulse * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
             filter: "blur(" + glowSize + "px)",
           }} />
           
           {/* Unicorn image */}
           <Img 
-            src={SCENE_PARAMS.unicornImage.value}
+            src={(props.unicornImage ?? SCENE_PARAMS.unicornImage.value)}
             style={{
               width: minDim * 0.5,
               height: "auto",
               transform: "translateY(" + legBob + "px)",
-              filter: "drop-shadow(0 0 20px " + SCENE_PARAMS.accentColor.value + "80)",
+              filter: "drop-shadow(0 0 20px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "80)",
             }}
           />
         </div>
@@ -280,7 +280,7 @@ function Scene() {
         }} />
         
         {/* Title overlay */}
-        {SCENE_PARAMS.showTitle.value && (
+        {(props.showTitle ?? SCENE_PARAMS.showTitle.value) && (
           <div style={{
             position: "absolute",
             top: height * 0.08,
@@ -291,15 +291,15 @@ function Scene() {
             transform: "translateY(" + titleY + "px)",
           }}>
             <h1 style={{
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               fontSize: minDim * 0.07,
               fontWeight: 700,
               fontFamily: "system-ui, sans-serif",
               margin: 0,
-              textShadow: "0 0 30px " + SCENE_PARAMS.accentColor.value + ", 0 2px 10px rgba(0,0,0,0.8)",
+              textShadow: "0 0 30px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", 0 2px 10px rgba(0,0,0,0.8)",
               letterSpacing: 2,
             }}>
-              {SCENE_PARAMS.titleText.value}
+              {(props.titleText ?? SCENE_PARAMS.titleText.value)}
             </h1>
             
             <p style={{
@@ -312,7 +312,7 @@ function Scene() {
               transform: "translateY(" + subtitleY + "px)",
               textShadow: "0 2px 8px rgba(0,0,0,0.8)",
             }}>
-              {SCENE_PARAMS.subtitleText.value}
+              {(props.subtitleText ?? SCENE_PARAMS.subtitleText.value)}
             </p>
           </div>
         )}

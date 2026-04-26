@@ -35,12 +35,12 @@ const SCENE_PARAMS = {
   showLensFlare: { type: "boolean", label: "Show Lens Flare", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   // Scene phases
@@ -125,7 +125,7 @@ function Scene() {
   );
   
   // Title animation
-  const titleOpacity = SCENE_PARAMS.showTitle.value ? interpolate(
+  const titleOpacity = (props.showTitle ?? SCENE_PARAMS.showTitle.value) ? interpolate(
     adjustedFrame,
     [150, 165, 200, 210],
     [0, 1, 1, 0.8],
@@ -143,7 +143,7 @@ function Scene() {
   const lampFlicker = 0.8 + Math.sin(adjustedFrame * 0.5) * 0.1 + Math.random() * 0.1;
   
   // Lens flare
-  const flareOpacity = SCENE_PARAMS.showLensFlare.value ? interpolate(
+  const flareOpacity = (props.showLensFlare ?? SCENE_PARAMS.showLensFlare.value) ? interpolate(
     adjustedFrame,
     [90, 100, 120],
     [0, 0.6, 0],
@@ -154,13 +154,13 @@ function Scene() {
   const skyShift = interpolate(adjustedFrame, [0, 180], [0, 5], { extrapolateRight: "clamp" });
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), overflow: "hidden" }}>
       {/* Main scene container with shake and zoom */}
       <div style={{
         position: "absolute",
         width: "100%",
         height: "100%",
-        transform: `scale(${zoomScale * SCENE_PARAMS.scale.value}) translate(${shakeX}px, ${shakeY}px)`,
+        transform: `scale(${zoomScale * (props.scale ?? SCENE_PARAMS.scale.value)}) translate(${shakeX}px, ${shakeY}px)`,
         transformOrigin: "50% 60%",
       }}>
         
@@ -171,7 +171,7 @@ function Scene() {
           left: 0,
           width: "100%",
           height: "55%",
-          background: `linear-gradient(180deg, ${SCENE_PARAMS.skyGradientTop.value} ${skyShift}%, #4a5568 50%, ${SCENE_PARAMS.skyGradientBottom.value} 100%)`,
+          background: `linear-gradient(180deg, ${(props.skyGradientTop ?? SCENE_PARAMS.skyGradientTop.value)} ${skyShift}%, #4a5568 50%, ${(props.skyGradientBottom ?? SCENE_PARAMS.skyGradientBottom.value)} 100%)`,
         }} />
         
         {/* Distant buildings silhouette */}
@@ -186,7 +186,7 @@ function Scene() {
                 left: `${i * 8.5}%`,
                 width: `${buildingWidth}%`,
                 height: `${buildingHeight}%`,
-                backgroundColor: SCENE_PARAMS.buildingColor.value,
+                backgroundColor: (props.buildingColor ?? SCENE_PARAMS.buildingColor.value),
                 opacity: 0.9,
               }}>
                 {/* Windows */}
@@ -213,7 +213,7 @@ function Scene() {
           left: 0,
           width: "100%",
           height: "45%",
-          backgroundColor: SCENE_PARAMS.streetColor.value,
+          backgroundColor: (props.streetColor ?? SCENE_PARAMS.streetColor.value),
         }}>
           {/* Road markings */}
           <div style={{
@@ -233,7 +233,7 @@ function Scene() {
             left: 0,
             width: "100%",
             height: "25%",
-            backgroundColor: SCENE_PARAMS.sidewalkColor.value,
+            backgroundColor: (props.sidewalkColor ?? SCENE_PARAMS.sidewalkColor.value),
           }} />
         </div>
         
@@ -262,7 +262,7 @@ function Scene() {
             <div style={{
               width: minDim * 0.12,
               height: minDim * 0.12,
-              background: `radial-gradient(circle, ${SCENE_PARAMS.lampLightColor.value}40 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${(props.lampLightColor ?? SCENE_PARAMS.lampLightColor.value)}40 0%, transparent 70%)`,
               position: "absolute",
               bottom: minDim * 0.14,
               left: -minDim * 0.05,
@@ -311,7 +311,7 @@ function Scene() {
           <div style={{
             width: minDim * 0.18,
             height: minDim * 0.06,
-            backgroundColor: SCENE_PARAMS.carColor.value,
+            backgroundColor: (props.carColor ?? SCENE_PARAMS.carColor.value),
             borderRadius: minDim * 0.015,
             position: "relative",
           }}>
@@ -322,7 +322,7 @@ function Scene() {
               left: "20%",
               width: "50%",
               height: minDim * 0.04,
-              backgroundColor: SCENE_PARAMS.carColor.value,
+              backgroundColor: (props.carColor ?? SCENE_PARAMS.carColor.value),
               borderRadius: `${minDim * 0.015}px ${minDim * 0.015}px 0 0`,
             }} />
             {/* Windows */}
@@ -343,9 +343,9 @@ function Scene() {
               top: "30%",
               width: minDim * 0.015,
               height: minDim * 0.02,
-              backgroundColor: SCENE_PARAMS.headlightColor.value,
+              backgroundColor: (props.headlightColor ?? SCENE_PARAMS.headlightColor.value),
               borderRadius: minDim * 0.005,
-              boxShadow: `0 0 ${minDim * 0.03}px ${SCENE_PARAMS.headlightColor.value}`,
+              boxShadow: `0 0 ${minDim * 0.03}px ${(props.headlightColor ?? SCENE_PARAMS.headlightColor.value)}`,
             }} />
             {/* Headlight beam */}
             <div style={{
@@ -354,7 +354,7 @@ function Scene() {
               top: "20%",
               width: minDim * 0.25,
               height: minDim * 0.04,
-              background: `linear-gradient(90deg, transparent 0%, ${SCENE_PARAMS.headlightColor.value}30 100%)`,
+              background: `linear-gradient(90deg, transparent 0%, ${(props.headlightColor ?? SCENE_PARAMS.headlightColor.value)}30 100%)`,
               opacity: 0.5,
             }} />
             {/* Wheels */}
@@ -427,7 +427,7 @@ function Scene() {
             transform: "translateX(-50%)",
             width: minDim * 0.04,
             height: minDim * 0.05,
-            backgroundColor: SCENE_PARAMS.girlDressColor.value,
+            backgroundColor: (props.girlDressColor ?? SCENE_PARAMS.girlDressColor.value),
             borderRadius: `${minDim * 0.015}px ${minDim * 0.015}px ${minDim * 0.02}px ${minDim * 0.02}px`,
           }} />
           
@@ -475,7 +475,7 @@ function Scene() {
             transform: `translateX(-50%) rotate(${hairSway}deg)`,
             width: minDim * 0.035,
             height: minDim * 0.045,
-            backgroundColor: SCENE_PARAMS.girlHairColor.value,
+            backgroundColor: (props.girlHairColor ?? SCENE_PARAMS.girlHairColor.value),
             borderRadius: `${minDim * 0.015}px ${minDim * 0.015}px ${minDim * 0.02}px ${minDim * 0.02}px`,
           }} />
         </div>
@@ -513,7 +513,7 @@ function Scene() {
       }} />
       
       {/* Vignette */}
-      {SCENE_PARAMS.showVignette.value && (
+      {(props.showVignette ?? SCENE_PARAMS.showVignette.value) && (
         <div style={{
           position: "absolute",
           top: 0,
@@ -526,14 +526,14 @@ function Scene() {
       )}
       
       {/* Lens flare during impact */}
-      {SCENE_PARAMS.showLensFlare.value && flareOpacity > 0 && (
+      {(props.showLensFlare ?? SCENE_PARAMS.showLensFlare.value) && flareOpacity > 0 && (
         <div style={{
           position: "absolute",
           top: "35%",
           left: "45%",
           width: minDim * 0.3,
           height: minDim * 0.3,
-          background: `radial-gradient(circle, ${SCENE_PARAMS.headlightColor.value}60 0%, transparent 60%)`,
+          background: `radial-gradient(circle, ${(props.headlightColor ?? SCENE_PARAMS.headlightColor.value)}60 0%, transparent 60%)`,
           opacity: flareOpacity,
           transform: "translate(-50%, -50%)",
         }} />
@@ -553,7 +553,7 @@ function Scene() {
       )}
       
       {/* Title */}
-      {SCENE_PARAMS.showTitle.value && titleOpacity > 0 && (
+      {(props.showTitle ?? SCENE_PARAMS.showTitle.value) && titleOpacity > 0 && (
         <div style={{
           position: "absolute",
           bottom: "15%",
@@ -564,7 +564,7 @@ function Scene() {
           transform: `translateY(${titleY}px)`,
         }}>
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.055,
             fontWeight: 300,
             fontFamily: "system-ui, sans-serif",
@@ -573,12 +573,12 @@ function Scene() {
             margin: 0,
             textShadow: `0 2px 20px rgba(0,0,0,0.8)`,
           }}>
-            {SCENE_PARAMS.sceneTitle.value}
+            {(props.sceneTitle ?? SCENE_PARAMS.sceneTitle.value)}
           </h1>
           <div style={{
             width: minDim * 0.15,
             height: 1,
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             margin: `${minDim * 0.02}px auto 0`,
             opacity: 0.8,
           }} />

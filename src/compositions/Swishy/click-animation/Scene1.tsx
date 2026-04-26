@@ -20,17 +20,17 @@ const SCENE_PARAMS = {
   showRipple: { type: "boolean", label: "Show Ripple", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
-  const cursorSize = SCENE_PARAMS.cursorSize.value * (minDim / 1000);
-  const buttonW = SCENE_PARAMS.buttonWidth.value * (minDim / 1000);
+  const cursorSize = (props.cursorSize ?? SCENE_PARAMS.cursorSize.value) * (minDim / 1000);
+  const buttonW = (props.buttonWidth ?? SCENE_PARAMS.buttonWidth.value) * (minDim / 1000);
   const buttonH = buttonW * 0.35;
   
   const buttonCenterX = width * 0.5;
@@ -96,7 +96,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
@@ -114,7 +114,7 @@ function Scene() {
           top: buttonCenterY - buttonH / 2,
           width: buttonW,
           height: buttonH,
-          backgroundColor: SCENE_PARAMS.buttonColor.value,
+          backgroundColor: (props.buttonColor ?? SCENE_PARAMS.buttonColor.value),
           borderRadius: buttonH * 0.25,
           display: "flex",
           justifyContent: "center",
@@ -126,17 +126,17 @@ function Scene() {
           transition: "box-shadow 0.2s ease",
         }}>
           <span style={{
-            color: SCENE_PARAMS.buttonTextColor.value,
+            color: (props.buttonTextColor ?? SCENE_PARAMS.buttonTextColor.value),
             fontSize: minDim * 0.028,
             fontWeight: 600,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             letterSpacing: "0.02em",
           }}>
-            {SCENE_PARAMS.buttonText.value}
+            {(props.buttonText ?? SCENE_PARAMS.buttonText.value)}
           </span>
         </div>
         
-        {SCENE_PARAMS.showRipple.value && adjustedFrame >= clickFrame && (
+        {(props.showRipple ?? SCENE_PARAMS.showRipple.value) && adjustedFrame >= clickFrame && (
           <div style={{
             position: "absolute",
             left: cursorHoverX - rippleSize / 2,
@@ -144,7 +144,7 @@ function Scene() {
             width: rippleSize,
             height: rippleSize,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.rippleColor.value,
+            backgroundColor: (props.rippleColor ?? SCENE_PARAMS.rippleColor.value),
             opacity: rippleOpacity,
             transform: "scale(" + rippleScale + ")",
             pointerEvents: "none",
@@ -168,8 +168,8 @@ function Scene() {
           >
             <path
               d="M2 2L2 24L7.5 18.5L12 28L16 26L11.5 16.5L19 16.5L2 2Z"
-              fill={SCENE_PARAMS.cursorColor.value}
-              stroke={SCENE_PARAMS.backgroundColor.value}
+              fill={(props.cursorColor ?? SCENE_PARAMS.cursorColor.value)}
+              stroke={(props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value)}
               strokeWidth="1.5"
               strokeLinejoin="round"
             />

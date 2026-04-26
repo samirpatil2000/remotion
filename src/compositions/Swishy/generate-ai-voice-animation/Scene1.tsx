@@ -21,11 +21,11 @@ const SCENE_PARAMS = {
   barCount: { type: "number", label: "Bar Count", value: 18, min: 8, max: 30, step: 1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   const animationWindow = durationInFrames * 0.65;
@@ -39,11 +39,11 @@ function Scene() {
   const subtitleY = interpolate(subtitleProgress, [0, 1], [16, 0], { extrapolateRight: "clamp" });
   const ctaY = interpolate(ctaProgress, [0, 1], [12, 0], { extrapolateRight: "clamp" });
 
-  const barCount = Math.round(SCENE_PARAMS.barCount.value);
+  const barCount = Math.round((props.barCount ?? SCENE_PARAMS.barCount.value));
   const barWidth = (width * 0.7) / barCount;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         right: "-8%",
@@ -51,7 +51,7 @@ function Scene() {
         width: minDim * 0.7,
         height: minDim * 0.7,
         borderRadius: "50%",
-        backgroundColor: SCENE_PARAMS.glowColor.value,
+        backgroundColor: (props.glowColor ?? SCENE_PARAMS.glowColor.value),
         opacity: 0.12,
         filter: "blur(" + minDim * 0.03 + "px)"
       }} />
@@ -60,43 +60,43 @@ function Scene() {
         position: "absolute",
         left: "8%",
         top: "38%",
-        transform: "translateY(-50%) scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "translateY(-50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "left center",
         width: "84%"
       }}>
         <div style={{
           fontSize: minDim * 0.09,
           fontWeight: 700,
-          color: SCENE_PARAMS.primaryColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: titleProgress,
           transform: "translateY(" + titleY + "px)"
-        }}>{SCENE_PARAMS.title.value}</div>
+        }}>{(props.title ?? SCENE_PARAMS.title.value)}</div>
 
         <div style={{
           marginTop: minDim * 0.02,
           fontSize: minDim * 0.04,
           fontWeight: 500,
-          color: SCENE_PARAMS.secondaryColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: subtitleProgress,
           transform: "translateY(" + subtitleY + "px)"
-        }}>{SCENE_PARAMS.subtitle.value}</div>
+        }}>{(props.subtitle ?? SCENE_PARAMS.subtitle.value)}</div>
 
         <div style={{
           marginTop: minDim * 0.03,
           display: "inline-block",
           padding: minDim * 0.012 + "px " + minDim * 0.03 + "px",
           borderRadius: minDim * 0.04,
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           color: "#0b1020",
           fontSize: minDim * 0.032,
           fontWeight: 700,
           letterSpacing: 0.2,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: ctaProgress,
           transform: "translateY(" + ctaY + "px)"
-        }}>{SCENE_PARAMS.cta.value}</div>
+        }}>{(props.cta ?? SCENE_PARAMS.cta.value)}</div>
       </div>
 
       <div style={{
@@ -126,7 +126,7 @@ function Scene() {
                 width: barWidth * 0.55,
                 height: barHeight,
                 borderRadius: barWidth * 0.3,
-                backgroundColor: SCENE_PARAMS.accentColor.value,
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 opacity
               }}
             />

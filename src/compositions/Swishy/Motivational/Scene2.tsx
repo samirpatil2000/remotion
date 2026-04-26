@@ -24,31 +24,31 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const baseX = width * 0.18;
   const baseY = height * 0.34;
 
   const words = [
-    { text: SCENE_PARAMS.word1.value, size: 0.085, weight: 700, delay: 0 },
-    { text: SCENE_PARAMS.word2.value, size: 0.05, weight: 500, delay: SCENE_PARAMS.staggerDelay.value },
-    { text: SCENE_PARAMS.word3.value, size: 0.12, weight: 800, delay: SCENE_PARAMS.staggerDelay.value * 2 }
+    { text: (props.word1 ?? SCENE_PARAMS.word1.value), size: 0.085, weight: 700, delay: 0 },
+    { text: (props.word2 ?? SCENE_PARAMS.word2.value), size: 0.05, weight: 500, delay: (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value) },
+    { text: (props.word3 ?? SCENE_PARAMS.word3.value), size: 0.12, weight: 800, delay: (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value) * 2 }
   ];
 
-  const supportDelay = SCENE_PARAMS.staggerDelay.value * 3 + 6;
+  const supportDelay = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value) * 3 + 6;
   const supportProgress = spring({ frame: Math.max(0, adjustedFrame - supportDelay), fps, config: { damping: 25, stiffness: 80 } });
-  const supportY = interpolate(supportProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const supportY = interpolate(supportProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "left top" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "left top" }}>
         {words.map((w, i) => {
           const progress = spring({ frame: Math.max(0, adjustedFrame - w.delay), fps, config: { damping: 20, stiffness: 90 } });
-          const slideY = interpolate(progress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+          const slideY = interpolate(progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
           return (
             <div key={i} style={{
               position: "absolute",
@@ -56,12 +56,12 @@ function Scene() {
               top: baseY + i * (minDim * 0.09),
               fontSize: minDim * w.size,
               fontWeight: w.weight,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
-              opacity: progress * SCENE_PARAMS.opacity.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
+              opacity: progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
               transform: "translateY(" + slideY + "px)",
               lineHeight: 1.05,
-              filter: "blur(" + SCENE_PARAMS.blur.value + "px)"
+              filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)"
             }}>
               {w.text}
             </div>
@@ -74,13 +74,13 @@ function Scene() {
           top: baseY + minDim * 0.3,
           fontSize: minDim * 0.032,
           fontWeight: 500,
-          color: SCENE_PARAMS.accentColor.value,
-          fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
-          opacity: supportProgress * SCENE_PARAMS.opacity.value,
+          color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+          fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
+          opacity: supportProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + supportY + "px)",
           maxWidth: width * 0.6
         }}>
-          {SCENE_PARAMS.supporting.value}
+          {(props.supporting ?? SCENE_PARAMS.supporting.value)}
         </div>
       </div>
     </AbsoluteFill>

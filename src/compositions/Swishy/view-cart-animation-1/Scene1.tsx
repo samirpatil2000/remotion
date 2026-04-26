@@ -20,12 +20,12 @@ const SCENE_PARAMS = {
   tapScale: { type: "number", label: "Tap Scale", value: 0.92, min: 0.8, max: 1, step: 0.02 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   // Button entrance with soft bounce
@@ -36,7 +36,7 @@ function Scene() {
   });
   
   // Scale starts at 0, overshoots slightly, then settles
-  const bounceMax = SCENE_PARAMS.bounceIntensity.value;
+  const bounceMax = (props.bounceIntensity ?? SCENE_PARAMS.bounceIntensity.value);
   const entranceScale = interpolate(
     entranceProgress,
     [0, 0.6, 1],
@@ -54,7 +54,7 @@ function Scene() {
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
   
-  const tapScaleValue = SCENE_PARAMS.tapScale.value;
+  const tapScaleValue = (props.tapScale ?? SCENE_PARAMS.tapScale.value);
   const tapScale = interpolate(
     tapProgress,
     [0, 1],
@@ -63,7 +63,7 @@ function Scene() {
   );
   
   // Final scale combines entrance and tap
-  const finalScale = entranceScale * tapScale * SCENE_PARAMS.scale.value;
+  const finalScale = entranceScale * tapScale * (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Glow animation
   const glowProgress = spring({
@@ -75,7 +75,7 @@ function Scene() {
   const glowOpacity = interpolate(
     glowProgress,
     [0, 1],
-    [0, SCENE_PARAMS.glowIntensity.value],
+    [0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)],
     { extrapolateRight: "clamp" }
   );
   
@@ -87,28 +87,28 @@ function Scene() {
   const fontSize = minDim * 0.04;
   
   // Shadow and glow
-  const shadowIntensity = SCENE_PARAMS.shadowIntensity.value;
+  const shadowIntensity = (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value);
   const boxShadow = `
     0 ${minDim * 0.01}px ${minDim * 0.03}px rgba(0, 0, 0, ${shadowIntensity * 0.15}),
     0 ${minDim * 0.005}px ${minDim * 0.01}px rgba(0, 0, 0, ${shadowIntensity * 0.1}),
-    0 0 ${minDim * 0.06}px ${SCENE_PARAMS.glowColor.value}${Math.round(glowOpacity * 80).toString(16).padStart(2, '0')}
+    0 0 ${minDim * 0.06}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}${Math.round(glowOpacity * 80).toString(16).padStart(2, '0')}
   `;
   
   // Cart icon SVG path
-  const CartIcon = () => (
+  const CartIcon = ({ props }: any) => (
     <svg
       width={iconSize}
       height={iconSize}
       viewBox="0 0 24 24"
       fill="none"
-      stroke={SCENE_PARAMS.buttonTextColor.value}
+      stroke={(props.buttonTextColor ?? SCENE_PARAMS.buttonTextColor.value)}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       style={{ marginRight: minDim * 0.02 }}
     >
-      <circle cx="9" cy="21" r="1" fill={SCENE_PARAMS.buttonTextColor.value} />
-      <circle cx="20" cy="21" r="1" fill={SCENE_PARAMS.buttonTextColor.value} />
+      <circle cx="9" cy="21" r="1" fill={(props.buttonTextColor ?? SCENE_PARAMS.buttonTextColor.value)} />
+      <circle cx="20" cy="21" r="1" fill={(props.buttonTextColor ?? SCENE_PARAMS.buttonTextColor.value)} />
       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
     </svg>
   );
@@ -116,7 +116,7 @@ function Scene() {
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -127,7 +127,7 @@ function Scene() {
           position: "absolute",
           width: "100%",
           height: "100%",
-          backgroundImage: `radial-gradient(circle at 50% 50%, ${SCENE_PARAMS.glowColor.value}08 0%, transparent 50%)`,
+          backgroundImage: `radial-gradient(circle at 50% 50%, ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}08 0%, transparent 50%)`,
           opacity: glowProgress,
         }}
       />
@@ -148,24 +148,24 @@ function Scene() {
             justifyContent: "center",
             width: buttonWidth,
             height: buttonHeight,
-            backgroundColor: SCENE_PARAMS.buttonColor.value,
+            backgroundColor: (props.buttonColor ?? SCENE_PARAMS.buttonColor.value),
             borderRadius: borderRadius,
             boxShadow: boxShadow,
             cursor: "pointer",
             transition: "none",
           }}
         >
-          <CartIcon />
+          <CartIcon props={props}  />
           <span
             style={{
-              color: SCENE_PARAMS.buttonTextColor.value,
+              color: (props.buttonTextColor ?? SCENE_PARAMS.buttonTextColor.value),
               fontSize: fontSize,
               fontWeight: 600,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               letterSpacing: "0.02em",
             }}
           >
-            {SCENE_PARAMS.buttonText.value}
+            {(props.buttonText ?? SCENE_PARAMS.buttonText.value)}
           </span>
         </div>
       </div>
@@ -178,7 +178,7 @@ function Scene() {
             width: buttonWidth * 1.5,
             height: buttonHeight * 1.5,
             borderRadius: borderRadius * 1.5,
-            border: `2px solid ${SCENE_PARAMS.glowColor.value}`,
+            border: `2px solid ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}`,
             opacity: interpolate(
               adjustedFrame,
               [tapStartFrame, tapStartFrame + 10, tapStartFrame + tapDuration + 20],

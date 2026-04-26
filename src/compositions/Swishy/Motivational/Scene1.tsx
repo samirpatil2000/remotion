@@ -22,32 +22,32 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const words = [
-    { text: SCENE_PARAMS.word1.value, size: 0.07, delay: 0, color: SCENE_PARAMS.textColor.value, weight: 700 },
-    { text: SCENE_PARAMS.word2.value, size: 0.14, delay: SCENE_PARAMS.staggerDelay.value, color: SCENE_PARAMS.accentColor.value, weight: 900 },
-    { text: SCENE_PARAMS.word3.value, size: 0.09, delay: SCENE_PARAMS.staggerDelay.value * 2, color: SCENE_PARAMS.textColor.value, weight: 700 }
+    { text: (props.word1 ?? SCENE_PARAMS.word1.value), size: 0.07, delay: 0, color: (props.textColor ?? SCENE_PARAMS.textColor.value), weight: 700 },
+    { text: (props.word2 ?? SCENE_PARAMS.word2.value), size: 0.14, delay: (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value), color: (props.accentColor ?? SCENE_PARAMS.accentColor.value), weight: 900 },
+    { text: (props.word3 ?? SCENE_PARAMS.word3.value), size: 0.09, delay: (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value) * 2, color: (props.textColor ?? SCENE_PARAMS.textColor.value), weight: 700 }
   ];
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: minDim * 0.02 }}>
           {words.map((w, i) => {
             const progress = spring({ frame: Math.max(0, adjustedFrame - w.delay), fps, config: { damping: 20, stiffness: 90 } });
-            const slideY = interpolate(progress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-            const opacity = interpolate(progress, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+            const slideY = interpolate(progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+            const opacity = interpolate(progress, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
             return (
               <div key={i} style={{
                 fontSize: minDim * w.size,
                 fontWeight: w.weight,
                 color: w.color,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 opacity: opacity,
                 transform: "translateY(" + slideY + "px)",
                 lineHeight: 1

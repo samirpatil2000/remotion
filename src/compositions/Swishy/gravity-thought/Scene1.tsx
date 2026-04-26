@@ -35,24 +35,24 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const lines = [
-    { left: SCENE_PARAMS.line1Left.value, right: SCENE_PARAMS.line1Right.value },
-    { left: SCENE_PARAMS.line2Left.value, right: SCENE_PARAMS.line2Right.value },
-    { left: SCENE_PARAMS.line3Left.value, right: SCENE_PARAMS.line3Right.value },
-    { left: SCENE_PARAMS.line4Left.value, right: SCENE_PARAMS.line4Right.value },
-    { left: SCENE_PARAMS.line5Left.value, right: SCENE_PARAMS.line5Right.value },
-    { left: SCENE_PARAMS.line6Left.value, right: SCENE_PARAMS.line6Right.value },
-    { left: SCENE_PARAMS.line7Left.value, right: SCENE_PARAMS.line7Right.value },
-    { left: SCENE_PARAMS.line8Left.value, right: SCENE_PARAMS.line8Right.value },
-    { left: SCENE_PARAMS.line9Left.value, right: SCENE_PARAMS.line9Right.value },
-    { left: SCENE_PARAMS.line10Left.value, right: SCENE_PARAMS.line10Right.value },
+    { left: (props.line1Left ?? SCENE_PARAMS.line1Left.value), right: (props.line1Right ?? SCENE_PARAMS.line1Right.value) },
+    { left: (props.line2Left ?? SCENE_PARAMS.line2Left.value), right: (props.line2Right ?? SCENE_PARAMS.line2Right.value) },
+    { left: (props.line3Left ?? SCENE_PARAMS.line3Left.value), right: (props.line3Right ?? SCENE_PARAMS.line3Right.value) },
+    { left: (props.line4Left ?? SCENE_PARAMS.line4Left.value), right: (props.line4Right ?? SCENE_PARAMS.line4Right.value) },
+    { left: (props.line5Left ?? SCENE_PARAMS.line5Left.value), right: (props.line5Right ?? SCENE_PARAMS.line5Right.value) },
+    { left: (props.line6Left ?? SCENE_PARAMS.line6Left.value), right: (props.line6Right ?? SCENE_PARAMS.line6Right.value) },
+    { left: (props.line7Left ?? SCENE_PARAMS.line7Left.value), right: (props.line7Right ?? SCENE_PARAMS.line7Right.value) },
+    { left: (props.line8Left ?? SCENE_PARAMS.line8Left.value), right: (props.line8Right ?? SCENE_PARAMS.line8Right.value) },
+    { left: (props.line9Left ?? SCENE_PARAMS.line9Left.value), right: (props.line9Right ?? SCENE_PARAMS.line9Right.value) },
+    { left: (props.line10Left ?? SCENE_PARAMS.line10Left.value), right: (props.line10Right ?? SCENE_PARAMS.line10Right.value) },
   ];
   
   const totalLines = lines.length;
@@ -132,7 +132,7 @@ function Scene() {
           width={boxSize}
           height={boxSize}
           fill="none"
-          stroke={SCENE_PARAMS.lineColor.value}
+          stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
           strokeWidth={strokeWidth}
           opacity={0.6}
         />
@@ -146,7 +146,7 @@ function Scene() {
           width={boxSize}
           height={boxSize}
           fill="none"
-          stroke={SCENE_PARAMS.lineColor.value}
+          stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
           strokeWidth={strokeWidth}
           opacity={0.6}
         />
@@ -161,7 +161,7 @@ function Scene() {
             y1={y + boxSize / 2}
             x2={width * 0.15}
             y2={nextY - boxSize / 2}
-            stroke={SCENE_PARAMS.lineColor.value}
+            stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
             strokeWidth={strokeWidth}
             opacity={0.4}
           />
@@ -173,7 +173,7 @@ function Scene() {
             y1={y + boxSize / 2}
             x2={width * 0.85}
             y2={nextY - boxSize / 2}
-            stroke={SCENE_PARAMS.lineColor.value}
+            stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
             strokeWidth={strokeWidth}
             opacity={0.4}
           />
@@ -187,7 +187,7 @@ function Scene() {
           y1={y}
           x2={width * 0.35 - displacement * 0.5}
           y2={y}
-          stroke={SCENE_PARAMS.lineColor.value}
+          stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
           strokeWidth={strokeWidth}
           opacity={0.4}
         />
@@ -199,7 +199,7 @@ function Scene() {
           y1={y}
           x2={rightX - boxSize / 2}
           y2={y}
-          stroke={SCENE_PARAMS.lineColor.value}
+          stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
           strokeWidth={strokeWidth}
           opacity={0.4}
         />
@@ -210,9 +210,9 @@ function Scene() {
   };
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -257,9 +257,9 @@ function Scene() {
                 right: width * 0.52 + displacement + pushAway,
                 top: y - fontSize * 0.4,
                 fontSize: fontSize,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
                 fontStyle: "italic",
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 whiteSpace: "nowrap",
                 textAlign: "right",
                 transition: "none",
@@ -271,9 +271,9 @@ function Scene() {
                 left: width * 0.52 + displacement + pushAway,
                 top: y - fontSize * 0.4,
                 fontSize: fontSize,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
                 fontStyle: "italic",
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 whiteSpace: "nowrap",
               }}>
                 {line.right}
@@ -288,14 +288,14 @@ function Scene() {
           top: centerWordY,
           transform: "translate(-50%, -50%)",
           fontSize: centerFontSize,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
           fontStyle: "italic",
           fontWeight: 400,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           whiteSpace: "nowrap",
           zIndex: 10,
         }}>
-          {SCENE_PARAMS.centerWord.value}
+          {(props.centerWord ?? SCENE_PARAMS.centerWord.value)}
         </div>
       </div>
     </AbsoluteFill>

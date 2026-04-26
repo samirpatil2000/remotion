@@ -30,15 +30,15 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
 
   const minDim = Math.min(width, height);
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const holdFrames = SCENE_PARAMS.holdDuration.value;
+  const holdFrames = (props.holdDuration ?? SCENE_PARAMS.holdDuration.value);
 
   // Parse time strings to minutes
   const parseTime = (timeStr) => {
@@ -54,8 +54,8 @@ function Scene() {
     return hours * 60 + minutes;
   };
 
-  const startMinutes = parseTime(SCENE_PARAMS.startTime.value);
-  const rawEndMinutes = parseTime(SCENE_PARAMS.endTime.value);
+  const startMinutes = parseTime((props.startTime ?? SCENE_PARAMS.startTime.value));
+  const rawEndMinutes = parseTime((props.endTime ?? SCENE_PARAMS.endTime.value));
   const endMinutes = rawEndMinutes <= startMinutes ? rawEndMinutes + 1440 : rawEndMinutes;
 
   // Animation ends before the hold period
@@ -82,22 +82,22 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
       <div style={{
-        transform: "scale(" + scaleValue + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)",
+        transform: "scale(" + scaleValue + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
         transformOrigin: "center center",
-        filter: SCENE_PARAMS.blur.value > 0 ? "blur(" + SCENE_PARAMS.blur.value + "px)" : "none",
+        filter: (props.blur ?? SCENE_PARAMS.blur.value) > 0 ? "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)" : "none",
       }}>
         <div style={{
           fontSize: minDim * 0.15,
           fontWeight: 400,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, -apple-system, sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, -apple-system, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           letterSpacing: "-0.02em",
-          opacity: SCENE_PARAMS.opacity.value,
+          opacity: (props.opacity ?? SCENE_PARAMS.opacity.value),
         }}>
           {timeString}
         </div>

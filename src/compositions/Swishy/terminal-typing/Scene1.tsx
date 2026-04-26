@@ -34,13 +34,13 @@ const SCENE_PARAMS = {
   showWindowButtons: { type: "boolean", label: "Show Window Buttons", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const typingSpeed = SCENE_PARAMS.typingSpeed.value;
-  const animSpeed = SCENE_PARAMS.animationSpeed.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const typingSpeed = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value);
+  const animSpeed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * animSpeed;
   
   const minDim = Math.min(width, height);
@@ -53,7 +53,7 @@ function Scene() {
   const buttonSize = minDim * 0.022;
   const borderRadius = minDim * 0.02;
   
-  const text = SCENE_PARAMS.typedText.value;
+  const text = (props.typedText ?? SCENE_PARAMS.typedText.value);
   const startTypingFrame = 15;
   const typingFrame = Math.max(0, adjustedFrame - startTypingFrame);
   const charsVisible = Math.floor(typingFrame / typingSpeed);
@@ -71,7 +71,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center"
     }}>
@@ -82,15 +82,15 @@ function Scene() {
       }}>
         <div style={{
           width: editorWidth,
-          backgroundColor: SCENE_PARAMS.editorColor.value,
+          backgroundColor: (props.editorColor ?? SCENE_PARAMS.editorColor.value),
           borderRadius: borderRadius,
           overflow: "hidden",
           boxShadow: "0 25px 60px -15px rgba(0,0,0,0.4)",
         }}>
-          {SCENE_PARAMS.showWindowButtons.value && (
+          {(props.showWindowButtons ?? SCENE_PARAMS.showWindowButtons.value) && (
             <div style={{
               height: headerHeight,
-              backgroundColor: SCENE_PARAMS.headerColor.value,
+              backgroundColor: (props.headerColor ?? SCENE_PARAMS.headerColor.value),
               display: "flex",
               alignItems: "center",
               paddingLeft: editorPadding * 0.6,
@@ -128,46 +128,46 @@ function Scene() {
               flexWrap: "wrap"
             }}>
               <span style={{ 
-                color: SCENE_PARAMS.keywordColor.value, 
+                color: (props.keywordColor ?? SCENE_PARAMS.keywordColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
                 fontStyle: "italic"
               }}>const</span>
               <span style={{ 
-                color: SCENE_PARAMS.variableColor.value, 
+                color: (props.variableColor ?? SCENE_PARAMS.variableColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace", 
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace", 
                 marginLeft: fontSize * 0.5 
-              }}>{SCENE_PARAMS.variableName.value}</span>
+              }}>{(props.variableName ?? SCENE_PARAMS.variableName.value)}</span>
               <span style={{ 
-                color: SCENE_PARAMS.operatorColor.value, 
+                color: (props.operatorColor ?? SCENE_PARAMS.operatorColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace", 
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace", 
                 marginLeft: fontSize * 0.4 
               }}>=</span>
               <span style={{ 
-                color: SCENE_PARAMS.stringColor.value, 
+                color: (props.stringColor ?? SCENE_PARAMS.stringColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace", 
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace", 
                 marginLeft: fontSize * 0.4 
               }}>"</span>
               <span style={{ 
-                color: SCENE_PARAMS.stringColor.value, 
+                color: (props.stringColor ?? SCENE_PARAMS.stringColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace"
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace"
               }}>{displayText}</span>
               <span style={{ 
                 width: fontSize * 0.12, 
                 height: fontSize * 1.1, 
-                backgroundColor: SCENE_PARAMS.cursorColor.value, 
+                backgroundColor: (props.cursorColor ?? SCENE_PARAMS.cursorColor.value), 
                 opacity: cursorBlink,
                 display: "inline-block",
                 marginLeft: 1
               }} />
               <span style={{ 
-                color: SCENE_PARAMS.stringColor.value, 
+                color: (props.stringColor ?? SCENE_PARAMS.stringColor.value), 
                 fontSize: fontSize, 
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace"
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace"
               }}>"</span>
             </div>
           </div>

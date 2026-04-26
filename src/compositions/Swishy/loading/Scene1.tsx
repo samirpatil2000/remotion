@@ -16,17 +16,17 @@ const SCENE_PARAMS = {
   scale: { type: "number", label: "Scale", value: 1, min: 0.5, max: 2, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const dotCount = SCENE_PARAMS.dotCount.value;
-  const dotSize = SCENE_PARAMS.dotSize.value;
-  const orbitRadius = minDim * SCENE_PARAMS.orbitRadius.value;
+  const dotCount = (props.dotCount ?? SCENE_PARAMS.dotCount.value);
+  const dotSize = (props.dotSize ?? SCENE_PARAMS.dotSize.value);
+  const orbitRadius = minDim * (props.orbitRadius ?? SCENE_PARAMS.orbitRadius.value);
   
   const centerX = width / 2;
   const centerY = height / 2;
@@ -70,11 +70,11 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       overflow: "hidden",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -136,8 +136,8 @@ function Scene() {
                 height: currentDotSize,
                 borderRadius: "50%",
                 backgroundColor: greenProgress > 0.01 
-                  ? SCENE_PARAMS.accentColor.value 
-                  : SCENE_PARAMS.dotColor.value,
+                  ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) 
+                  : (props.dotColor ?? SCENE_PARAMS.dotColor.value),
                 opacity: entranceOpacity * (greenProgress > 0.01 ? (0.4 + greenProgress * 0.6) : 1),
                 boxShadow: greenProgress > 0.01
                   ? "0 0 " + glowSize + "px rgba(34,197,94," + glowIntensity + ")"

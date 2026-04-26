@@ -29,42 +29,42 @@ const SCENE_PARAMS = {
   gravityIntensity: { type: "number", label: "Gravity Bounce", value: 14, min: 5, max: 30, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const { fps, width, height } = useVideoConfig();
   const frame = useCurrentFrame();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Defining the layout positions
   const balls = [
-    { text: SCENE_PARAMS.letter1.value, x: 30, y: 25, rot: -15, delay: 0 },
-    { text: SCENE_PARAMS.letter2.value, x: 65, y: 35, rot: 12, delay: 1 },
-    { text: SCENE_PARAMS.letter3.value, x: 25, y: 55, rot: -5, delay: 2 },
-    { text: SCENE_PARAMS.letter4.value, x: 75, y: 60, rot: 25, delay: 3 },
-    { text: SCENE_PARAMS.letter5.value, x: 35, y: 82, rot: -10, delay: 4 },
-    { text: SCENE_PARAMS.letter6.value, x: 70, y: 85, rot: 5, delay: 5 },
+    { text: (props.letter1 ?? SCENE_PARAMS.letter1.value), x: 30, y: 25, rot: -15, delay: 0 },
+    { text: (props.letter2 ?? SCENE_PARAMS.letter2.value), x: 65, y: 35, rot: 12, delay: 1 },
+    { text: (props.letter3 ?? SCENE_PARAMS.letter3.value), x: 25, y: 55, rot: -5, delay: 2 },
+    { text: (props.letter4 ?? SCENE_PARAMS.letter4.value), x: 75, y: 60, rot: 25, delay: 3 },
+    { text: (props.letter5 ?? SCENE_PARAMS.letter5.value), x: 35, y: 82, rot: -10, delay: 4 },
+    { text: (props.letter6 ?? SCENE_PARAMS.letter6.value), x: 70, y: 85, rot: 5, delay: 5 },
   ];
 
   const ballSize = minDim * 0.35;
   const letterSize = ballSize * 0.45;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, overflow: "hidden" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), overflow: "hidden" }}>
       <div style={{ 
         width: "100%", 
         height: "100%", 
         position: "relative",
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center"
       }}>
         {balls.map((ball, i) => {
-          const staggerOffset = ball.delay * SCENE_PARAMS.stagger.value;
+          const staggerOffset = ball.delay * (props.stagger ?? SCENE_PARAMS.stagger.value);
           const dropProgress = spring({
             frame: Math.max(0, adjustedFrame - staggerOffset),
             fps,
             config: { 
-              damping: SCENE_PARAMS.gravityIntensity.value, 
+              damping: (props.gravityIntensity ?? SCENE_PARAMS.gravityIntensity.value), 
               stiffness: 100 
             }
           });
@@ -93,7 +93,7 @@ function Scene() {
                 height: ballSize,
                 marginLeft: -ballSize / 2,
                 marginTop: -ballSize / 2,
-                backgroundColor: SCENE_PARAMS.ballColor.value,
+                backgroundColor: (props.ballColor ?? SCENE_PARAMS.ballColor.value),
                 borderRadius: "50%",
                 display: "flex",
                 justifyContent: "center",
@@ -101,14 +101,14 @@ function Scene() {
                 opacity: currentOpacity,
                 transform: `rotate(${currentRot}deg) scale(${currentScale})`,
                 boxShadow: "0 20px 0px rgba(0,0,0,0.15)",
-                border: `4px solid ${SCENE_PARAMS.backgroundColor.value === "#000000" ? "#ffffff" : "transparent"}`
+                border: `4px solid ${(props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) === "#000000" ? "#ffffff" : "transparent"}`
               }}
             >
               <span style={{
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 fontSize: letterSize,
                 fontWeight: 900,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 userSelect: "none"
               }}>
                 {ball.text}

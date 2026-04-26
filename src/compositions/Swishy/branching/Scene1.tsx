@@ -20,18 +20,18 @@ const SCENE_PARAMS = {
   branchCurve: { type: "number", label: "Branch Curve", value: 40, min: 20, max: 80, step: 5 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const barHeight = height * 0.6;
   const barX = width * 0.5;
   const barTop = height * 0.2;
-  const nodeCount = SCENE_PARAMS.nodeCount.value;
+  const nodeCount = (props.nodeCount ?? SCENE_PARAMS.nodeCount.value);
   
   const barEntrance = spring({ frame: adjustedFrame, fps, config: { damping: 30, stiffness: 60 } });
   const barGrowth = interpolate(adjustedFrame, [0, 60], [0, 1], { extrapolateRight: "clamp" });
@@ -49,10 +49,10 @@ function Scene() {
     });
   }
   
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{ 
         transform: "scale(" + scaleValue + ")", 
         transformOrigin: "center center",
@@ -70,18 +70,18 @@ function Scene() {
               </feMerge>
             </filter>
             <linearGradient id="barGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.barColor.value} stopOpacity="0.6"/>
-              <stop offset="100%" stopColor={SCENE_PARAMS.barColor.value} stopOpacity="1"/>
+              <stop offset="0%" stopColor={(props.barColor ?? SCENE_PARAMS.barColor.value)} stopOpacity="0.6"/>
+              <stop offset="100%" stopColor={(props.barColor ?? SCENE_PARAMS.barColor.value)} stopOpacity="1"/>
             </linearGradient>
           </defs>
           
           <rect
-            x={barX - SCENE_PARAMS.barWidth.value / 2}
+            x={barX - (props.barWidth ?? SCENE_PARAMS.barWidth.value) / 2}
             y={barTop + barHeight * (1 - smoothBarGrowth * barEntrance)}
-            width={SCENE_PARAMS.barWidth.value}
+            width={(props.barWidth ?? SCENE_PARAMS.barWidth.value)}
             height={barHeight * smoothBarGrowth * barEntrance}
             fill="url(#barGradient)"
-            rx={SCENE_PARAMS.barWidth.value / 2}
+            rx={(props.barWidth ?? SCENE_PARAMS.barWidth.value) / 2}
           />
           
           {nodes.map((node, i) => {
@@ -96,7 +96,7 @@ function Scene() {
             const branchEndX = node.x + node.branchAngle * node.branchLength * smoothBranch;
             const branchEndY = node.y - node.branchLength * 0.6 * smoothBranch;
             const controlX = node.x + node.branchAngle * node.branchLength * 0.5;
-            const controlY = node.y - SCENE_PARAMS.branchCurve.value * smoothBranch;
+            const controlY = node.y - (props.branchCurve ?? SCENE_PARAMS.branchCurve.value) * smoothBranch;
             
             const subBranchFrame = Math.max(0, branchFrame - 25);
             const subBranchProgress = spring({ frame: subBranchFrame, fps, config: { damping: 35, stiffness: 45 } });
@@ -113,7 +113,7 @@ function Scene() {
                     <path
                       d={"M " + node.x + " " + node.y + " Q " + controlX + " " + controlY + " " + branchEndX + " " + branchEndY}
                       fill="none"
-                      stroke={SCENE_PARAMS.branchColor.value}
+                      stroke={(props.branchColor ?? SCENE_PARAMS.branchColor.value)}
                       strokeWidth={2.5}
                       strokeLinecap="round"
                       opacity={smoothBranch * 0.9}
@@ -123,7 +123,7 @@ function Scene() {
                       <path
                         d={"M " + branchEndX + " " + branchEndY + " Q " + (branchEndX + node.branchAngle * subBranchLength * 0.2) + " " + (branchEndY - subBranchLength * 0.5) + " " + subBranchEndX + " " + subBranchEndY}
                         fill="none"
-                        stroke={SCENE_PARAMS.branchColor.value}
+                        stroke={(props.branchColor ?? SCENE_PARAMS.branchColor.value)}
                         strokeWidth={1.5}
                         strokeLinecap="round"
                         opacity={smoothSubBranch * 0.7}
@@ -134,8 +134,8 @@ function Scene() {
                       <circle
                         cx={subBranchEndX}
                         cy={subBranchEndY}
-                        r={SCENE_PARAMS.nodeSize.value * 0.4 * smoothSubBranch}
-                        fill={SCENE_PARAMS.nodeColor.value}
+                        r={(props.nodeSize ?? SCENE_PARAMS.nodeSize.value) * 0.4 * smoothSubBranch}
+                        fill={(props.nodeColor ?? SCENE_PARAMS.nodeColor.value)}
                         opacity={smoothSubBranch * 0.8}
                         filter="url(#glow)"
                       />
@@ -161,7 +161,7 @@ function Scene() {
           const pulseScale = 1 + Math.sin(pulsePhase * Math.PI * 2) * 0.08;
           const pulseOpacity = 0.4 + Math.sin(pulsePhase * Math.PI * 2) * 0.1;
           
-          const size = SCENE_PARAMS.nodeSize.value * smoothNode;
+          const size = (props.nodeSize ?? SCENE_PARAMS.nodeSize.value) * smoothNode;
           
           return (
             <React.Fragment key={i}>
@@ -172,8 +172,8 @@ function Scene() {
                 width: size * 4,
                 height: size * 4,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.glowColor.value,
-                opacity: SCENE_PARAMS.glowIntensity.value * smoothNode * pulseOpacity,
+                backgroundColor: (props.glowColor ?? SCENE_PARAMS.glowColor.value),
+                opacity: (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * smoothNode * pulseOpacity,
                 filter: "blur(" + (size * 1.5) + "px)",
                 transform: "scale(" + pulseScale + ")",
                 transition: "transform 0.3s ease-out"
@@ -186,8 +186,8 @@ function Scene() {
                 width: size,
                 height: size,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.nodeColor.value,
-                boxShadow: "0 0 " + (size * 0.8) + "px " + SCENE_PARAMS.glowColor.value + ", 0 0 " + (size * 1.5) + "px " + SCENE_PARAMS.glowColor.value + "60",
+                backgroundColor: (props.nodeColor ?? SCENE_PARAMS.nodeColor.value),
+                boxShadow: "0 0 " + (size * 0.8) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + ", 0 0 " + (size * 1.5) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "60",
                 opacity: smoothNode,
               }} />
             </React.Fragment>
@@ -200,7 +200,7 @@ function Scene() {
           top: barTop - minDim * 0.2,
           width: minDim * 0.3,
           height: minDim * 0.3,
-          background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + "10 0%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "10 0%, transparent 70%)",
           opacity: interpolate(adjustedFrame, [120, 160], [0, 1], { extrapolateRight: "clamp" }),
           filter: "blur(" + (minDim * 0.03) + "px)",
         }} />

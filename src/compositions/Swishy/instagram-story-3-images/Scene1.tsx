@@ -20,38 +20,38 @@ const SCENE_PARAMS = {
   cardSpacing: { type: "number", label: "Card Spacing", value: 24, min: 10, max: 50, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   
   const cardWidth = width * 0.85;
   const cardHeight = height * 0.22;
-  const spacing = SCENE_PARAMS.cardSpacing.value;
+  const spacing = (props.cardSpacing ?? SCENE_PARAMS.cardSpacing.value);
   const totalCardsHeight = (cardHeight * 3) + (spacing * 2);
   const startY = (height - totalCardsHeight) / 2;
   
   const slideDistance = width * 1.2;
   
   const cards = [
-    { image: SCENE_PARAMS.image1.value, fromLeft: true, delay: 0 },
-    { image: SCENE_PARAMS.image2.value, fromLeft: false, delay: stagger },
-    { image: SCENE_PARAMS.image3.value, fromLeft: true, delay: stagger * 2 },
+    { image: (props.image1 ?? SCENE_PARAMS.image1.value), fromLeft: true, delay: 0 },
+    { image: (props.image2 ?? SCENE_PARAMS.image2.value), fromLeft: false, delay: stagger },
+    { image: (props.image3 ?? SCENE_PARAMS.image3.value), fromLeft: true, delay: stagger * 2 },
   ];
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -70,7 +70,7 @@ function Scene() {
           const opacity = interpolate(progress, [0, 0.3, 1], [0, 0.8, 1]);
           
           const cardY = startY + (index * (cardHeight + spacing));
-          const shadowOpacity = SCENE_PARAMS.shadowIntensity.value * progress;
+          const shadowOpacity = (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) * progress;
           
           return (
             <div
@@ -81,15 +81,15 @@ function Scene() {
                 top: cardY,
                 width: cardWidth,
                 height: cardHeight,
-                borderRadius: SCENE_PARAMS.cardBorderRadius.value,
-                backgroundColor: SCENE_PARAMS.cardColor.value,
+                borderRadius: (props.cardBorderRadius ?? SCENE_PARAMS.cardBorderRadius.value),
+                backgroundColor: (props.cardColor ?? SCENE_PARAMS.cardColor.value),
                 overflow: "hidden",
                 transform: "translateX(" + translateX + "px)",
                 opacity: opacity,
                 boxShadow: "0 " + (8 * progress) + "px " + (32 * progress) + "px -8px rgba(" + 
-                  parseInt(SCENE_PARAMS.shadowColor.value.slice(1, 3), 16) + ", " +
-                  parseInt(SCENE_PARAMS.shadowColor.value.slice(3, 5), 16) + ", " +
-                  parseInt(SCENE_PARAMS.shadowColor.value.slice(5, 7), 16) + ", " +
+                  parseInt((props.shadowColor ?? SCENE_PARAMS.shadowColor.value).slice(1, 3), 16) + ", " +
+                  parseInt((props.shadowColor ?? SCENE_PARAMS.shadowColor.value).slice(3, 5), 16) + ", " +
+                  parseInt((props.shadowColor ?? SCENE_PARAMS.shadowColor.value).slice(5, 7), 16) + ", " +
                   shadowOpacity + ")",
               }}
             >

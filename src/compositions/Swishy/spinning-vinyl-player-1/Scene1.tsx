@@ -22,15 +22,15 @@ const SCENE_PARAMS = {
   tonearmAngle: { type: "number", label: "Tonearm Angle", value: -28, min: -45, max: -15, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const rotSpeed = SCENE_PARAMS.rotationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const rotSpeed = (props.rotationSpeed ?? SCENE_PARAMS.rotationSpeed.value);
   
   // Continuous rotation - 360 degrees per 3 seconds at base speed
   const rotationDuration = fps * 3;
@@ -41,7 +41,7 @@ function Scene() {
   
   // Tonearm is STATIONARY - resting on the outer portion of the record
   // No animation, no movement - just a fixed position
-  const tonearmAngle = SCENE_PARAMS.tonearmAngle.value;
+  const tonearmAngle = (props.tonearmAngle ?? SCENE_PARAMS.tonearmAngle.value);
   
   // Sizing
   const turntableSize = minDim * 0.75;
@@ -57,19 +57,19 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
       }}>
         {/* Turntable Base */}
         <div style={{
           width: turntableSize,
           height: turntableSize,
-          backgroundColor: SCENE_PARAMS.turntableColor.value,
+          backgroundColor: (props.turntableColor ?? SCENE_PARAMS.turntableColor.value),
           borderRadius: minDim * 0.03,
           display: "flex",
           justifyContent: "center",
@@ -81,7 +81,7 @@ function Scene() {
           <div style={{
             width: recordSize * 1.05,
             height: recordSize * 1.05,
-            backgroundColor: SCENE_PARAMS.platteColor.value,
+            backgroundColor: (props.platteColor ?? SCENE_PARAMS.platteColor.value),
             borderRadius: "50%",
             display: "flex",
             justifyContent: "center",
@@ -100,9 +100,9 @@ function Scene() {
               backgroundColor: "#1a1a1a",
             }}>
               {/* Record Image or Default Grooves */}
-              {SCENE_PARAMS.recordImage.value ? (
+              {(props.recordImage ?? SCENE_PARAMS.recordImage.value) ? (
                 <Img
-                  src={SCENE_PARAMS.recordImage.value}
+                  src={(props.recordImage ?? SCENE_PARAMS.recordImage.value)}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -152,7 +152,7 @@ function Scene() {
                 width: labelSize,
                 height: labelSize,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.labelColor.value,
+                backgroundColor: (props.labelColor ?? SCENE_PARAMS.labelColor.value),
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -163,7 +163,7 @@ function Scene() {
                   width: spindleSize,
                   height: spindleSize,
                   borderRadius: "50%",
-                  backgroundColor: SCENE_PARAMS.platteColor.value,
+                  backgroundColor: (props.platteColor ?? SCENE_PARAMS.platteColor.value),
                   boxShadow: `inset 0 ${minDim * 0.001}px ${minDim * 0.003}px rgba(0,0,0,0.4)`,
                 }} />
               </div>
@@ -181,9 +181,9 @@ function Scene() {
                 ${highlightAngle}deg,
                 transparent 0%,
                 transparent 35%,
-                rgba(255,255,255,${SCENE_PARAMS.highlightIntensity.value}) 48%,
-                rgba(255,255,255,${SCENE_PARAMS.highlightIntensity.value * 1.2}) 50%,
-                rgba(255,255,255,${SCENE_PARAMS.highlightIntensity.value}) 52%,
+                rgba(255,255,255,${(props.highlightIntensity ?? SCENE_PARAMS.highlightIntensity.value)}) 48%,
+                rgba(255,255,255,${(props.highlightIntensity ?? SCENE_PARAMS.highlightIntensity.value) * 1.2}) 50%,
+                rgba(255,255,255,${(props.highlightIntensity ?? SCENE_PARAMS.highlightIntensity.value)}) 52%,
                 transparent 65%,
                 transparent 100%
               )`,
@@ -202,8 +202,8 @@ function Scene() {
                 ${highlightAngle + 180}deg,
                 transparent 0%,
                 transparent 40%,
-                rgba(0,0,0,${SCENE_PARAMS.shadowIntensity.value}) 55%,
-                rgba(0,0,0,${SCENE_PARAMS.shadowIntensity.value * 0.5}) 70%,
+                rgba(0,0,0,${(props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value)}) 55%,
+                rgba(0,0,0,${(props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) * 0.5}) 70%,
                 transparent 85%,
                 transparent 100%
               )`,
@@ -212,7 +212,7 @@ function Scene() {
           </div>
           
           {/* Tonearm - STATIONARY, resting on outer edge of record */}
-          {SCENE_PARAMS.showTonearm.value && (
+          {(props.showTonearm ?? SCENE_PARAMS.showTonearm.value) && (
             <div style={{
               position: "absolute",
               top: turntableSize * 0.12,
@@ -228,7 +228,7 @@ function Scene() {
                 width: minDim * 0.045,
                 height: minDim * 0.045,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.tonearmColor.value,
+                backgroundColor: (props.tonearmColor ?? SCENE_PARAMS.tonearmColor.value),
                 boxShadow: `0 ${minDim * 0.003}px ${minDim * 0.01}px rgba(0,0,0,0.3)`,
               }} />
               
@@ -236,7 +236,7 @@ function Scene() {
               <div style={{
                 width: tonearmWidth,
                 height: tonearmLength,
-                backgroundColor: SCENE_PARAMS.tonearmColor.value,
+                backgroundColor: (props.tonearmColor ?? SCENE_PARAMS.tonearmColor.value),
                 borderRadius: tonearmWidth / 2,
                 position: "absolute",
                 top: 0,
@@ -282,14 +282,14 @@ function Scene() {
           )}
           
           {/* Tonearm Rest */}
-          {SCENE_PARAMS.showTonearm.value && (
+          {(props.showTonearm ?? SCENE_PARAMS.showTonearm.value) && (
             <div style={{
               position: "absolute",
               top: turntableSize * 0.08,
               right: turntableSize * 0.25,
               width: minDim * 0.025,
               height: minDim * 0.04,
-              backgroundColor: SCENE_PARAMS.tonearmColor.value,
+              backgroundColor: (props.tonearmColor ?? SCENE_PARAMS.tonearmColor.value),
               borderRadius: minDim * 0.005,
               boxShadow: `0 ${minDim * 0.002}px ${minDim * 0.006}px rgba(0,0,0,0.2)`,
             }} />

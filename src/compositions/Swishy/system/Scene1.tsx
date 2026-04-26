@@ -17,14 +17,14 @@ const SCENE_PARAMS = {
   reorganizeDelay: { type: "number", label: "Reorganize Start", value: 45, min: 20, max: 80, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const reorganizeStart = SCENE_PARAMS.reorganizeDelay.value;
+  const reorganizeStart = (props.reorganizeDelay ?? SCENE_PARAMS.reorganizeDelay.value);
   
   const blockWidth = minDim * 0.08;
   const blockHeight = minDim * 0.045;
@@ -108,7 +108,7 @@ function Scene() {
   
   const blocks = initialPositions.map((_, index) => {
     const pos = getBlockPosition(index);
-    const glowAmount = glowPhase * SCENE_PARAMS.glowIntensity.value * pulseProgress;
+    const glowAmount = glowPhase * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * pulseProgress;
     
     const accentLineProgress = interpolate(
       adjustedFrame,
@@ -125,11 +125,11 @@ function Scene() {
           top: pos.y - blockHeight / 2,
           width: blockWidth,
           height: blockHeight,
-          backgroundColor: SCENE_PARAMS.blockColor.value,
-          opacity: pos.entranceProgress * SCENE_PARAMS.blockOpacity.value,
+          backgroundColor: (props.blockColor ?? SCENE_PARAMS.blockColor.value),
+          opacity: pos.entranceProgress * (props.blockOpacity ?? SCENE_PARAMS.blockOpacity.value),
           borderRadius: minDim * 0.008,
           boxShadow: glowAmount > 0 ? 
-            `0 0 ${minDim * 0.02 * glowAmount}px ${minDim * 0.008 * glowAmount}px ${SCENE_PARAMS.accentColor.value}` : 
+            `0 0 ${minDim * 0.02 * glowAmount}px ${minDim * 0.008 * glowAmount}px ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)}` : 
             "none",
           transition: "box-shadow 0.1s ease",
         }} />
@@ -142,7 +142,7 @@ function Scene() {
               top: pos.y - blockHeight / 2,
               width: minDim * 0.003,
               height: blockHeight * accentLineProgress,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               opacity: 0.7,
               borderRadius: minDim * 0.002,
             }} />
@@ -152,7 +152,7 @@ function Scene() {
               top: pos.y + blockHeight / 2 - blockHeight * accentLineProgress,
               width: minDim * 0.003,
               height: blockHeight * accentLineProgress,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               opacity: 0.7,
               borderRadius: minDim * 0.002,
             }} />
@@ -167,7 +167,7 @@ function Scene() {
               top: pos.y - minDim * 0.007,
               width: minDim * 0.014,
               height: minDim * 0.014,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               borderRadius: "50%",
               opacity: glowPhase * 0.8,
             }} />
@@ -177,7 +177,7 @@ function Scene() {
               top: pos.y - minDim * 0.007,
               width: minDim * 0.014,
               height: minDim * 0.014,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               borderRadius: "50%",
               opacity: glowPhase * 0.8,
             }} />
@@ -204,7 +204,7 @@ function Scene() {
     const endY = toPos.y - blockHeight / 2;
     const midY = (startY + endY) / 2;
     
-    const lineGlowAmount = glowPhase * SCENE_PARAMS.glowIntensity.value * pulseProgress * 0.6;
+    const lineGlowAmount = glowPhase * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * pulseProgress * 0.6;
     
     const verticalLength1 = (midY - startY) * lineProgress;
     const horizontalLength = (endX - startX) * lineProgress;
@@ -219,10 +219,10 @@ function Scene() {
             top: startY,
             width: lineThickness,
             height: Math.abs(verticalLength1),
-            backgroundColor: SCENE_PARAMS.lineColor.value,
+            backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
             opacity: lineProgress * 0.6,
             boxShadow: lineGlowAmount > 0 ? 
-              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${SCENE_PARAMS.accentColor.value}` : 
+              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)}` : 
               "none",
           }} />
         )}
@@ -234,10 +234,10 @@ function Scene() {
             top: midY - lineThickness / 2,
             width: Math.abs(horizontalLength),
             height: lineThickness,
-            backgroundColor: SCENE_PARAMS.lineColor.value,
+            backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
             opacity: lineProgress * 0.6,
             boxShadow: lineGlowAmount > 0 ? 
-              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${SCENE_PARAMS.accentColor.value}` : 
+              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)}` : 
               "none",
           }} />
         )}
@@ -249,10 +249,10 @@ function Scene() {
             top: midY,
             width: lineThickness,
             height: Math.abs(verticalLength2),
-            backgroundColor: SCENE_PARAMS.lineColor.value,
+            backgroundColor: (props.lineColor ?? SCENE_PARAMS.lineColor.value),
             opacity: lineProgress * 0.6,
             boxShadow: lineGlowAmount > 0 ? 
-              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${SCENE_PARAMS.accentColor.value}` : 
+              `0 0 ${minDim * 0.01 * lineGlowAmount}px ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)}` : 
               "none",
           }} />
         )}
@@ -262,12 +262,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
     }}>
       <div style={{
         width: "100%",
         height: "100%",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         position: "relative",
       }}>

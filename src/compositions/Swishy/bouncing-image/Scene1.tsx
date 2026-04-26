@@ -18,17 +18,17 @@ const SCENE_PARAMS = {
   showParticles: { type: "boolean", label: "Show Burst Particles", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const stickerSize = minDim * SCENE_PARAMS.stickerSize.value;
-  const bounceIntensity = SCENE_PARAMS.bounceIntensity.value;
-  const maxShadowOffset = SCENE_PARAMS.shadowOffset.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const stickerSize = minDim * (props.stickerSize ?? SCENE_PARAMS.stickerSize.value);
+  const bounceIntensity = (props.bounceIntensity ?? SCENE_PARAMS.bounceIntensity.value);
+  const maxShadowOffset = (props.shadowOffset ?? SCENE_PARAMS.shadowOffset.value);
   
   // Pop-up entrance animation with overshoot
   const entranceProgress = spring({
@@ -64,23 +64,23 @@ function Scene() {
   
   // Pulse loop after entrance (starts after frame 40)
   const pulseFrame = Math.max(0, adjustedFrame - 40);
-  const pulseScale = SCENE_PARAMS.enablePulse.value 
+  const pulseScale = (props.enablePulse ?? SCENE_PARAMS.enablePulse.value) 
     ? 1 + Math.sin(pulseFrame * 0.08) * 0.02
     : 1;
   
   // Shadow pulse
-  const shadowPulse = SCENE_PARAMS.enablePulse.value
+  const shadowPulse = (props.enablePulse ?? SCENE_PARAMS.enablePulse.value)
     ? maxShadowOffset + Math.sin(pulseFrame * 0.08) * 3
     : maxShadowOffset;
   
   // Slight rotation wobble
-  const wobble = SCENE_PARAMS.enablePulse.value && adjustedFrame > 40
+  const wobble = (props.enablePulse ?? SCENE_PARAMS.enablePulse.value) && adjustedFrame > 40
     ? Math.sin(pulseFrame * 0.1) * 2
     : 0;
   
   // Burst particles
   const particles = [];
-  if (SCENE_PARAMS.showParticles.value) {
+  if ((props.showParticles ?? SCENE_PARAMS.showParticles.value)) {
     const particleCount = 12;
     for (let i = 0; i < particleCount; i++) {
       const angle = (i / particleCount) * Math.PI * 2;
@@ -121,7 +121,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden"
@@ -162,7 +162,7 @@ function Scene() {
           filter: "blur(8px)",
         }}>
           <Img 
-            src={SCENE_PARAMS.stickerImage.value}
+            src={(props.stickerImage ?? SCENE_PARAMS.stickerImage.value)}
             style={{
               width: "100%",
               height: "100%",
@@ -181,7 +181,7 @@ function Scene() {
           filter: "drop-shadow(" + (finalShadowOffset * 0.3) + "px " + (finalShadowOffset * 0.3) + "px " + (finalShadowOffset * 0.5) + "px rgba(0,0,0,0.25))",
         }}>
           <Img 
-            src={SCENE_PARAMS.stickerImage.value}
+            src={(props.stickerImage ?? SCENE_PARAMS.stickerImage.value)}
             style={{
               width: "100%",
               height: "100%",

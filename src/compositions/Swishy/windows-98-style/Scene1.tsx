@@ -20,14 +20,14 @@ const SCENE_PARAMS = {
   showScanlines: { type: "boolean", label: "Show Scanlines", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const expandDur = SCENE_PARAMS.expandDuration.value;
+  const expandDur = (props.expandDuration ?? SCENE_PARAMS.expandDuration.value);
   
   // Icon dimensions
   const iconSize = minDim * 0.1;
@@ -41,7 +41,7 @@ function Scene() {
     { name: "My Computer", icon: "computer", col: 0, row: 0 },
     { name: "Recycle Bin", icon: "recycle", col: 0, row: 1 },
     { name: "My Documents", icon: "folder", col: 0, row: 2 },
-    { name: SCENE_PARAMS.windowTitle.value, icon: "camera", col: 0, row: 3 },
+    { name: (props.windowTitle ?? SCENE_PARAMS.windowTitle.value), icon: "camera", col: 0, row: 3 },
     { name: "Internet Explorer", icon: "internet", col: 0, row: 4 },
     { name: "Network", icon: "network", col: 0, row: 5 },
   ];
@@ -389,7 +389,7 @@ function Scene() {
   };
   
   // Vector person component (retro wireframe style)
-  const VectorPerson = ({ size, color }) => {
+  const VectorPerson = ({ props, size, color }: any) => {
     const s = size;
     return (
       <div style={{
@@ -564,7 +564,7 @@ function Scene() {
   };
   
   // Windows 98 cursor
-  const Win98Cursor = ({ x, y, visible }) => {
+  const Win98Cursor = ({ props, x, y, visible }: any) => {
     if (!visible) return null;
     const cursorSize = minDim * 0.04;
     return (
@@ -586,9 +586,9 @@ function Scene() {
   };
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       {/* Scanlines overlay */}
-      {SCENE_PARAMS.showScanlines.value && (
+      {(props.showScanlines ?? SCENE_PARAMS.showScanlines.value) && (
         <div style={{
           position: "absolute",
           top: 0,
@@ -624,7 +624,7 @@ function Scene() {
           }}>
             {renderIcon(icon.icon, iconSize)}
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
               fontSize: minDim * 0.02,
               color: "#ffffff",
               textShadow: "1px 1px 0 #000000",
@@ -647,18 +647,18 @@ function Scene() {
           top: currentY,
           width: currentWidth,
           height: currentHeight,
-          backgroundColor: SCENE_PARAMS.windowBg.value,
+          backgroundColor: (props.windowBg ?? SCENE_PARAMS.windowBg.value),
           border: "3px outset #dfdfdf",
           boxShadow: "inset -1px -1px 0 #808080, inset 1px 1px 0 #ffffff",
           display: "flex",
           flexDirection: "column",
-          transform: `scale(${SCENE_PARAMS.scale.value})`,
+          transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
           transformOrigin: "top left",
         }}>
           {/* Title Bar */}
           <div style={{
             height: minDim * 0.045,
-            backgroundColor: SCENE_PARAMS.titleBarColor.value,
+            backgroundColor: (props.titleBarColor ?? SCENE_PARAMS.titleBarColor.value),
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -672,12 +672,12 @@ function Scene() {
                 borderRadius: 2,
               }} />
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
                 fontSize: minDim * 0.028,
                 fontWeight: "bold",
-                color: SCENE_PARAMS.titleTextColor.value,
+                color: (props.titleTextColor ?? SCENE_PARAMS.titleTextColor.value),
               }}>
-                {SCENE_PARAMS.windowTitle.value}
+                {(props.windowTitle ?? SCENE_PARAMS.windowTitle.value)}
               </span>
             </div>
             <div style={{ display: "flex", gap: 2 }}>
@@ -703,7 +703,7 @@ function Scene() {
           {/* Menu Bar */}
           <div style={{
             height: minDim * 0.035,
-            backgroundColor: SCENE_PARAMS.windowBg.value,
+            backgroundColor: (props.windowBg ?? SCENE_PARAMS.windowBg.value),
             borderBottom: "1px solid #808080",
             display: "flex",
             alignItems: "center",
@@ -715,7 +715,7 @@ function Scene() {
               const isHovered = hoveredMenuIndex === i;
               return (
                 <span key={i} style={{
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
                   fontSize: minDim * 0.022,
                   color: isHovered ? "#ffffff" : "#000000",
                   backgroundColor: isHovered ? "#000080" : "transparent",
@@ -749,7 +749,7 @@ function Scene() {
               transform: "translate(-50%, -50%)",
               zIndex: 1,
             }}>
-              <VectorPerson size={minDim * 0.15} color={SCENE_PARAMS.personColor.value} />
+              <VectorPerson props={props}  size={minDim * 0.15} color={(props.personColor ?? SCENE_PARAMS.personColor.value)} />
             </div>
             
             {/* Viewfinder */}
@@ -827,7 +827,7 @@ function Scene() {
           {/* Toolbar */}
           <div style={{
             height: minDim * 0.06,
-            backgroundColor: SCENE_PARAMS.windowBg.value,
+            backgroundColor: (props.windowBg ?? SCENE_PARAMS.windowBg.value),
             borderTop: "1px solid #ffffff",
             display: "flex",
             alignItems: "center",
@@ -843,7 +843,7 @@ function Scene() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
               fontSize: minDim * 0.022,
               color: "#000000",
             }}>
@@ -856,7 +856,7 @@ function Scene() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
               fontSize: minDim * 0.022,
               color: "#000000",
             }}>
@@ -867,7 +867,7 @@ function Scene() {
           {/* Status Bar */}
           <div style={{
             height: minDim * 0.035,
-            backgroundColor: SCENE_PARAMS.windowBg.value,
+            backgroundColor: (props.windowBg ?? SCENE_PARAMS.windowBg.value),
             borderTop: "2px inset #808080",
             display: "flex",
             alignItems: "center",
@@ -883,11 +883,11 @@ function Scene() {
               paddingLeft: minDim * 0.008,
             }}>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
                 fontSize: minDim * 0.02,
                 color: "#000000",
               }}>
-                {SCENE_PARAMS.statusText.value}
+                {(props.statusText ?? SCENE_PARAMS.statusText.value)}
               </span>
             </div>
           </div>
@@ -895,7 +895,7 @@ function Scene() {
       )}
       
       {/* Mouse Cursor */}
-      <Win98Cursor x={mousePos.x} y={mousePos.y} visible={mousePos.visible} />
+      <Win98Cursor props={props}  x={mousePos.x} y={mousePos.y} visible={mousePos.visible} />
       
       {/* Taskbar */}
       <div style={{
@@ -926,7 +926,7 @@ function Scene() {
             background: "linear-gradient(135deg, #ff0000 25%, #00ff00 25%, #00ff00 50%, #0000ff 50%, #0000ff 75%, #ffff00 75%)",
           }} />
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
             fontSize: minDim * 0.022,
             fontWeight: "bold",
             color: "#000000",
@@ -953,11 +953,11 @@ function Scene() {
               borderRadius: 2,
             }} />
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
               fontSize: minDim * 0.02,
               color: "#000000",
             }}>
-              {SCENE_PARAMS.windowTitle.value}
+              {(props.windowTitle ?? SCENE_PARAMS.windowTitle.value)}
             </span>
           </div>
         )}
@@ -972,7 +972,7 @@ function Scene() {
           alignItems: "center",
         }}>
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", Arial, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Arial, sans-serif",
             fontSize: minDim * 0.02,
             color: "#000000",
           }}>

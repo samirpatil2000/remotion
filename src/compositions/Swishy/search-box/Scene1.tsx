@@ -27,19 +27,19 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 0.8, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   const lines = [
-    SCENE_PARAMS.searchLine1.value,
-    SCENE_PARAMS.searchLine2.value,
-    SCENE_PARAMS.searchLine3.value,
-    SCENE_PARAMS.searchLine4.value,
-    SCENE_PARAMS.searchLine5.value
+    (props.searchLine1 ?? SCENE_PARAMS.searchLine1.value),
+    (props.searchLine2 ?? SCENE_PARAMS.searchLine2.value),
+    (props.searchLine3 ?? SCENE_PARAMS.searchLine3.value),
+    (props.searchLine4 ?? SCENE_PARAMS.searchLine4.value),
+    (props.searchLine5 ?? SCENE_PARAMS.searchLine5.value)
   ];
 
   const animWindow = durationInFrames * 0.8;
@@ -59,16 +59,16 @@ function Scene() {
   const currentIndex = Math.min(lines.length - 1, Math.floor(Math.min(adjustedFrame, animWindow - 1) / segment));
   const cursorBlink = interpolate(adjustedFrame % 20, [0, 10], [1, 0], { extrapolateRight: "clamp" });
 
-  const leftPos = SCENE_PARAMS.searchBoxX.value + "%";
-  const topPos = SCENE_PARAMS.searchBoxY.value + "%";
-  const boxW = SCENE_PARAMS.searchBoxW.value + "%";
-  const boxH = SCENE_PARAMS.searchBoxH.value + "%";
-  const paddingX = (SCENE_PARAMS.paddingX.value / 100) * width;
+  const leftPos = (props.searchBoxX ?? SCENE_PARAMS.searchBoxX.value) + "%";
+  const topPos = (props.searchBoxY ?? SCENE_PARAMS.searchBoxY.value) + "%";
+  const boxW = (props.searchBoxW ?? SCENE_PARAMS.searchBoxW.value) + "%";
+  const boxH = (props.searchBoxH ?? SCENE_PARAMS.searchBoxH.value) + "%";
+  const paddingX = ((props.paddingX ?? SCENE_PARAMS.paddingX.value) / 100) * width;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <Img
-        src={SCENE_PARAMS.backgroundImage.value}
+        src={(props.backgroundImage ?? SCENE_PARAMS.backgroundImage.value)}
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
       <div style={{
@@ -82,14 +82,14 @@ function Scene() {
         paddingLeft: paddingX,
         paddingRight: paddingX,
         boxSizing: "border-box",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "left center"
       }}>
         <span style={{
           fontSize: minDim * 0.032,
           fontWeight: 500,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "clip"
@@ -98,9 +98,9 @@ function Scene() {
         </span>
         <span style={{
           fontSize: minDim * 0.032,
-          color: SCENE_PARAMS.cursorColor.value,
+          color: (props.cursorColor ?? SCENE_PARAMS.cursorColor.value),
           marginLeft: minDim * 0.004,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: cursorBlink
         }}>
           |

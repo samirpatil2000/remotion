@@ -22,33 +22,33 @@ const SCENE_PARAMS = {
   shadowIntensity: { type: "number", label: "Shadow Intensity", value: 0.15, min: 0, max: 0.4, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   
   const photos = [
-    SCENE_PARAMS.photo1.value,
-    SCENE_PARAMS.photo2.value,
-    SCENE_PARAMS.photo3.value,
-    SCENE_PARAMS.photo4.value,
-    SCENE_PARAMS.photo5.value,
+    (props.photo1 ?? SCENE_PARAMS.photo1.value),
+    (props.photo2 ?? SCENE_PARAMS.photo2.value),
+    (props.photo3 ?? SCENE_PARAMS.photo3.value),
+    (props.photo4 ?? SCENE_PARAMS.photo4.value),
+    (props.photo5 ?? SCENE_PARAMS.photo5.value),
   ];
   
-  const photoSize = minDim * SCENE_PARAMS.photoSize.value;
-  const gap = minDim * SCENE_PARAMS.photoGap.value;
+  const photoSize = minDim * (props.photoSize ?? SCENE_PARAMS.photoSize.value);
+  const gap = minDim * (props.photoGap ?? SCENE_PARAMS.photoGap.value);
   const totalWidth = (photoSize * photos.length) + (gap * (photos.length - 1));
   const startX = (width - totalWidth) / 2;
   
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -75,7 +75,7 @@ function Scene() {
           const startXPos = width + photoSize + (i * 50);
           const currentX = interpolate(progress, [0, 1], [startXPos, targetX], { extrapolateRight: "clamp" });
           
-          const shadowOpacity = interpolate(progress, [0, 1], [0, SCENE_PARAMS.shadowIntensity.value], { extrapolateRight: "clamp" });
+          const shadowOpacity = interpolate(progress, [0, 1], [0, (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value)], { extrapolateRight: "clamp" });
           const photoOpacity = interpolate(progress, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
           
           return (
@@ -87,7 +87,7 @@ function Scene() {
                 top: (height - photoSize) / 2,
                 width: photoSize,
                 height: photoSize,
-                borderRadius: SCENE_PARAMS.borderRadius.value,
+                borderRadius: (props.borderRadius ?? SCENE_PARAMS.borderRadius.value),
                 overflow: "hidden",
                 opacity: photoOpacity,
                 boxShadow: "0 " + (photoSize * 0.08) + "px " + (photoSize * 0.2) + "px rgba(15, 23, 42, " + shadowOpacity + ")",

@@ -26,23 +26,23 @@ const SCENE_PARAMS = {
   blurAmount: { type: "number", label: "Blur Amount", value: 5, min: 0, max: 20, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const cycleFrames = SCENE_PARAMS.cycleFrames.value;
+  const cycleFrames = (props.cycleFrames ?? SCENE_PARAMS.cycleFrames.value);
   
   const words = [
-    SCENE_PARAMS.word1.value,
-    SCENE_PARAMS.word2.value,
-    SCENE_PARAMS.word3.value,
-    SCENE_PARAMS.word4.value,
-    SCENE_PARAMS.word5.value,
-    SCENE_PARAMS.word6.value,
-    SCENE_PARAMS.word7.value,
+    (props.word1 ?? SCENE_PARAMS.word1.value),
+    (props.word2 ?? SCENE_PARAMS.word2.value),
+    (props.word3 ?? SCENE_PARAMS.word3.value),
+    (props.word4 ?? SCENE_PARAMS.word4.value),
+    (props.word5 ?? SCENE_PARAMS.word5.value),
+    (props.word6 ?? SCENE_PARAMS.word6.value),
+    (props.word7 ?? SCENE_PARAMS.word7.value),
   ].filter(function(w) { return w.trim(); });
   
   const totalWords = words.length;
@@ -50,10 +50,10 @@ function Scene() {
   const currentActiveIndex = Math.floor(adjustedFrame / cycleFrames) % totalWords;
   const frameInCycle = adjustedFrame % cycleFrames;
   
-  const fontSize = minDim * SCENE_PARAMS.fontSize.value;
-  const lineHeight = fontSize * SCENE_PARAMS.lineSpacing.value;
-  const curveIntensity = SCENE_PARAMS.curveIntensity.value;
-  const blurAmount = SCENE_PARAMS.blurAmount.value;
+  const fontSize = minDim * (props.fontSize ?? SCENE_PARAMS.fontSize.value);
+  const lineHeight = fontSize * (props.lineSpacing ?? SCENE_PARAMS.lineSpacing.value);
+  const curveIntensity = (props.curveIntensity ?? SCENE_PARAMS.curveIntensity.value);
+  const blurAmount = (props.blurAmount ?? SCENE_PARAMS.blurAmount.value);
   
   const entranceProgress = spring({
     frame: adjustedFrame,
@@ -125,7 +125,7 @@ function Scene() {
     AbsoluteFill,
     { 
       style: { 
-        backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
         justifyContent: "center", 
         alignItems: "center",
         overflow: "hidden",
@@ -135,7 +135,7 @@ function Scene() {
       "div",
       {
         style: {
-          transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformOrigin: "center center",
           opacity: containerOpacity,
           display: "flex",
@@ -166,10 +166,10 @@ function Scene() {
             "span",
             {
               style: {
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: fontSize,
                 fontWeight: slot.isActiveSlot ? 700 : 400,
-                color: slot.isActiveSlot ? SCENE_PARAMS.activeTextColor.value : SCENE_PARAMS.mutedTextColor.value,
+                color: slot.isActiveSlot ? (props.activeTextColor ?? SCENE_PARAMS.activeTextColor.value) : (props.mutedTextColor ?? SCENE_PARAMS.mutedTextColor.value),
                 opacity: slot.exitOpacity * slotOpacity,
                 position: "absolute",
                 whiteSpace: "nowrap",
@@ -183,10 +183,10 @@ function Scene() {
             "span",
             {
               style: {
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: fontSize,
                 fontWeight: slot.isActiveSlot ? 700 : 400,
-                color: slot.isActiveSlot ? SCENE_PARAMS.activeTextColor.value : SCENE_PARAMS.mutedTextColor.value,
+                color: slot.isActiveSlot ? (props.activeTextColor ?? SCENE_PARAMS.activeTextColor.value) : (props.mutedTextColor ?? SCENE_PARAMS.mutedTextColor.value),
                 opacity: slot.enterOpacity * slotOpacity,
                 position: "absolute",
                 whiteSpace: "nowrap",

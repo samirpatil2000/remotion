@@ -20,11 +20,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const mapWidth = width;
   const mapHeight = height;
@@ -51,15 +51,15 @@ function Scene() {
   const planeSize = minDim * 0.06;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         inset: 0,
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center"
       }}>
         <Img
-          src={SCENE_PARAMS.mapImage.value}
+          src={(props.mapImage ?? SCENE_PARAMS.mapImage.value)}
           style={{
             width: "100%",
             height: "100%",
@@ -73,7 +73,7 @@ function Scene() {
           <path
             d={`M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`}
             fill="none"
-            stroke={SCENE_PARAMS.routeColor.value}
+            stroke={(props.routeColor ?? SCENE_PARAMS.routeColor.value)}
             strokeWidth={minDim * 0.007}
             strokeLinecap="round"
             pathLength={1}
@@ -90,8 +90,8 @@ function Scene() {
           height: dotSize,
           borderRadius: "50%",
           transform: "translate(-50%, -50%)",
-          backgroundColor: SCENE_PARAMS.cityDotColor.value,
-          boxShadow: `0 0 ${minDim * 0.03}px ${SCENE_PARAMS.dotGlowColor.value}, 0 0 ${minDim * 0.06}px ${SCENE_PARAMS.dotGlowColor.value}`
+          backgroundColor: (props.cityDotColor ?? SCENE_PARAMS.cityDotColor.value),
+          boxShadow: `0 0 ${minDim * 0.03}px ${(props.dotGlowColor ?? SCENE_PARAMS.dotGlowColor.value)}, 0 0 ${minDim * 0.06}px ${(props.dotGlowColor ?? SCENE_PARAMS.dotGlowColor.value)}`
         }} />
 
         <div style={{
@@ -102,8 +102,8 @@ function Scene() {
           height: dotSize,
           borderRadius: "50%",
           transform: "translate(-50%, -50%)",
-          backgroundColor: SCENE_PARAMS.cityDotColor.value,
-          boxShadow: `0 0 ${minDim * 0.03}px ${SCENE_PARAMS.dotGlowColor.value}, 0 0 ${minDim * 0.06}px ${SCENE_PARAMS.dotGlowColor.value}`
+          backgroundColor: (props.cityDotColor ?? SCENE_PARAMS.cityDotColor.value),
+          boxShadow: `0 0 ${minDim * 0.03}px ${(props.dotGlowColor ?? SCENE_PARAMS.dotGlowColor.value)}, 0 0 ${minDim * 0.06}px ${(props.dotGlowColor ?? SCENE_PARAMS.dotGlowColor.value)}`
         }} />
 
         <div style={{
@@ -117,11 +117,11 @@ function Scene() {
           <svg viewBox="0 0 64 64" width="100%" height="100%" style={{ display: "block" }}>
             <path
               d="M60 32 L4 10 L20 32 L4 54 Z"
-              fill={SCENE_PARAMS.planeColor.value}
+              fill={(props.planeColor ?? SCENE_PARAMS.planeColor.value)}
             />
             <path
               d="M20 32 L4 10 L36 26 Z"
-              fill={SCENE_PARAMS.planeColor.value}
+              fill={(props.planeColor ?? SCENE_PARAMS.planeColor.value)}
               opacity="0.85"
             />
           </svg>
@@ -137,11 +137,11 @@ function Scene() {
         }}>
           <div style={{
             fontSize: minDim * 0.035,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontWeight: 600,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             textShadow: "0 2px 10px rgba(0,0,0,0.7)"
-          }}>{SCENE_PARAMS.fromCity.value}</div>
+          }}>{(props.fromCity ?? SCENE_PARAMS.fromCity.value)}</div>
         </div>
 
         <div style={{
@@ -154,11 +154,11 @@ function Scene() {
         }}>
           <div style={{
             fontSize: minDim * 0.035,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontWeight: 600,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             textShadow: "0 2px 10px rgba(0,0,0,0.7)"
-          }}>{SCENE_PARAMS.toCity.value}</div>
+          }}>{(props.toCity ?? SCENE_PARAMS.toCity.value)}</div>
         </div>
       </div>
     </AbsoluteFill>

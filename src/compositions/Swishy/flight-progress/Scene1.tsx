@@ -43,11 +43,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   // Card dimensions based on viewport
   const cardWidth = Math.min(width * 0.65, 1248);
@@ -74,7 +74,7 @@ function Scene() {
   const progressWidth = interpolate(
     progressEntrance,
     [0, 1],
-    [0, SCENE_PARAMS.flightProgress.value],
+    [0, (props.flightProgress ?? SCENE_PARAMS.flightProgress.value)],
     { extrapolateRight: "clamp" }
   );
   
@@ -83,20 +83,20 @@ function Scene() {
   const timeSize = cardWidth * 0.018;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         {/* Main Card */}
         <div style={{
           width: cardWidth,
           height: cardHeight,
-          backgroundColor: SCENE_PARAMS.cardBackground.value,
+          backgroundColor: (props.cardBackground ?? SCENE_PARAMS.cardBackground.value),
           borderRadius: cardWidth * 0.026,
           padding: padding,
           boxShadow: "0px 20px 50px rgba(0,0,0,0.3)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: cardEntrance,
           transform: "scale(" + interpolate(cardEntrance, [0, 1], [0.95, 1]) + ")",
         }}>
@@ -110,21 +110,21 @@ function Scene() {
                 transform: "translateY(" + interpolate(departureEntrance, [0, 1], [20, 0]) + "px)",
               }}>
                 <div style={{
-                  fontFamily: SCENE_PARAMS.codeFont.value + ", monospace",
+                  fontFamily: (props.codeFont ?? SCENE_PARAMS.codeFont.value) + ", monospace",
                   fontWeight: 700,
                   fontSize: codeSize,
                   lineHeight: 1,
                   letterSpacing: "0.05em",
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 }}>
-                  {SCENE_PARAMS.departureCode.value}
+                  {(props.departureCode ?? SCENE_PARAMS.departureCode.value)}
                 </div>
                 <div style={{ marginTop: cardWidth * 0.012 }}>
-                  <div style={{ fontSize: citySize, fontWeight: 600, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                    {SCENE_PARAMS.departureCity.value}
+                  <div style={{ fontSize: citySize, fontWeight: 600, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                    {(props.departureCity ?? SCENE_PARAMS.departureCity.value)}
                   </div>
-                  <div style={{ fontSize: timeSize, color: SCENE_PARAMS.mutedColor.value, marginTop: 4, fontWeight: 500, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                    {SCENE_PARAMS.departureTime.value}
+                  <div style={{ fontSize: timeSize, color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value), marginTop: 4, fontWeight: 500, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                    {(props.departureTime ?? SCENE_PARAMS.departureTime.value)}
                   </div>
                 </div>
               </div>
@@ -136,7 +136,7 @@ function Scene() {
                 paddingBottom: cardWidth * 0.032,
               }}>
                 <svg width={cardWidth * 0.04} height={cardWidth * 0.04} viewBox="0 0 24 24" fill="none">
-                  <path d="M16.01 11H4V13H16.01V16L20 12L16.01 8V11Z" fill={SCENE_PARAMS.arrowColor.value} />
+                  <path d="M16.01 11H4V13H16.01V16L20 12L16.01 8V11Z" fill={(props.arrowColor ?? SCENE_PARAMS.arrowColor.value)} />
                 </svg>
               </div>
               
@@ -146,23 +146,23 @@ function Scene() {
                 transform: "translateY(" + interpolate(arrivalEntrance, [0, 1], [20, 0]) + "px)",
               }}>
                 <div style={{
-                  fontFamily: SCENE_PARAMS.codeFont.value + ", monospace",
+                  fontFamily: (props.codeFont ?? SCENE_PARAMS.codeFont.value) + ", monospace",
                   fontWeight: 700,
                   fontSize: codeSize,
                   lineHeight: 1,
                   letterSpacing: "0.05em",
-                  color: SCENE_PARAMS.accentColor.value,
+                  color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                   opacity: glowPulse,
-                  textShadow: SCENE_PARAMS.accentColor.value + "66 0px 0px 20px",
+                  textShadow: (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "66 0px 0px 20px",
                 }}>
-                  {SCENE_PARAMS.arrivalCode.value}
+                  {(props.arrivalCode ?? SCENE_PARAMS.arrivalCode.value)}
                 </div>
                 <div style={{ marginTop: cardWidth * 0.012 }}>
-                  <div style={{ fontSize: citySize, fontWeight: 600, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                    {SCENE_PARAMS.arrivalCity.value}
+                  <div style={{ fontSize: citySize, fontWeight: 600, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                    {(props.arrivalCity ?? SCENE_PARAMS.arrivalCity.value)}
                   </div>
-                  <div style={{ fontSize: timeSize, color: SCENE_PARAMS.mutedColor.value, marginTop: 4, fontWeight: 500, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                    {SCENE_PARAMS.arrivalTime.value}
+                  <div style={{ fontSize: timeSize, color: (props.mutedColor ?? SCENE_PARAMS.mutedColor.value), marginTop: 4, fontWeight: 500, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                    {(props.arrivalTime ?? SCENE_PARAMS.arrivalTime.value)}
                   </div>
                 </div>
               </div>
@@ -181,18 +181,18 @@ function Scene() {
               transform: "translateX(" + interpolate(etaEntrance, [0, 1], [30, 0]) + "px)",
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: cardWidth * 0.022, fontWeight: 700, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                  {SCENE_PARAMS.etaTime.value}
+                <span style={{ fontSize: cardWidth * 0.022, fontWeight: 700, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                  {(props.etaTime ?? SCENE_PARAMS.etaTime.value)}
                 </span>
                 <svg width={16} height={16} viewBox="0 0 24 24" fill="none">
                   <path d="M6.99 11L3 15L6.99 19V16H14V14H6.99V11ZM21 9L17.01 5V8H10V10H17.01V13L21 9Z" fill="#666" />
                 </svg>
               </div>
-              <span style={{ fontSize: cardWidth * 0.018, color: "#666666", fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                {SCENE_PARAMS.etaTimezone.value}
+              <span style={{ fontSize: cardWidth * 0.018, color: "#666666", fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                {(props.etaTimezone ?? SCENE_PARAMS.etaTimezone.value)}
               </span>
-              <span style={{ fontSize: cardWidth * 0.018, color: SCENE_PARAMS.arrowColor.value, fontWeight: 700, marginTop: 4, fontFamily: SCENE_PARAMS.bodyFont.value + ", sans-serif" }}>
-                {SCENE_PARAMS.etaEvent.value}
+              <span style={{ fontSize: cardWidth * 0.018, color: (props.arrowColor ?? SCENE_PARAMS.arrowColor.value), fontWeight: 700, marginTop: 4, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", sans-serif" }}>
+                {(props.etaEvent ?? SCENE_PARAMS.etaEvent.value)}
               </span>
             </div>
           </div>
@@ -223,9 +223,9 @@ function Scene() {
                   top: 0,
                   bottom: 0,
                   width: progressWidth + "%",
-                  background: "linear-gradient(90deg, " + SCENE_PARAMS.accentColor.value + "44 0%, " + SCENE_PARAMS.accentColor.value + " 100%)",
+                  background: "linear-gradient(90deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "44 0%, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + " 100%)",
                   borderRadius: 999,
-                  boxShadow: SCENE_PARAMS.accentColor.value + "88 0px 0px 30px",
+                  boxShadow: (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "88 0px 0px 30px",
                 }} />
                 
                 {/* Plane Icon */}
@@ -257,14 +257,14 @@ function Scene() {
               
               {/* Time Remaining */}
               <div style={{
-                fontFamily: SCENE_PARAMS.monoFont.value + ", monospace",
+                fontFamily: (props.monoFont ?? SCENE_PARAMS.monoFont.value) + ", monospace",
                 color: "#555555",
                 fontSize: cardWidth * 0.02,
                 fontWeight: 500,
                 minWidth: cardWidth * 0.1,
                 textAlign: "right",
               }}>
-                {SCENE_PARAMS.timeRemaining.value}
+                {(props.timeRemaining ?? SCENE_PARAMS.timeRemaining.value)}
               </div>
             </div>
           </div>

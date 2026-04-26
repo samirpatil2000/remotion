@@ -18,12 +18,12 @@ const SCENE_PARAMS = {
   showSparkles: { type: "boolean", label: "Show Sparkles", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   const isPortrait = height > width;
   
@@ -44,7 +44,7 @@ function Scene() {
   
   // Glow pulse
   const glowPulse = 0.6 + Math.sin((adjustedFrame / fps) * 2) * 0.4;
-  const glowSize = minDim * 0.4 * SCENE_PARAMS.glowIntensity.value * glowPulse;
+  const glowSize = minDim * 0.4 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * glowPulse;
   
   // Title animation
   const titleDelay = 25;
@@ -79,7 +79,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -89,18 +89,18 @@ function Scene() {
         position: "absolute",
         width: "100%",
         height: "100%",
-        background: "radial-gradient(ellipse at 50% 60%, " + SCENE_PARAMS.accentColor.value + "15 0%, transparent 60%)",
+        background: "radial-gradient(ellipse at 50% 60%, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "15 0%, transparent 60%)",
       }} />
       
       {/* Sparkles */}
-      {SCENE_PARAMS.showSparkles.value && sparkles.map((sparkle, i) => {
+      {(props.showSparkles ?? SCENE_PARAMS.showSparkles.value) && sparkles.map((sparkle, i) => {
         const sparkleFrame = (adjustedFrame + sparkle.delay * 3) % 60;
         const sparkleOpacity = interpolate(
           sparkleFrame, 
           [0, 15, 30, 45, 60], 
           [0, 1, 0.3, 1, 0],
           { extrapolateRight: "clamp" }
-        ) * SCENE_PARAMS.sparkleIntensity.value;
+        ) * (props.sparkleIntensity ?? SCENE_PARAMS.sparkleIntensity.value);
         const sparkleScale = interpolate(
           sparkleFrame,
           [0, 15, 30, 45, 60],
@@ -122,18 +122,18 @@ function Scene() {
               width: "100%",
               height: "20%",
               top: "40%",
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               borderRadius: minDim * 0.01,
-              boxShadow: "0 0 " + (minDim * 0.02) + "px " + SCENE_PARAMS.accentColor.value,
+              boxShadow: "0 0 " + (minDim * 0.02) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
             <div style={{
               position: "absolute",
               width: "20%",
               height: "100%",
               left: "40%",
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               borderRadius: minDim * 0.01,
-              boxShadow: "0 0 " + (minDim * 0.02) + "px " + SCENE_PARAMS.accentColor.value,
+              boxShadow: "0 0 " + (minDim * 0.02) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
           </div>
         );
@@ -141,7 +141,7 @@ function Scene() {
       
       {/* Main content container with scale */}
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -154,7 +154,7 @@ function Scene() {
           width: glowSize,
           height: glowSize,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.accentColor.value + "40 0%, " + SCENE_PARAMS.secondaryGlow.value + "20 40%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40 0%, " + (props.secondaryGlow ?? SCENE_PARAMS.secondaryGlow.value) + "20 40%, transparent 70%)",
           filter: "blur(" + (minDim * 0.05) + "px)",
           opacity: horseOpacity,
         }} />
@@ -163,7 +163,7 @@ function Scene() {
         <div style={{
           transform: "translateY(" + (horseY + floatCycle) + "px)",
           opacity: horseOpacity,
-          filter: "drop-shadow(0 0 " + (minDim * 0.03 * SCENE_PARAMS.glowIntensity.value) + "px " + SCENE_PARAMS.accentColor.value + ")",
+          filter: "drop-shadow(0 0 " + (minDim * 0.03 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")",
         }}>
           <svg
             width={horseSize}
@@ -177,13 +177,13 @@ function Scene() {
               cy="115"
               rx="45"
               ry="30"
-              fill={SCENE_PARAMS.horseColor.value}
+              fill={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
             />
             
             {/* Horse neck */}
             <path
               d="M 70 100 Q 55 70 60 50 Q 65 35 75 30 Q 85 28 90 35 L 85 95"
-              fill={SCENE_PARAMS.horseColor.value}
+              fill={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
             />
             
             {/* Horse head */}
@@ -192,7 +192,7 @@ function Scene() {
               cy="38"
               rx="18"
               ry="15"
-              fill={SCENE_PARAMS.horseColor.value}
+              fill={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
             />
             
             {/* Snout */}
@@ -201,7 +201,7 @@ function Scene() {
               cy="45"
               rx="10"
               ry="8"
-              fill={SCENE_PARAMS.horseColor.value}
+              fill={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
             />
             
             {/* Eye */}
@@ -209,7 +209,7 @@ function Scene() {
               cx="62"
               cy="35"
               r="3"
-              fill={SCENE_PARAMS.backgroundColor.value}
+              fill={(props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value)}
             />
             <circle
               cx="61"
@@ -221,7 +221,7 @@ function Scene() {
             {/* Ear */}
             <path
               d="M 75 25 Q 78 15 82 20 Q 83 28 78 30"
-              fill={SCENE_PARAMS.horseColor.value}
+              fill={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
             />
             
             {/* Magical horn */}
@@ -229,7 +229,7 @@ function Scene() {
               d="M 70 22 L 65 -5 L 75 22"
               fill="url(#hornGradient)"
               style={{
-                filter: "drop-shadow(0 0 " + (minDim * 0.01) + "px " + SCENE_PARAMS.accentColor.value + ")",
+                filter: "drop-shadow(0 0 " + (minDim * 0.01) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")",
               }}
             />
             
@@ -246,14 +246,14 @@ function Scene() {
             <path
               d="M 75 135 Q 73 155 70 175"
               fill="none"
-              stroke={SCENE_PARAMS.horseColor.value}
+              stroke={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
               strokeWidth="10"
               strokeLinecap="round"
             />
             <path
               d="M 90 138 Q 88 155 85 175"
               fill="none"
-              stroke={SCENE_PARAMS.horseColor.value}
+              stroke={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
               strokeWidth="10"
               strokeLinecap="round"
             />
@@ -262,14 +262,14 @@ function Scene() {
             <path
               d="M 120 138 Q 122 155 125 175"
               fill="none"
-              stroke={SCENE_PARAMS.horseColor.value}
+              stroke={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
               strokeWidth="10"
               strokeLinecap="round"
             />
             <path
               d="M 135 135 Q 138 155 142 175"
               fill="none"
-              stroke={SCENE_PARAMS.horseColor.value}
+              stroke={(props.horseColor ?? SCENE_PARAMS.horseColor.value)}
               strokeWidth="10"
               strokeLinecap="round"
             />
@@ -286,54 +286,54 @@ function Scene() {
             {/* Gradients */}
             <defs>
               <linearGradient id="hornGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stopColor={SCENE_PARAMS.horseColor.value} />
-                <stop offset="50%" stopColor={SCENE_PARAMS.accentColor.value} />
-                <stop offset="100%" stopColor={SCENE_PARAMS.secondaryGlow.value} />
+                <stop offset="0%" stopColor={(props.horseColor ?? SCENE_PARAMS.horseColor.value)} />
+                <stop offset="50%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
+                <stop offset="100%" stopColor={(props.secondaryGlow ?? SCENE_PARAMS.secondaryGlow.value)} />
               </linearGradient>
               <linearGradient id="maneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={SCENE_PARAMS.accentColor.value} />
-                <stop offset="50%" stopColor={SCENE_PARAMS.secondaryGlow.value} />
-                <stop offset="100%" stopColor={SCENE_PARAMS.accentColor.value} />
+                <stop offset="0%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
+                <stop offset="50%" stopColor={(props.secondaryGlow ?? SCENE_PARAMS.secondaryGlow.value)} />
+                <stop offset="100%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
               </linearGradient>
               <linearGradient id="tailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={SCENE_PARAMS.secondaryGlow.value} />
-                <stop offset="100%" stopColor={SCENE_PARAMS.accentColor.value} />
+                <stop offset="0%" stopColor={(props.secondaryGlow ?? SCENE_PARAMS.secondaryGlow.value)} />
+                <stop offset="100%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
               </linearGradient>
             </defs>
           </svg>
         </div>
         
         {/* Title */}
-        {SCENE_PARAMS.showTitle.value && (
+        {(props.showTitle ?? SCENE_PARAMS.showTitle.value) && (
           <div style={{
             marginTop: minDim * 0.08,
             textAlign: "center",
           }}>
             <h1 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
               fontSize: minDim * 0.09,
               fontWeight: 700,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               margin: 0,
               opacity: titleProgress,
               transform: "translateY(" + titleY + "px)",
-              textShadow: "0 0 " + (minDim * 0.03) + "px " + SCENE_PARAMS.accentColor.value + "80",
+              textShadow: "0 0 " + (minDim * 0.03) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "80",
               letterSpacing: minDim * 0.005,
             }}>
-              {SCENE_PARAMS.title.value}
+              {(props.title ?? SCENE_PARAMS.title.value)}
             </h1>
             <p style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
               fontSize: minDim * 0.035,
               fontWeight: 400,
-              color: SCENE_PARAMS.accentColor.value,
+              color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               margin: 0,
               marginTop: minDim * 0.015,
               opacity: subtitleProgress,
               letterSpacing: minDim * 0.008,
               textTransform: "uppercase",
             }}>
-              {SCENE_PARAMS.subtitle.value}
+              {(props.subtitle ?? SCENE_PARAMS.subtitle.value)}
             </p>
           </div>
         )}

@@ -28,22 +28,22 @@ const SCENE_PARAMS = {
   showOutput: { type: "boolean", label: "Show Output", value: true }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const command = SCENE_PARAMS.command.value;
-  const charsPerSecond = SCENE_PARAMS.typingSpeed.value;
+  const command = (props.command ?? SCENE_PARAMS.command.value);
+  const charsPerSecond = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value);
   const framesPerChar = fps / charsPerSecond;
   const typingEndFrame = command.length * framesPerChar;
   const outputStartFrame = typingEndFrame + fps * 0.5;
   
   const SKILLS_LOGO = "███████╗██╗  ██╗██╗██╗     ██╗     ███████╗\n██╔════╝██║ ██╔╝██║██║     ██║     ██╔════╝\n███████╗█████╔╝ ██║██║     ██║     ███████╗\n╚════██║██╔═██╗ ██║██║     ██║     ╚════██║\n███████║██║  ██╗██║███████╗███████╗███████║\n╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚══════╝";
   
-  const OUTPUT_LINES = SCENE_PARAMS.outputBody.value.split("\n");
+  const OUTPUT_LINES = (props.outputBody ?? SCENE_PARAMS.outputBody.value).split("\n");
   
   const visibleChars = Math.floor(
     interpolate(adjustedFrame, [0, typingEndFrame], [0, command.length], {
@@ -53,7 +53,7 @@ function Scene() {
   
   const displayedText = command.slice(0, visibleChars);
   const isTyping = visibleChars < command.length;
-  const showOutput = SCENE_PARAMS.showOutput.value && adjustedFrame >= outputStartFrame;
+  const showOutput = (props.showOutput ?? SCENE_PARAMS.showOutput.value) && adjustedFrame >= outputStartFrame;
   
   const framesPerLine = fps * 0.08;
   const linesStartFrame = outputStartFrame + framesPerLine;
@@ -76,7 +76,7 @@ function Scene() {
   });
   
   const translateY = interpolate(slideIn, [0, 1], [height * 0.3, 0], { extrapolateRight: "clamp" });
-  const rotationAmount = SCENE_PARAMS.rotationAmount.value;
+  const rotationAmount = (props.rotationAmount ?? SCENE_PARAMS.rotationAmount.value);
   const rotateY = interpolate(adjustedFrame, [0, fps * 8], [rotationAmount, -rotationAmount], { extrapolateRight: "clamp" });
   const terminalScale = interpolate(adjustedFrame, [0, fps * 8], [0.9, 1], { extrapolateRight: "clamp" });
   
@@ -89,12 +89,12 @@ function Scene() {
   const outputFontSize = minDim * 0.018;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center", perspective: 1000 }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)", transformOrigin: "center center", filter: "blur(" + SCENE_PARAMS.blur.value + "px)" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center", perspective: 1000 }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)", transformOrigin: "center center", filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)" }}>
         <div style={{
           transform: "translateY(" + translateY + "px) rotateX(12deg) rotateY(" + rotateY + "deg) scale(" + terminalScale + ")",
           transformStyle: "preserve-3d",
-          opacity: SCENE_PARAMS.opacity.value,
+          opacity: (props.opacity ?? SCENE_PARAMS.opacity.value),
         }}>
           <div style={{
             width: containerWidth,
@@ -110,12 +110,12 @@ function Scene() {
               borderRadius: minDim * 0.02,
               overflow: "hidden",
               boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-              backgroundColor: SCENE_PARAMS.terminalBg.value,
+              backgroundColor: (props.terminalBg ?? SCENE_PARAMS.terminalBg.value),
             }}>
               <div style={{
                 height: titleBarHeight,
                 minHeight: titleBarHeight,
-                backgroundColor: SCENE_PARAMS.titleBarBg.value,
+                backgroundColor: (props.titleBarBg ?? SCENE_PARAMS.titleBarBg.value),
                 display: "flex",
                 alignItems: "center",
                 padding: "0 " + (minDim * 0.015) + "px",
@@ -127,14 +127,14 @@ function Scene() {
                   <div style={{ width: trafficLightSize, height: trafficLightSize, borderRadius: "50%", backgroundColor: "#28c840" }} />
                 </div>
                 <div style={{ flex: 1, textAlign: "center" }}>
-                  <span style={{ color: "#4d4d4d", fontSize: minDim * 0.018, fontWeight: 500, fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif" }}>Terminal</span>
+                  <span style={{ color: "#4d4d4d", fontSize: minDim * 0.018, fontWeight: 500, fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif" }}>Terminal</span>
                 </div>
                 <div style={{ width: minDim * 0.04 }} />
               </div>
               
               <div style={{
                 flex: 1,
-                backgroundColor: SCENE_PARAMS.terminalBg.value,
+                backgroundColor: (props.terminalBg ?? SCENE_PARAMS.terminalBg.value),
                 padding: minDim * 0.02,
                 fontFamily: "Monaco, Menlo, monospace",
                 fontSize: fontSize,
@@ -142,15 +142,15 @@ function Scene() {
                 display: "flex",
                 flexDirection: "column",
               }}>
-                <div style={{ display: "flex", alignItems: "center", color: SCENE_PARAMS.textColor.value }}>
-                  <span style={{ color: SCENE_PARAMS.promptColor.value, fontWeight: 600 }}>{SCENE_PARAMS.promptSymbol.value}</span>
-                  <span style={{ color: SCENE_PARAMS.textColor.value, margin: "0 " + (minDim * 0.008) + "px" }}>$</span>
+                <div style={{ display: "flex", alignItems: "center", color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>
+                  <span style={{ color: (props.promptColor ?? SCENE_PARAMS.promptColor.value), fontWeight: 600 }}>{(props.promptSymbol ?? SCENE_PARAMS.promptSymbol.value)}</span>
+                  <span style={{ color: (props.textColor ?? SCENE_PARAMS.textColor.value), margin: "0 " + (minDim * 0.008) + "px" }}>$</span>
                   <span>{displayedText}</span>
                   {!showOutput && (
                     <span style={{
                       width: minDim * 0.01,
                       height: fontSize * 1.2,
-                      backgroundColor: SCENE_PARAMS.textColor.value,
+                      backgroundColor: (props.textColor ?? SCENE_PARAMS.textColor.value),
                       marginLeft: minDim * 0.003,
                       opacity: cursorOpacity,
                     }} />
@@ -159,7 +159,7 @@ function Scene() {
                 
                 {showOutput && (
                   <div style={{ marginTop: minDim * 0.015, fontSize: outputFontSize, lineHeight: 1.4, flex: 1, overflow: "hidden" }}>
-                    <pre style={{ color: SCENE_PARAMS.textColor.value, margin: 0, marginBottom: minDim * 0.012, fontFamily: "Monaco, Menlo, monospace", whiteSpace: "pre", fontSize: outputFontSize * 0.7 }}>{SKILLS_LOGO}</pre>
+                    <pre style={{ color: (props.textColor ?? SCENE_PARAMS.textColor.value), margin: 0, marginBottom: minDim * 0.012, fontFamily: "Monaco, Menlo, monospace", whiteSpace: "pre", fontSize: outputFontSize * 0.7 }}>{SKILLS_LOGO}</pre>
                     {OUTPUT_LINES.slice(0, visibleLines).map(function(line, i) {
                       var lineProgress = spring({
                         frame: Math.max(0, adjustedFrame - linesStartFrame - i * framesPerLine),
@@ -171,7 +171,7 @@ function Scene() {
                       var isHighlight = line.indexOf("●") !== -1;
                       return (
                         <div key={i} style={{ 
-                          color: isHighlight ? SCENE_PARAMS.accentColor.value : SCENE_PARAMS.textColor.value, 
+                          color: isHighlight ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : (props.textColor ?? SCENE_PARAMS.textColor.value), 
                           minHeight: outputFontSize * 1.4,
                           opacity: lineOpacity,
                           transform: "translateX(" + lineX + "px)",

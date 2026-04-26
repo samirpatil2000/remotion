@@ -19,12 +19,12 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const logoEntrance = spring({
@@ -37,7 +37,7 @@ function Scene() {
   
   const pulsePhase = Math.max(0, adjustedFrame - 45) / fps;
   const pulseAmount = adjustedFrame > 45 
-    ? Math.sin(pulsePhase * 2) * SCENE_PARAMS.pulseIntensity.value 
+    ? Math.sin(pulsePhase * 2) * (props.pulseIntensity ?? SCENE_PARAMS.pulseIntensity.value) 
     : 0;
   const finalLogoScale = logoScale + pulseAmount;
   
@@ -47,7 +47,7 @@ function Scene() {
     config: { damping: 25, stiffness: 80 }
   });
   
-  const glowOpacity = interpolate(glowProgress, [0, 1], [0, SCENE_PARAMS.glowIntensity.value], { extrapolateRight: "clamp" });
+  const glowOpacity = interpolate(glowProgress, [0, 1], [0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)], { extrapolateRight: "clamp" });
   const glowScale = interpolate(glowProgress, [0, 1], [0.8, 1.2], { extrapolateRight: "clamp" });
   
   const glowPulse = adjustedFrame > 30 
@@ -61,7 +61,7 @@ function Scene() {
     AbsoluteFill,
     {
       style: {
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
       }
@@ -70,7 +70,7 @@ function Scene() {
       "div",
       {
         style: {
-          transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformOrigin: "center center",
           position: "relative",
           display: "flex",
@@ -84,7 +84,7 @@ function Scene() {
           width: logoSize * 1.8,
           height: logoSize * 1.8,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + " 0%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + " 0%, transparent 70%)",
           opacity: glowOpacity,
           transform: "scale(" + (glowScale * glowPulse) + ")",
           filter: "blur(" + (logoSize * 0.15) + "px)",
@@ -97,7 +97,7 @@ function Scene() {
             width: logoSize,
             height: logoSize,
             borderRadius: borderRadius,
-            backgroundColor: SCENE_PARAMS.logoBackgroundColor.value,
+            backgroundColor: (props.logoBackgroundColor ?? SCENE_PARAMS.logoBackgroundColor.value),
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -123,7 +123,7 @@ function Scene() {
           "span",
           {
             style: {
-              color: SCENE_PARAMS.logoTextColor.value,
+              color: (props.logoTextColor ?? SCENE_PARAMS.logoTextColor.value),
               fontSize: logoSize * 0.48,
               fontWeight: 600,
               fontFamily: "system-ui, -apple-system, sans-serif",
@@ -132,7 +132,7 @@ function Scene() {
               zIndex: 1,
             }
           },
-          SCENE_PARAMS.logoText.value
+          (props.logoText ?? SCENE_PARAMS.logoText.value)
         )
       )
     )

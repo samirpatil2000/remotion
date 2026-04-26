@@ -41,11 +41,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const t1BubbleIn = 6;
   const t1TextIn = 30;
@@ -60,8 +60,8 @@ function Scene() {
   const bubble2Progress = spring({ frame: Math.max(0, adjustedFrame - t2BubbleIn), fps, config: { damping: 20, stiffness: 90 } });
   const iconProgress = spring({ frame: Math.max(0, adjustedFrame - 2), fps, config: { damping: 20, stiffness: 90 } });
 
-  const bubble1Y = interpolate(bubble1Progress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const bubble2Y = interpolate(bubble2Progress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const bubble1Y = interpolate(bubble1Progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const bubble2Y = interpolate(bubble2Progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
   const iconY = interpolate(iconProgress, [0, 1], [10, 0], { extrapolateRight: "clamp" });
 
   const typingOpacity1 = interpolate(adjustedFrame, [t1TextIn - 6, t1TextIn], [1, 0], { extrapolateRight: "clamp" });
@@ -83,29 +83,29 @@ function Scene() {
   const bubble1SizeProgress = interpolate(adjustedFrame, [t1TextIn - 4, t1TextIn + 8], [0, 1], { extrapolateRight: "clamp" });
   const bubble2SizeProgress = interpolate(adjustedFrame, [t2TextIn - 4, t2TextIn + 8], [0, 1], { extrapolateRight: "clamp" });
 
-  const paddingSmall = minDim * SCENE_PARAMS.typingPadding.value;
-  const paddingFull = minDim * SCENE_PARAMS.fullPadding.value;
+  const paddingSmall = minDim * (props.typingPadding ?? SCENE_PARAMS.typingPadding.value);
+  const paddingFull = minDim * (props.fullPadding ?? SCENE_PARAMS.fullPadding.value);
 
   const bubble1Padding = interpolate(bubble1SizeProgress, [0, 1], [paddingSmall, paddingFull], { extrapolateRight: "clamp" });
   const bubble2Padding = interpolate(bubble2SizeProgress, [0, 1], [paddingSmall, paddingFull], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
         <div style={{
           position: "absolute",
           top: 0,
           left: 0,
           right: 0,
           height: height * 0.09,
-          backgroundColor: SCENE_PARAMS.topBarColor.value,
+          backgroundColor: (props.topBarColor ?? SCENE_PARAMS.topBarColor.value),
           boxShadow: "0 " + height * 0.002 + "px " + height * 0.01 + "px rgba(0,0,0,0.12)",
           display: "flex",
           alignItems: "center",
           paddingLeft: width * 0.04,
           paddingRight: width * 0.04,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-          color: SCENE_PARAMS.iconColor.value,
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+          color: (props.iconColor ?? SCENE_PARAMS.iconColor.value),
           fontSize: minDim * 0.035,
           opacity: iconProgress,
           transform: "translateY(" + iconY + "px)"
@@ -123,32 +123,32 @@ function Scene() {
           top: height * 0.18,
           right: width * 0.06,
           maxWidth: width * 0.7,
-          backgroundColor: SCENE_PARAMS.bubbleGreen.value,
+          backgroundColor: (props.bubbleGreen ?? SCENE_PARAMS.bubbleGreen.value),
           borderRadius: minDim * 0.03,
           padding: bubble1Padding,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           fontSize: minDim * 0.045,
           lineHeight: 1.2,
           boxShadow: "0 " + minDim * 0.003 + "px " + minDim * 0.01 + "px rgba(0,0,0,0.12)",
-          opacity: bubble1Progress * SCENE_PARAMS.opacity.value,
+          opacity: bubble1Progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + bubble1Y + "px)"
         }}>
-          <div style={{ opacity: typingOpacity1 * dotPulse }}>{SCENE_PARAMS.typingDots.value}</div>
+          <div style={{ opacity: typingOpacity1 * dotPulse }}>{(props.typingDots ?? SCENE_PARAMS.typingDots.value)}</div>
           <div style={{ opacity: textOpacity1 }}>
-            <div>{SCENE_PARAMS.message1.value}</div>
+            <div>{(props.message1 ?? SCENE_PARAMS.message1.value)}</div>
             <div style={{
               marginTop: minDim * 0.015,
               fontSize: minDim * 0.03,
-              color: SCENE_PARAMS.timeColor.value,
+              color: (props.timeColor ?? SCENE_PARAMS.timeColor.value),
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-end",
               gap: minDim * 0.01
             }}>
-              <span>{SCENE_PARAMS.time1.value}</span>
-              <span style={{ color: SCENE_PARAMS.tickBlue.value, fontWeight: 700, opacity: tick1Opacity, transform: "translateY(" + tick1Y + "px)" }}>✓</span>
-              <span style={{ color: SCENE_PARAMS.tickBlue.value, fontWeight: 700, opacity: tick2Opacity, transform: "translateY(" + tick2Y + "px)" }}>✓</span>
+              <span>{(props.time1 ?? SCENE_PARAMS.time1.value)}</span>
+              <span style={{ color: (props.tickBlue ?? SCENE_PARAMS.tickBlue.value), fontWeight: 700, opacity: tick1Opacity, transform: "translateY(" + tick1Y + "px)" }}>✓</span>
+              <span style={{ color: (props.tickBlue ?? SCENE_PARAMS.tickBlue.value), fontWeight: 700, opacity: tick2Opacity, transform: "translateY(" + tick2Y + "px)" }}>✓</span>
             </div>
           </div>
         </div>
@@ -158,33 +158,33 @@ function Scene() {
           top: height * 0.39,
           left: width * 0.06,
           maxWidth: width * 0.7,
-          backgroundColor: SCENE_PARAMS.bubbleWhite.value,
+          backgroundColor: (props.bubbleWhite ?? SCENE_PARAMS.bubbleWhite.value),
           borderRadius: minDim * 0.03,
           padding: bubble2Padding,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           fontSize: minDim * 0.045,
           lineHeight: 1.2,
           boxShadow: "0 " + minDim * 0.003 + "px " + minDim * 0.01 + "px rgba(0,0,0,0.12)",
-          opacity: bubble2Progress * SCENE_PARAMS.opacity.value,
+          opacity: bubble2Progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + bubble2Y + "px)"
         }}>
-          <div style={{ opacity: typingOpacity2 * dotPulse }}>{SCENE_PARAMS.typingDots.value}</div>
+          <div style={{ opacity: typingOpacity2 * dotPulse }}>{(props.typingDots ?? SCENE_PARAMS.typingDots.value)}</div>
           <div style={{ opacity: textOpacity2 }}>
             <div style={{ display: "flex", gap: minDim * 0.02, alignItems: "center" }}>
-              <span>{SCENE_PARAMS.message2.value}</span>
-              <span>{SCENE_PARAMS.emoji2.value}</span>
+              <span>{(props.message2 ?? SCENE_PARAMS.message2.value)}</span>
+              <span>{(props.emoji2 ?? SCENE_PARAMS.emoji2.value)}</span>
             </div>
             <div style={{
               marginTop: minDim * 0.015,
               fontSize: minDim * 0.03,
-              color: SCENE_PARAMS.timeColor.value,
+              color: (props.timeColor ?? SCENE_PARAMS.timeColor.value),
               display: "flex",
               justifyContent: "flex-start",
               gap: minDim * 0.01
             }}>
-              <span>{SCENE_PARAMS.time2.value}</span>
-              <span style={{ color: SCENE_PARAMS.iconColor.value, fontWeight: 700, opacity: tick2Opacity2, transform: "translateY(" + tick2Y2 + "px)" }}>✓</span>
+              <span>{(props.time2 ?? SCENE_PARAMS.time2.value)}</span>
+              <span style={{ color: (props.iconColor ?? SCENE_PARAMS.iconColor.value), fontWeight: 700, opacity: tick2Opacity2, transform: "translateY(" + tick2Y2 + "px)" }}>✓</span>
             </div>
           </div>
         </div>

@@ -18,12 +18,12 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const f = frame * speed;
   
   const isPortrait = height > width;
@@ -153,8 +153,8 @@ function Scene() {
   const phoneFlash = f >= phase4End + 30 && f < phase4End + 50;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%", position: "relative" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%", position: "relative" }}>
         
         {/* Desk surface */}
         <div style={{
@@ -180,7 +180,7 @@ function Scene() {
           <div style={{
             width: "100%",
             height: "100%",
-            backgroundColor: SCENE_PARAMS.laptopColor.value,
+            backgroundColor: (props.laptopColor ?? SCENE_PARAMS.laptopColor.value),
             borderRadius: minDim * 0.015,
             padding: laptopWidth * 0.05,
             boxSizing: "border-box",
@@ -189,7 +189,7 @@ function Scene() {
             <div style={{
               width: "100%",
               height: "100%",
-              backgroundColor: SCENE_PARAMS.screenColor.value,
+              backgroundColor: (props.screenColor ?? SCENE_PARAMS.screenColor.value),
               borderRadius: minDim * 0.008,
               overflow: "hidden",
               position: "relative",
@@ -278,7 +278,7 @@ function Scene() {
                       <div style={{
                         width: "100%",
                         height: "40%",
-                        backgroundColor: SCENE_PARAMS.marioRed.value,
+                        backgroundColor: (props.marioRed ?? SCENE_PARAMS.marioRed.value),
                         borderRadius: "50% 50% 0 0",
                       }} />
                       {/* Mario face */}
@@ -291,7 +291,7 @@ function Scene() {
                       <div style={{
                         width: "100%",
                         height: "35%",
-                        backgroundColor: SCENE_PARAMS.marioBlue.value,
+                        backgroundColor: (props.marioBlue ?? SCENE_PARAMS.marioBlue.value),
                         borderRadius: "0 0 30% 30%",
                       }} />
                     </div>
@@ -360,7 +360,7 @@ function Scene() {
           top: deskY - minDim * 0.12,
           width: minDim * 0.08,
           height: minDim * 0.12,
-          backgroundColor: SCENE_PARAMS.mugColor.value,
+          backgroundColor: (props.mugColor ?? SCENE_PARAMS.mugColor.value),
           borderRadius: "0 0 10px 10px",
           border: "3px solid #ddd",
           borderTop: "none",
@@ -395,7 +395,7 @@ function Scene() {
           top: deskY - minDim * 0.15,
           width: minDim * 0.08,
           height: minDim * 0.08,
-          backgroundColor: SCENE_PARAMS.stickyColor.value,
+          backgroundColor: (props.stickyColor ?? SCENE_PARAMS.stickyColor.value),
           transform: "rotate(-5deg)",
           boxShadow: "2px 2px 5px rgba(0,0,0,0.2)",
         }} />
@@ -456,7 +456,7 @@ function Scene() {
               <div style={{
                 width: "100%",
                 height: "100%",
-                border: "3px solid " + SCENE_PARAMS.coinColor.value,
+                border: "3px solid " + (props.coinColor ?? SCENE_PARAMS.coinColor.value),
                 borderRadius: minDim * 0.01,
                 position: "relative",
               }}>
@@ -466,7 +466,7 @@ function Scene() {
                   left: "20%",
                   right: "20%",
                   height: "40%",
-                  border: "2px solid " + SCENE_PARAMS.coinColor.value,
+                  border: "2px solid " + (props.coinColor ?? SCENE_PARAMS.coinColor.value),
                   borderRadius: minDim * 0.005,
                 }} />
               </div>
@@ -492,7 +492,7 @@ function Scene() {
               left: "10%",
               width: "80%",
               height: "25%",
-              backgroundColor: SCENE_PARAMS.marioRed.value,
+              backgroundColor: (props.marioRed ?? SCENE_PARAMS.marioRed.value),
               borderRadius: "50% 50% 0 0",
             }} />
             {/* Hat brim */}
@@ -502,7 +502,7 @@ function Scene() {
               left: 0,
               width: "100%",
               height: "10%",
-              backgroundColor: SCENE_PARAMS.marioRed.value,
+              backgroundColor: (props.marioRed ?? SCENE_PARAMS.marioRed.value),
             }} />
             {/* Face */}
             <div style={{
@@ -551,7 +551,7 @@ function Scene() {
               left: "20%",
               width: "60%",
               height: "30%",
-              backgroundColor: SCENE_PARAMS.marioBlue.value,
+              backgroundColor: (props.marioBlue ?? SCENE_PARAMS.marioBlue.value),
               borderRadius: "20%",
             }}>
               {/* Buttons */}
@@ -572,7 +572,7 @@ function Scene() {
               left: "25%",
               width: "20%",
               height: "20%",
-              backgroundColor: SCENE_PARAMS.marioBlue.value,
+              backgroundColor: (props.marioBlue ?? SCENE_PARAMS.marioBlue.value),
               borderRadius: "0 0 30% 30%",
               transform: "rotate(" + (runCycle * 20) + "deg)",
               transformOrigin: "top center",
@@ -583,7 +583,7 @@ function Scene() {
               right: "25%",
               width: "20%",
               height: "20%",
-              backgroundColor: SCENE_PARAMS.marioBlue.value,
+              backgroundColor: (props.marioBlue ?? SCENE_PARAMS.marioBlue.value),
               borderRadius: "0 0 30% 30%",
               transform: "rotate(" + (-runCycle * 20) + "deg)",
               transformOrigin: "top center",
@@ -599,7 +599,7 @@ function Scene() {
             top: deskY - minDim * 0.2,
             fontSize: minDim * 0.04,
             fontWeight: "bold",
-            color: SCENE_PARAMS.coinColor.value,
+            color: (props.coinColor ?? SCENE_PARAMS.coinColor.value),
             opacity: interpolate(f, [coinCollectFrame, coinCollectFrame + 30], [1, 0], { extrapolateRight: "clamp" }),
             transform: "translateY(" + interpolate(f, [coinCollectFrame, coinCollectFrame + 30], [0, -30], { extrapolateRight: "clamp" }) + "px)",
           }}>

@@ -40,81 +40,81 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const isPortrait = height > width;
 
   const brandProgress = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
-  const brandY = interpolate(brandProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const brandY = interpolate(brandProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   const navItems = [
-    { label: SCENE_PARAMS.navItem1.value, icon: SCENE_PARAMS.icon1.value },
-    { label: SCENE_PARAMS.navItem2.value, icon: SCENE_PARAMS.icon2.value },
-    { label: SCENE_PARAMS.navItem3.value, icon: SCENE_PARAMS.icon3.value },
-    { label: SCENE_PARAMS.navItem4.value, icon: SCENE_PARAMS.icon4.value },
-    { label: SCENE_PARAMS.navItem5.value, icon: SCENE_PARAMS.icon5.value }
+    { label: (props.navItem1 ?? SCENE_PARAMS.navItem1.value), icon: (props.icon1 ?? SCENE_PARAMS.icon1.value) },
+    { label: (props.navItem2 ?? SCENE_PARAMS.navItem2.value), icon: (props.icon2 ?? SCENE_PARAMS.icon2.value) },
+    { label: (props.navItem3 ?? SCENE_PARAMS.navItem3.value), icon: (props.icon3 ?? SCENE_PARAMS.icon3.value) },
+    { label: (props.navItem4 ?? SCENE_PARAMS.navItem4.value), icon: (props.icon4 ?? SCENE_PARAMS.icon4.value) },
+    { label: (props.navItem5 ?? SCENE_PARAMS.navItem5.value), icon: (props.icon5 ?? SCENE_PARAMS.icon5.value) }
   ];
 
   const titleProgress = spring({ frame: Math.max(0, adjustedFrame - 18), fps, config: { damping: 20, stiffness: 90 } });
-  const titleY = interpolate(titleProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const titleY = interpolate(titleProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   const subProgress = spring({ frame: Math.max(0, adjustedFrame - 26), fps, config: { damping: 20, stiffness: 90 } });
-  const subY = interpolate(subProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const subY = interpolate(subProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   const actionProgress = spring({ frame: Math.max(0, adjustedFrame - 34), fps, config: { damping: 20, stiffness: 90 } });
-  const actionY = interpolate(actionProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const actionY = interpolate(actionProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   const logoProgress = spring({ frame: Math.max(0, adjustedFrame - 6), fps, config: { damping: 20, stiffness: 90 } });
-  const logoY = interpolate(logoProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const logoY = interpolate(logoProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
-  const blurValue = (p) => "blur(" + ((1 - p) * SCENE_PARAMS.blur.value).toFixed(2) + "px)";
+  const blurValue = (p) => "blur(" + ((1 - p) * (props.blur ?? SCENE_PARAMS.blur.value)).toFixed(2) + "px)";
 
   const sidebarLeft = isPortrait ? width * 0.08 : width * 0.06;
   const contentLeft = isPortrait ? width * 0.33 : width * 0.28;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ position: "absolute", top: height * 0.08, left: sidebarLeft, display: "flex", alignItems: "center", gap: minDim * 0.015 }}>
           <Img
-            src={SCENE_PARAMS.logoImage.value}
+            src={(props.logoImage ?? SCENE_PARAMS.logoImage.value)}
             style={{
               width: minDim * 0.06,
               height: minDim * 0.06,
               objectFit: "cover",
-              opacity: logoProgress * SCENE_PARAMS.opacity.value,
+              opacity: logoProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
               transform: "translateY(" + logoY + "px)",
               filter: blurValue(logoProgress)
             }}
           />
           <div style={{
-            fontFamily: SCENE_PARAMS.brandFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.brandFont ?? SCENE_PARAMS.brandFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.07,
             fontWeight: 700,
-            color: SCENE_PARAMS.textColor.value,
-            opacity: brandProgress * SCENE_PARAMS.opacity.value,
-            transform: "translateY(" + brandY + "px) rotate(" + SCENE_PARAMS.rotation.value + "deg)",
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            opacity: brandProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
+            transform: "translateY(" + brandY + "px) rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
             filter: blurValue(brandProgress)
           }}>
-            {SCENE_PARAMS.brandName.value}
+            {(props.brandName ?? SCENE_PARAMS.brandName.value)}
           </div>
         </div>
 
         <div style={{ position: "absolute", top: height * 0.20, left: sidebarLeft }}>
           {navItems.map((item, i) => {
-            const delay = 12 + i * SCENE_PARAMS.staggerDelay.value;
+            const delay = 12 + i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const p = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
-            const y = interpolate(p, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+            const y = interpolate(p, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
             return (
               <div key={i} style={{
                 display: "flex",
                 alignItems: "center",
                 gap: minDim * 0.015,
                 marginBottom: minDim * 0.018,
-                opacity: p * SCENE_PARAMS.opacity.value,
+                opacity: p * (props.opacity ?? SCENE_PARAMS.opacity.value),
                 transform: "translateY(" + y + "px)",
                 filter: blurValue(p)
               }}>
@@ -124,14 +124,14 @@ function Scene() {
                     width: minDim * 0.028,
                     height: minDim * 0.028,
                     objectFit: "contain",
-                    opacity: p * SCENE_PARAMS.opacity.value
+                    opacity: p * (props.opacity ?? SCENE_PARAMS.opacity.value)
                   }}
                 />
                 <div style={{
-                  fontFamily: SCENE_PARAMS.uiFont.value + ", system-ui, sans-serif",
+                  fontFamily: (props.uiFont ?? SCENE_PARAMS.uiFont.value) + ", system-ui, sans-serif",
                   fontSize: minDim * 0.032,
                   fontWeight: 500,
-                  color: i === 0 ? SCENE_PARAMS.textColor.value : SCENE_PARAMS.secondaryColor.value
+                  color: i === 0 ? (props.textColor ?? SCENE_PARAMS.textColor.value) : (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value)
                 }}>
                   {item.label}
                 </div>
@@ -142,40 +142,40 @@ function Scene() {
 
         <div style={{ position: "absolute", top: height * 0.26, left: contentLeft, right: width * 0.08 }}>
           <div style={{
-            fontFamily: SCENE_PARAMS.uiFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.uiFont ?? SCENE_PARAMS.uiFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.085,
             fontWeight: 700,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             lineHeight: 1.05,
-            opacity: titleProgress * SCENE_PARAMS.opacity.value,
+            opacity: titleProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
             transform: "translateY(" + titleY + "px)",
             filter: blurValue(titleProgress)
           }}>
-            {SCENE_PARAMS.pageTitle.value}
+            {(props.pageTitle ?? SCENE_PARAMS.pageTitle.value)}
           </div>
           <div style={{
             marginTop: minDim * 0.025,
-            fontFamily: SCENE_PARAMS.uiFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.uiFont ?? SCENE_PARAMS.uiFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.04,
             fontWeight: 500,
-            color: SCENE_PARAMS.secondaryColor.value,
-            opacity: subProgress * SCENE_PARAMS.opacity.value,
+            color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
+            opacity: subProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
             transform: "translateY(" + subY + "px)",
             filter: blurValue(subProgress)
           }}>
-            {SCENE_PARAMS.subTitle.value}
+            {(props.subTitle ?? SCENE_PARAMS.subTitle.value)}
           </div>
           <div style={{
             marginTop: minDim * 0.035,
-            fontFamily: SCENE_PARAMS.uiFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.uiFont ?? SCENE_PARAMS.uiFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.038,
             fontWeight: 600,
-            color: SCENE_PARAMS.accentColor.value,
-            opacity: actionProgress * SCENE_PARAMS.opacity.value,
+            color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+            opacity: actionProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
             transform: "translateY(" + actionY + "px)",
             filter: blurValue(actionProgress)
           }}>
-            {SCENE_PARAMS.actionText.value}
+            {(props.actionText ?? SCENE_PARAMS.actionText.value)}
           </div>
         </div>
       </div>

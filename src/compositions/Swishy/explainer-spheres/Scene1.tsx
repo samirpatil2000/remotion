@@ -34,12 +34,12 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const r = isPortrait ? width * 0.18 : height * 0.22;
   const spacing = r * 1.18;
@@ -48,20 +48,20 @@ function Scene() {
   const centerY = height * 0.52;
 
   const labels = [
-    SCENE_PARAMS.circle1Text.value,
-    SCENE_PARAMS.circle2Text.value,
-    SCENE_PARAMS.circle3Text.value,
-    SCENE_PARAMS.circle4Text.value
+    (props.circle1Text ?? SCENE_PARAMS.circle1Text.value),
+    (props.circle2Text ?? SCENE_PARAMS.circle2Text.value),
+    (props.circle3Text ?? SCENE_PARAMS.circle3Text.value),
+    (props.circle4Text ?? SCENE_PARAMS.circle4Text.value)
   ];
 
   return (
     <AbsoluteFill style={{
-      background: "linear-gradient(90deg, " + SCENE_PARAMS.backgroundStart.value + " 0%, " + SCENE_PARAMS.backgroundMid.value + " 55%, " + SCENE_PARAMS.backgroundEnd.value + " 100%)"
+      background: "linear-gradient(90deg, " + (props.backgroundStart ?? SCENE_PARAMS.backgroundStart.value) + " 0%, " + (props.backgroundMid ?? SCENE_PARAMS.backgroundMid.value) + " 55%, " + (props.backgroundEnd ?? SCENE_PARAMS.backgroundEnd.value) + " 100%)"
     }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <svg width={width} height={height} style={{ position: "absolute", left: 0, top: 0 }}>
           {labels.map((_, i) => {
-            const delay = i * SCENE_PARAMS.staggerDelay.value;
+            const delay = i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const drawProgress = interpolate(adjustedFrame, [delay, delay + 40], [0, 1], { extrapolateRight: "clamp" });
             const circumference = 2 * Math.PI * r;
             const dashOffset = circumference * (1 - drawProgress);
@@ -74,7 +74,7 @@ function Scene() {
                 cy={centerY}
                 r={r}
                 fill="none"
-                stroke={SCENE_PARAMS.strokeColor.value}
+                stroke={(props.strokeColor ?? SCENE_PARAMS.strokeColor.value)}
                 strokeWidth={minDim * 0.0025}
                 strokeOpacity={0.55}
                 strokeDasharray={circumference}
@@ -86,9 +86,9 @@ function Scene() {
         </svg>
 
         {labels.map((label, i) => {
-          const delay = i * SCENE_PARAMS.staggerDelay.value + 18;
+          const delay = i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value) + 18;
           const textProgress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
-          const slideY = interpolate(textProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+          const slideY = interpolate(textProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
           const cx = startX + i * spacing;
 
           const lines = label.split("\n");
@@ -99,14 +99,14 @@ function Scene() {
               left: cx,
               top: centerY,
               transform: "translate(-50%, -50%) translateY(" + slideY + "px)",
-              opacity: textProgress * SCENE_PARAMS.opacity.value,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              opacity: textProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.032,
               fontWeight: 500,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               textAlign: "center",
               lineHeight: 1.2,
-              filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+              filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
             }}>
               {lines.map((line, idx) => (
                 <div key={idx}>{line}</div>

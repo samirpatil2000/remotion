@@ -23,14 +23,14 @@ const SCENE_PARAMS = {
   gridLineCount: { type: "number", label: "Grid Line Count", value: 6, min: 3, max: 10, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const maxAmount = SCENE_PARAMS.maxDollarAmount.value;
+  const maxAmount = (props.maxDollarAmount ?? SCENE_PARAMS.maxDollarAmount.value);
   
   // Curve animation progress - this drives everything
   const curveProgress = interpolate(
@@ -47,7 +47,7 @@ function Scene() {
   const bgTextOpacity = interpolate(
     adjustedFrame,
     [0, 36],
-    [0, SCENE_PARAMS.backgroundTextOpacity.value],
+    [0, (props.backgroundTextOpacity ?? SCENE_PARAMS.backgroundTextOpacity.value)],
     { extrapolateRight: "clamp" }
   );
   
@@ -59,7 +59,7 @@ function Scene() {
   );
   
   // Grid lines staggered fade in
-  const gridLineCount = SCENE_PARAMS.gridLineCount.value;
+  const gridLineCount = (props.gridLineCount ?? SCENE_PARAMS.gridLineCount.value);
   const gridLines = [];
   for (let i = 0; i < gridLineCount; i++) {
     const lineDelay = i * 6;
@@ -177,13 +177,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -199,7 +199,7 @@ function Scene() {
           fontSize: minDim * 0.38,
           fontWeight: 800,
           fontFamily: "system-ui, -apple-system, sans-serif",
-          background: "linear-gradient(180deg, " + SCENE_PARAMS.textColorStart.value + " 0%, " + SCENE_PARAMS.textColorEnd.value + " 100%)",
+          background: "linear-gradient(180deg, " + (props.textColorStart ?? SCENE_PARAMS.textColorStart.value) + " 0%, " + (props.textColorEnd ?? SCENE_PARAMS.textColorEnd.value) + " 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -229,7 +229,7 @@ function Scene() {
               y1={height * 0.1}
               x2={line.x}
               y2={height}
-              stroke={SCENE_PARAMS.gridLineColor.value}
+              stroke={(props.gridLineColor ?? SCENE_PARAMS.gridLineColor.value)}
               strokeWidth={1}
               strokeDasharray="8 6"
               opacity={line.opacity}
@@ -250,13 +250,13 @@ function Scene() {
         >
           <defs>
             <linearGradient id="redFadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.curveGlowColor.value} stopOpacity={0.4 * glowPulse} />
-              <stop offset="50%" stopColor={SCENE_PARAMS.curveColor.value} stopOpacity={0.2 * glowPulse} />
-              <stop offset="100%" stopColor={SCENE_PARAMS.curveColor.value} stopOpacity={0} />
+              <stop offset="0%" stopColor={(props.curveGlowColor ?? SCENE_PARAMS.curveGlowColor.value)} stopOpacity={0.4 * glowPulse} />
+              <stop offset="50%" stopColor={(props.curveColor ?? SCENE_PARAMS.curveColor.value)} stopOpacity={0.2 * glowPulse} />
+              <stop offset="100%" stopColor={(props.curveColor ?? SCENE_PARAMS.curveColor.value)} stopOpacity={0} />
             </linearGradient>
             <linearGradient id="curveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={SCENE_PARAMS.curveColor.value} />
-              <stop offset="100%" stopColor={SCENE_PARAMS.curveGlowColor.value} />
+              <stop offset="0%" stopColor={(props.curveColor ?? SCENE_PARAMS.curveColor.value)} />
+              <stop offset="100%" stopColor={(props.curveGlowColor ?? SCENE_PARAMS.curveGlowColor.value)} />
             </linearGradient>
             <filter id="curveGlow">
               <feGaussianBlur stdDeviation="8" result="coloredBlur" />
@@ -303,14 +303,14 @@ function Scene() {
                 cx={lastPoint.x}
                 cy={lastPoint.y}
                 r={minDim * 0.05 * glowPulse}
-                fill={SCENE_PARAMS.curveGlowColor.value}
+                fill={(props.curveGlowColor ?? SCENE_PARAMS.curveGlowColor.value)}
                 opacity={0.25}
               />
               <circle
                 cx={lastPoint.x}
                 cy={lastPoint.y}
                 r={minDim * 0.02 * dotPulse}
-                fill={SCENE_PARAMS.curveGlowColor.value}
+                fill={(props.curveGlowColor ?? SCENE_PARAMS.curveGlowColor.value)}
                 filter="url(#curveGlow)"
               />
             </g>
@@ -354,7 +354,7 @@ function Scene() {
               position: "relative",
               width: tooltipWidth,
               height: tooltipHeight,
-              background: "linear-gradient(145deg, " + SCENE_PARAMS.tooltipBg.value + " 0%, #1f1f1f 100%)",
+              background: "linear-gradient(145deg, " + (props.tooltipBg ?? SCENE_PARAMS.tooltipBg.value) + " 0%, #1f1f1f 100%)",
               borderRadius: minDim * 0.02,
               padding: minDim * 0.02 + "px " + minDim * 0.025 + "px",
               boxShadow: "0 " + minDim * 0.005 + "px " + minDim * 0.015 + "px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.2)",
@@ -375,24 +375,24 @@ function Scene() {
                 height: 0,
                 borderTop: minDim * 0.015 + "px solid transparent",
                 borderBottom: minDim * 0.015 + "px solid transparent",
-                borderLeft: minDim * 0.018 + "px solid " + SCENE_PARAMS.tooltipBg.value,
+                borderLeft: minDim * 0.018 + "px solid " + (props.tooltipBg ?? SCENE_PARAMS.tooltipBg.value),
                 filter: "drop-shadow(2px 0 2px rgba(0,0,0,0.3))",
               }} />
               
               <span style={{
                 fontSize: minDim * 0.024,
-                color: SCENE_PARAMS.tooltipLabelColor.value,
+                color: (props.tooltipLabelColor ?? SCENE_PARAMS.tooltipLabelColor.value),
                 fontFamily: "system-ui, -apple-system, sans-serif",
                 fontWeight: 500,
                 textTransform: "uppercase",
                 letterSpacing: minDim * 0.002,
               }}>
-                {SCENE_PARAMS.tooltipLabel.value}
+                {(props.tooltipLabel ?? SCENE_PARAMS.tooltipLabel.value)}
               </span>
               
               <span style={{
                 fontSize: minDim * 0.042,
-                color: SCENE_PARAMS.tooltipTextColor.value,
+                color: (props.tooltipTextColor ?? SCENE_PARAMS.tooltipTextColor.value),
                 fontFamily: "system-ui, -apple-system, sans-serif",
                 fontWeight: 700,
                 textShadow: "0 2px 4px rgba(0,0,0,0.3)",

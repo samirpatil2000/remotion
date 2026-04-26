@@ -32,13 +32,13 @@ const SCENE_PARAMS = {
   windowFlicker: { type: "boolean", label: "Window Flicker", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
   
@@ -48,7 +48,7 @@ function Scene() {
   const titleY = interpolate(titleProgress, [0, 1], [30, 0]);
   
   // Generate stars
-  const starCount = SCENE_PARAMS.starCount.value;
+  const starCount = (props.starCount ?? SCENE_PARAMS.starCount.value);
   const stars = [];
   for (let i = 0; i < starCount; i++) {
     const seed1 = Math.sin(i * 12.9898) * 43758.5453 % 1;
@@ -93,7 +93,7 @@ function Scene() {
   const skylineProgress = spring({ frame: Math.max(0, adjustedFrame - 5), fps, config: { damping: 22, stiffness: 85 } });
   
   // Mid-century diamond/starburst element
-  const Starburst = ({ size, color }) => (
+  const Starburst = ({ props, size, color }: any) => (
     <svg width={size} height={size} viewBox="0 0 40 40">
       <path d="M20 0 L22 16 L40 20 L22 24 L20 40 L18 24 L0 20 L18 16 Z" fill={color} />
       <path d="M20 8 L21 17 L30 20 L21 23 L20 32 L19 23 L10 20 L19 17 Z" fill={color} opacity="0.6" />
@@ -101,7 +101,7 @@ function Scene() {
   );
   
   // Vintage cartoon swirl component
-  const VintageSwirl = ({ size, color, rotation, flip }) => (
+  const VintageSwirl = ({ props, size, color, rotation, flip }: any) => (
     <svg width={size} height={size} viewBox="0 0 100 100" style={{ transform: flip ? "scaleX(-1)" : "none" }}>
       <path
         d="M50 85 C50 85 30 75 25 55 C20 35 35 20 50 25 C65 30 70 45 60 55 C50 65 40 55 45 45 C50 35 60 40 55 50"
@@ -116,7 +116,7 @@ function Scene() {
   );
   
   // Generate animated swirls
-  const swirlCount = SCENE_PARAMS.swirlCount.value;
+  const swirlCount = (props.swirlCount ?? SCENE_PARAMS.swirlCount.value);
   const swirls = [];
   for (let i = 0; i < swirlCount; i++) {
     const seed1 = Math.sin(i * 23.456) * 43758.5453 % 1;
@@ -158,7 +158,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      background: "linear-gradient(to bottom, " + SCENE_PARAMS.backgroundColor.value + " 0%, " + SCENE_PARAMS.skyBottom.value + " 60%, #2d4a6d 100%)",
+      background: "linear-gradient(to bottom, " + (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) + " 0%, " + (props.skyBottom ?? SCENE_PARAMS.skyBottom.value) + " 60%, #2d4a6d 100%)",
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -175,10 +175,10 @@ function Scene() {
               top: star.y,
               width: star.size,
               height: star.size,
-              backgroundColor: SCENE_PARAMS.starColor.value,
+              backgroundColor: (props.starColor ?? SCENE_PARAMS.starColor.value),
               borderRadius: "50%",
               opacity: star.opacity,
-              boxShadow: "0 0 " + (star.size * 2) + "px " + SCENE_PARAMS.starColor.value,
+              boxShadow: "0 0 " + (star.size * 2) + "px " + (props.starColor ?? SCENE_PARAMS.starColor.value),
             }}
           />
         ))}
@@ -196,9 +196,9 @@ function Scene() {
               zIndex: 5,
             }}
           >
-            <VintageSwirl 
+            <VintageSwirl props={props}  
               size={swirl.size} 
-              color={SCENE_PARAMS.swirlColor.value}
+              color={(props.swirlColor ?? SCENE_PARAMS.swirlColor.value)}
               rotation={swirl.rotation}
               flip={swirl.flip}
             />
@@ -234,7 +234,7 @@ function Scene() {
             for (let w = 0; w < windowCount; w++) {
               const seed = Math.sin((i * 100 + w * 17) * 12.9898) * 43758.5453 % 1;
               const flickerSeed = Math.sin((i * 50 + w * 23) * 45.233) * 43758.5453 % 1;
-              const flicker = SCENE_PARAMS.windowFlicker.value 
+              const flicker = (props.windowFlicker ?? SCENE_PARAMS.windowFlicker.value) 
                 ? (Math.sin((adjustedFrame * 0.08) + flickerSeed * 20) + 1) / 2 * 0.3 + 0.7
                 : 1;
               
@@ -257,7 +257,7 @@ function Scene() {
                   left: bLeft,
                   width: bWidth,
                   height: bHeight,
-                  backgroundColor: SCENE_PARAMS.buildingColor.value,
+                  backgroundColor: (props.buildingColor ?? SCENE_PARAMS.buildingColor.value),
                 }}
               >
                 {/* Building top detail - mid-century style */}
@@ -269,7 +269,7 @@ function Scene() {
                     transform: "translateX(-50%)",
                     width: bWidth * 0.3,
                     height: bWidth * 0.15,
-                    backgroundColor: SCENE_PARAMS.buildingColor.value,
+                    backgroundColor: (props.buildingColor ?? SCENE_PARAMS.buildingColor.value),
                   }} />
                 )}
                 {i % 3 === 1 && (
@@ -282,7 +282,7 @@ function Scene() {
                     height: 0,
                     borderLeft: (bWidth * 0.25) + "px solid transparent",
                     borderRight: (bWidth * 0.25) + "px solid transparent",
-                    borderBottom: (bWidth * 0.2) + "px solid " + SCENE_PARAMS.buildingColor.value,
+                    borderBottom: (bWidth * 0.2) + "px solid " + (props.buildingColor ?? SCENE_PARAMS.buildingColor.value),
                   }} />
                 )}
                 
@@ -297,9 +297,9 @@ function Scene() {
                       transform: "translate(-50%, 50%)",
                       width: bWidth * 0.15,
                       height: bWidth * 0.22,
-                      backgroundColor: SCENE_PARAMS.windowColor.value,
+                      backgroundColor: (props.windowColor ?? SCENE_PARAMS.windowColor.value),
                       opacity: win.opacity * 0.85,
-                      boxShadow: "0 0 " + (bWidth * 0.1) + "px " + SCENE_PARAMS.windowColor.value,
+                      boxShadow: "0 0 " + (bWidth * 0.1) + "px " + (props.windowColor ?? SCENE_PARAMS.windowColor.value),
                     }}
                   />
                 ))}
@@ -323,7 +323,7 @@ function Scene() {
             transform: "rotate(" + (adjustedFrame * 0.3) + "deg)",
             marginBottom: minDim * 0.03,
           }}>
-            <Starburst size={minDim * 0.08} color={SCENE_PARAMS.accentColor.value} />
+            <Starburst props={props}  size={minDim * 0.08} color={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
           </div>
           
           {/* Decorative top line */}
@@ -337,28 +337,28 @@ function Scene() {
             <div style={{
               width: interpolate(lineProgress, [0, 1], [0, minDim * 0.15]),
               height: 2,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
             <div style={{
               width: minDim * 0.012,
               height: minDim * 0.012,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               transform: "rotate(45deg)",
               opacity: lineProgress,
             }} />
             <div style={{
               width: interpolate(lineProgress, [0, 1], [0, minDim * 0.15]),
               height: 2,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
           </div>
           
           {/* Title */}
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: isPortrait ? minDim * 0.11 : minDim * 0.09,
             fontWeight: 400,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", Georgia, serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Georgia, serif",
             fontStyle: "italic",
             letterSpacing: "0.04em",
             margin: 0,
@@ -366,7 +366,7 @@ function Scene() {
             transform: "translateY(" + titleY + "px)",
             textShadow: "0 0 " + (minDim * 0.02) + "px rgba(232, 184, 74, 0.4), 0 " + (minDim * 0.004) + "px " + (minDim * 0.01) + "px rgba(0,0,0,0.5)",
           }}>
-            {SCENE_PARAMS.title.value}
+            {(props.title ?? SCENE_PARAMS.title.value)}
           </h1>
           
           {/* Decorative bottom line */}
@@ -380,19 +380,19 @@ function Scene() {
             <div style={{
               width: interpolate(lineProgress, [0, 1], [0, minDim * 0.15]),
               height: 2,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
             <div style={{
               width: minDim * 0.012,
               height: minDim * 0.012,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               transform: "rotate(45deg)",
               opacity: lineProgress,
             }} />
             <div style={{
               width: interpolate(lineProgress, [0, 1], [0, minDim * 0.15]),
               height: 2,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }} />
           </div>
           
@@ -402,7 +402,7 @@ function Scene() {
             transform: "rotate(" + (-adjustedFrame * 0.25) + "deg)",
             marginTop: minDim * 0.03,
           }}>
-            <Starburst size={minDim * 0.06} color={SCENE_PARAMS.accentColor.value} />
+            <Starburst props={props}  size={minDim * 0.06} color={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
           </div>
         </div>
         
@@ -414,7 +414,7 @@ function Scene() {
           opacity: interpolate(adjustedFrame, [30, 50], [0, 0.7], { extrapolateRight: "clamp" }),
           transform: "rotate(" + (adjustedFrame * 0.2) + "deg)",
         }}>
-          <Starburst size={minDim * 0.05} color={SCENE_PARAMS.accentColor.value} />
+          <Starburst props={props}  size={minDim * 0.05} color={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
         </div>
         <div style={{
           position: "absolute",
@@ -423,7 +423,7 @@ function Scene() {
           opacity: interpolate(adjustedFrame, [35, 55], [0, 0.7], { extrapolateRight: "clamp" }),
           transform: "rotate(" + (-adjustedFrame * 0.2) + "deg)",
         }}>
-          <Starburst size={minDim * 0.045} color={SCENE_PARAMS.accentColor.value} />
+          <Starburst props={props}  size={minDim * 0.045} color={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
         </div>
         
         {/* Gradient overlay at bottom for depth */}

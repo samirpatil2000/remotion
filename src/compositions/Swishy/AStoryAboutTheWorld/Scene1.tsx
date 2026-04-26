@@ -21,11 +21,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   const scenes = [
     { start: 0, type: "centered-stack" },
@@ -53,8 +53,8 @@ function Scene() {
   const bgColors = ["#ffffff", "#0f172a", "#fef3c7", "#e0f2fe", "#ffffff", "#fef2f2", "#f8fafc"];
   const bgColor = bgColors[currentSceneIndex] || "#ffffff";
   const isDark = bgColor === "#0f172a";
-  const textColor = isDark ? "#f8fafc" : SCENE_PARAMS.textColor.value;
-  const fadedColor = isDark ? "#64748b" : SCENE_PARAMS.accentColor.value;
+  const textColor = isDark ? "#f8fafc" : (props.textColor ?? SCENE_PARAMS.textColor.value);
+  const fadedColor = isDark ? "#64748b" : (props.accentColor ?? SCENE_PARAMS.accentColor.value);
   
   var content = null;
   var graphics = [];
@@ -79,15 +79,15 @@ function Scene() {
       );
     }
     
-    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")", textAlign: "center" } },
-      React.createElement("div", { style: { fontSize: minDim * 0.045, fontWeight: 400, color: fadedColor, fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui", opacity: word1Progress, transform: "scale(" + scale1 + ")", marginBottom: minDim * 0.01 } }, SCENE_PARAMS.scene1Word1.value),
-      React.createElement("div", { style: { fontSize: minDim * 0.12, fontWeight: 700, color: textColor, fontFamily: SCENE_PARAMS.headingFont.value + ", serif", opacity: word2Progress, transform: "scale(" + scale2 + ")" } }, SCENE_PARAMS.scene1Word2.value)
+    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", textAlign: "center" } },
+      React.createElement("div", { style: { fontSize: minDim * 0.045, fontWeight: 400, color: fadedColor, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui", opacity: word1Progress, transform: "scale(" + scale1 + ")", marginBottom: minDim * 0.01 } }, (props.scene1Word1 ?? SCENE_PARAMS.scene1Word1.value)),
+      React.createElement("div", { style: { fontSize: minDim * 0.12, fontWeight: 700, color: textColor, fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", opacity: word2Progress, transform: "scale(" + scale2 + ")" } }, (props.scene1Word2 ?? SCENE_PARAMS.scene1Word2.value))
     );
   }
   
   // SCENE 2: Typewriter effect - single word typing out letter by letter, centered
   if (currentScene.type === "typewriter-center") {
-    var word = SCENE_PARAMS.scene2Word1.value;
+    var word = (props.scene2Word1 ?? SCENE_PARAMS.scene2Word1.value);
     var charCount = word.length;
     var visibleChars = Math.floor(interpolate(sceneProgress, [10, 10 + charCount * 5], [0, charCount], { extrapolateRight: "clamp" }));
     var displayText = word.substring(0, visibleChars);
@@ -105,8 +105,8 @@ function Scene() {
       );
     }
     
-    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")", textAlign: "center" } },
-      React.createElement("div", { style: { fontSize: minDim * 0.1, fontWeight: 700, color: "#f8fafc", fontFamily: SCENE_PARAMS.headingFont.value + ", serif", letterSpacing: minDim * 0.015 } }, 
+    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", textAlign: "center" } },
+      React.createElement("div", { style: { fontSize: minDim * 0.1, fontWeight: 700, color: "#f8fafc", fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", letterSpacing: minDim * 0.015 } }, 
         displayText,
         React.createElement("span", { style: { opacity: cursorBlink ? 1 : 0, marginLeft: 2 } }, "|")
       )
@@ -115,7 +115,7 @@ function Scene() {
   
   // SCENE 3: Grid cascade - words slide in from different directions in a grid
   if (currentScene.type === "grid-cascade") {
-    var gridWords = SCENE_PARAMS.scene3Words.value.split(",");
+    var gridWords = (props.scene3Words ?? SCENE_PARAMS.scene3Words.value).split(",");
     var gridContent = [];
     var positions = [
       { x: "20%", y: "30%", fromX: -100, fromY: 0 },
@@ -144,11 +144,11 @@ function Scene() {
       gridContent.push(
         React.createElement("div", {
           key: "grid" + g,
-          style: { position: "absolute", left: pos.x, top: pos.y, transform: "translate(-50%, -50%) translate(" + slideX + "px, " + slideY + "px)", fontSize: isEmphasis ? minDim * 0.14 : minDim * 0.05, fontWeight: isEmphasis ? 900 : 500, color: isEmphasis ? "#92400e" : "#78716c", fontFamily: SCENE_PARAMS.headingFont.value + ", serif", opacity: gridProgress }
+          style: { position: "absolute", left: pos.x, top: pos.y, transform: "translate(-50%, -50%) translate(" + slideX + "px, " + slideY + "px)", fontSize: isEmphasis ? minDim * 0.14 : minDim * 0.05, fontWeight: isEmphasis ? 900 : 500, color: isEmphasis ? "#92400e" : "#78716c", fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", opacity: gridProgress }
         }, gridWords[g])
       );
     }
-    content = React.createElement("div", { style: { transform: "scale(" + SCENE_PARAMS.scale.value + ")", width: "100%", height: "100%", position: "relative" } }, gridContent);
+    content = React.createElement("div", { style: { transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", width: "100%", height: "100%", position: "relative" } }, gridContent);
   }
   
   // SCENE 4: Giant word reveal - huge word slides up from bottom, fills screen
@@ -170,8 +170,8 @@ function Scene() {
       );
     }
     
-    content = React.createElement("div", { style: { position: "absolute", left: "50%", bottom: "15%", transform: "translateX(-50%) translateY(" + giantY + "px) scale(" + (SCENE_PARAMS.scale.value * giantScale) + ")", textAlign: "center" } },
-      React.createElement("div", { style: { fontSize: minDim * 0.22, fontWeight: 900, color: "#0c4a6e", fontFamily: SCENE_PARAMS.headingFont.value + ", serif", letterSpacing: minDim * 0.01, textTransform: "uppercase" } }, SCENE_PARAMS.scene4Word.value)
+    content = React.createElement("div", { style: { position: "absolute", left: "50%", bottom: "15%", transform: "translateX(-50%) translateY(" + giantY + "px) scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * giantScale) + ")", textAlign: "center" } },
+      React.createElement("div", { style: { fontSize: minDim * 0.22, fontWeight: 900, color: "#0c4a6e", fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", letterSpacing: minDim * 0.01, textTransform: "uppercase" } }, (props.scene4Word ?? SCENE_PARAMS.scene4Word.value))
     );
   }
   
@@ -195,15 +195,15 @@ function Scene() {
       );
     }
     
-    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")", textAlign: "center" } },
-      React.createElement("div", { style: { fontSize: minDim * 0.18, fontWeight: 900, color: textColor, fontFamily: SCENE_PARAMS.headingFont.value + ", serif", opacity: flashOpacity, marginBottom: minDim * 0.03 } }, SCENE_PARAMS.scene5Word1.value),
-      React.createElement("div", { style: { fontSize: minDim * 0.06, fontWeight: 400, color: fadedColor, fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui", opacity: sentenceProgress, transform: "translateY(" + sentenceY + "px)" } }, SCENE_PARAMS.scene5Word2.value)
+    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", textAlign: "center" } },
+      React.createElement("div", { style: { fontSize: minDim * 0.18, fontWeight: 900, color: textColor, fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", opacity: flashOpacity, marginBottom: minDim * 0.03 } }, (props.scene5Word1 ?? SCENE_PARAMS.scene5Word1.value)),
+      React.createElement("div", { style: { fontSize: minDim * 0.06, fontWeight: 400, color: fadedColor, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui", opacity: sentenceProgress, transform: "translateY(" + sentenceY + "px)" } }, (props.scene5Word2 ?? SCENE_PARAMS.scene5Word2.value))
     );
   }
   
   // SCENE 6: Corner stack - words positioned in bottom left, stacked vertically
   if (currentScene.type === "corner-stack") {
-    var stackWords = SCENE_PARAMS.scene6Words.value.split(",");
+    var stackWords = (props.scene6Words ?? SCENE_PARAMS.scene6Words.value).split(",");
     var stackContent = [];
     
     for (var h = 0; h < 6; h++) {
@@ -227,11 +227,11 @@ function Scene() {
       stackContent.push(
         React.createElement("div", {
           key: "stack" + s,
-          style: { fontSize: isEmphasis2 ? minDim * 0.14 : minDim * 0.05, fontWeight: isEmphasis2 ? 900 : 500, color: isEmphasis2 ? "#991b1b" : "#9f1239", fontFamily: SCENE_PARAMS.headingFont.value + ", serif", opacity: stackProgress, transform: "translateX(" + stackX + "px)", lineHeight: 1.1 }
+          style: { fontSize: isEmphasis2 ? minDim * 0.14 : minDim * 0.05, fontWeight: isEmphasis2 ? 900 : 500, color: isEmphasis2 ? "#991b1b" : "#9f1239", fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", opacity: stackProgress, transform: "translateX(" + stackX + "px)", lineHeight: 1.1 }
         }, stackWords[s])
       );
     }
-    content = React.createElement("div", { style: { position: "absolute", left: "12%", bottom: "25%", transform: "scale(" + SCENE_PARAMS.scale.value + ")", textAlign: "left" } }, stackContent);
+    content = React.createElement("div", { style: { position: "absolute", left: "12%", bottom: "25%", transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", textAlign: "left" } }, stackContent);
   }
   
   // SCENE 7: Orbit text with questions - text in center, questions orbit around
@@ -245,7 +245,7 @@ function Scene() {
       graphics.push(
         React.createElement("div", {
           key: "question" + q,
-          style: { position: "absolute", left: qX + "%", top: qY + "%", fontSize: minDim * (0.035 + (q % 3) * 0.01), fontFamily: SCENE_PARAMS.headingFont.value + ", serif", color: "#94a3b8", opacity: qProgress * 0.5, transform: "translate(-50%, -50%)" }
+          style: { position: "absolute", left: qX + "%", top: qY + "%", fontSize: minDim * (0.035 + (q % 3) * 0.01), fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", color: "#94a3b8", opacity: qProgress * 0.5, transform: "translate(-50%, -50%)" }
         }, "?")
       );
     }
@@ -264,9 +264,9 @@ function Scene() {
     var line1Y = interpolate(line1Progress, [0, 1], [20, 0]);
     var line2Y = interpolate(line2Progress, [0, 1], [25, 0]);
     
-    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")", textAlign: "center" } },
-      React.createElement("div", { style: { fontSize: minDim * 0.04, fontWeight: 400, color: fadedColor, fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui", opacity: line1Progress, transform: "translateY(" + line1Y + "px)", marginBottom: minDim * 0.015 } }, SCENE_PARAMS.scene7Word1.value),
-      React.createElement("div", { style: { fontSize: minDim * 0.11, fontWeight: 700, color: textColor, fontFamily: SCENE_PARAMS.headingFont.value + ", serif", opacity: line2Progress, transform: "translateY(" + line2Y + "px)", lineHeight: 1.1 } }, SCENE_PARAMS.scene7Word2.value.split(" ").join("\n"))
+    content = React.createElement("div", { style: { position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", textAlign: "center" } },
+      React.createElement("div", { style: { fontSize: minDim * 0.04, fontWeight: 400, color: fadedColor, fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui", opacity: line1Progress, transform: "translateY(" + line1Y + "px)", marginBottom: minDim * 0.015 } }, (props.scene7Word1 ?? SCENE_PARAMS.scene7Word1.value)),
+      React.createElement("div", { style: { fontSize: minDim * 0.11, fontWeight: 700, color: textColor, fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", serif", opacity: line2Progress, transform: "translateY(" + line2Y + "px)", lineHeight: 1.1 } }, (props.scene7Word2 ?? SCENE_PARAMS.scene7Word2.value).split(" ").join("\n"))
     );
   }
   
@@ -280,7 +280,7 @@ function Scene() {
         var dotActive = idx <= currentSceneIndex;
         return React.createElement("div", {
           key: "dot" + idx,
-          style: { width: minDim * 0.01, height: minDim * 0.01, borderRadius: "50%", backgroundColor: dotActive ? (isDark ? "#f8fafc" : SCENE_PARAMS.textColor.value) : (isDark ? "#475569" : "#d1d5db"), transform: "scale(" + (dotActive ? 1 : 0.7) + ")", transition: "all 0.3s ease" }
+          style: { width: minDim * 0.01, height: minDim * 0.01, borderRadius: "50%", backgroundColor: dotActive ? (isDark ? "#f8fafc" : (props.textColor ?? SCENE_PARAMS.textColor.value)) : (isDark ? "#475569" : "#d1d5db"), transform: "scale(" + (dotActive ? 1 : 0.7) + ")", transition: "all 0.3s ease" }
         });
       })
     )

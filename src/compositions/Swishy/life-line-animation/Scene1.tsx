@@ -30,16 +30,16 @@ const SCENE_PARAMS = {
   fontFamily: { type: "font", label: "Font", value: "Open Sans" }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const centerY = height / 2;
-  const amplitude = SCENE_PARAMS.waveAmplitude.value;
-  const frequency = SCENE_PARAMS.waveFrequency.value;
-  const heartbeatCount = Math.round(SCENE_PARAMS.heartbeatCount.value);
+  const amplitude = (props.waveAmplitude ?? SCENE_PARAMS.waveAmplitude.value);
+  const frequency = (props.waveFrequency ?? SCENE_PARAMS.waveFrequency.value);
+  const heartbeatCount = Math.round((props.heartbeatCount ?? SCENE_PARAMS.heartbeatCount.value));
   
   // Generate heartbeat wave points
   const generateHeartbeatPath = (progress) => {
@@ -122,9 +122,9 @@ function Scene() {
   const filterId = "glow-filter";
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%"
@@ -138,7 +138,7 @@ function Scene() {
           <defs>
             <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur 
-                stdDeviation={SCENE_PARAMS.glowIntensity.value} 
+                stdDeviation={(props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)} 
                 result="coloredBlur"
               />
               <feMerge>
@@ -151,8 +151,8 @@ function Scene() {
           {/* Main heartbeat line */}
           <path
             d={pathD}
-            stroke={SCENE_PARAMS.lineColor.value}
-            strokeWidth={SCENE_PARAMS.strokeWidth.value}
+            stroke={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
+            strokeWidth={(props.strokeWidth ?? SCENE_PARAMS.strokeWidth.value)}
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -160,12 +160,12 @@ function Scene() {
           />
           
           {/* Tracking dot */}
-          {SCENE_PARAMS.showDot.value && points.length > 0 && (
+          {(props.showDot ?? SCENE_PARAMS.showDot.value) && points.length > 0 && (
             <circle
               cx={currentPoint.x}
               cy={currentPoint.y}
-              r={SCENE_PARAMS.dotSize.value}
-              fill={SCENE_PARAMS.lineColor.value}
+              r={(props.dotSize ?? SCENE_PARAMS.dotSize.value)}
+              fill={(props.lineColor ?? SCENE_PARAMS.lineColor.value)}
               style={{ filter: "url(#" + filterId + ")" }}
             />
           )}

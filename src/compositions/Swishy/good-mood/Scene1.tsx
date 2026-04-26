@@ -23,18 +23,18 @@ const SCENE_PARAMS = {
   stretchIntensity: { type: "number", label: "Stretch Intensity", value: 0.28, min: 0.1, max: 0.45, step: 0.01 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const minDim = Math.min(width, height);
   
   // Columns based on the "GOOD MOOD" grid
   const columns = [
-    { top: "G", bottom: "M", bottomColor: SCENE_PARAMS.colorM.value },
-    { top: "O", bottom: "O", bottomColor: SCENE_PARAMS.colorO1.value },
-    { top: "O", bottom: "O", bottomColor: SCENE_PARAMS.colorO2.value },
-    { top: "D", bottom: "D", bottomColor: SCENE_PARAMS.colorD.value },
+    { top: "G", bottom: "M", bottomColor: (props.colorM ?? SCENE_PARAMS.colorM.value) },
+    { top: "O", bottom: "O", bottomColor: (props.colorO1 ?? SCENE_PARAMS.colorO1.value) },
+    { top: "O", bottom: "O", bottomColor: (props.colorO2 ?? SCENE_PARAMS.colorO2.value) },
+    { top: "D", bottom: "D", bottomColor: (props.colorD ?? SCENE_PARAMS.colorD.value) },
   ];
 
   // Container dimensions to maintain aspect ratio similar to the screenshot
@@ -43,7 +43,7 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center" 
     }}>
@@ -51,7 +51,7 @@ function Scene() {
         width: containerWidth,
         height: containerHeight,
         display: "flex",
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         gap: "2px" // Subtle gap between columns like the screenshot
       }}>
         {columns.map((col, i) => {
@@ -63,7 +63,7 @@ function Scene() {
           
           // splitRatio determines how much of the column height the top letter takes
           // 0.5 is equal split. We oscillate around it.
-          const intensity = SCENE_PARAMS.stretchIntensity.value;
+          const intensity = (props.stretchIntensity ?? SCENE_PARAMS.stretchIntensity.value);
           const splitRatio = 0.5 + (rawSin * intensity);
           
           return (
@@ -87,8 +87,8 @@ function Scene() {
                 transition: "height 0.1s ease-out"
               }}>
                 <span style={{ 
-                  color: SCENE_PARAMS.topRowColor.value, 
-                  fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`,
+                  color: (props.topRowColor ?? SCENE_PARAMS.topRowColor.value), 
+                  fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`,
                   fontSize: minDim * 0.5,
                   fontWeight: 900,
                   lineHeight: 0.8,
@@ -114,7 +114,7 @@ function Scene() {
               }}>
                 <span style={{ 
                   color: col.bottomColor, 
-                  fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`,
+                  fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`,
                   fontSize: minDim * 0.5,
                   fontWeight: 900,
                   lineHeight: 0.8,

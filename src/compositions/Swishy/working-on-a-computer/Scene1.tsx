@@ -20,12 +20,12 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.6, min: 0, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   // Scene entrance
@@ -38,7 +38,7 @@ function Scene() {
   const cursorBlink = Math.floor(adjustedFrame / 15) % 2 === 0;
   
   // Code lines appearing
-  const typingDelay = SCENE_PARAMS.typingSpeed.value;
+  const typingDelay = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value);
   const codeLines = [
     "$ ssh root@192.168.1.1",
     "Password: ********",
@@ -86,7 +86,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       overflow: "hidden",
     }}>
       {/* Ambient particles */}
@@ -97,7 +97,7 @@ function Scene() {
           top: p.y,
           width: p.size,
           height: p.size,
-          backgroundColor: SCENE_PARAMS.monitorGlow.value,
+          backgroundColor: (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value),
           borderRadius: "50%",
           opacity: p.opacity * sceneEntrance,
         }} />
@@ -111,14 +111,14 @@ function Scene() {
         width: width * 1.2,
         height: height * 0.8,
         transform: "translateX(-50%)",
-        background: "radial-gradient(ellipse at center top, " + SCENE_PARAMS.monitorGlow.value + "25 0%, transparent 50%)",
-        opacity: SCENE_PARAMS.glowIntensity.value * flicker * sceneEntrance,
+        background: "radial-gradient(ellipse at center top, " + (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value) + "25 0%, transparent 50%)",
+        opacity: (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * flicker * sceneEntrance,
         pointerEvents: "none",
       }} />
       
       {/* Main scene container */}
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         opacity: sceneEntrance,
         width: "100%",
@@ -139,7 +139,7 @@ function Scene() {
           borderRadius: minDim * 0.02,
           border: "4px solid #27272a",
           overflow: "hidden",
-          boxShadow: "0 0 " + minDim * 0.06 + "px " + SCENE_PARAMS.monitorGlow.value + "40, inset 0 0 " + minDim * 0.02 + "px rgba(0,0,0,0.5)",
+          boxShadow: "0 0 " + minDim * 0.06 + "px " + (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value) + "40, inset 0 0 " + minDim * 0.02 + "px rgba(0,0,0,0.5)",
         }}>
           {/* Screen content */}
           <div style={{
@@ -182,7 +182,7 @@ function Scene() {
                 
                 return (
                   <div key={i} style={{
-                    color: isSuccess ? "#22c55e" : isCommand ? SCENE_PARAMS.terminalGreen.value : isProgress ? "#3b82f6" : "#94a3b8",
+                    color: isSuccess ? "#22c55e" : isCommand ? (props.terminalGreen ?? SCENE_PARAMS.terminalGreen.value) : isProgress ? "#3b82f6" : "#94a3b8",
                     opacity: lineProgress,
                     transform: "translateX(" + interpolate(lineProgress, [0, 1], [-10, 0]) + "px)",
                     whiteSpace: "nowrap",
@@ -197,16 +197,16 @@ function Scene() {
               {/* Cursor */}
               {cursorBlink && visibleLines <= codeLines.length && (
                 <span style={{
-                  color: SCENE_PARAMS.terminalGreen.value,
+                  color: (props.terminalGreen ?? SCENE_PARAMS.terminalGreen.value),
                   opacity: 0.9,
-                  textShadow: "0 0 8px " + SCENE_PARAMS.terminalGreen.value,
+                  textShadow: "0 0 8px " + (props.terminalGreen ?? SCENE_PARAMS.terminalGreen.value),
                 }}>█</span>
               )}
             </div>
           </div>
           
           {/* Scanlines overlay */}
-          {SCENE_PARAMS.showScanlines.value && (
+          {(props.showScanlines ?? SCENE_PARAMS.showScanlines.value) && (
             <div style={{
               position: "absolute",
               top: 0,
@@ -237,7 +237,7 @@ function Scene() {
           top: height * 0.62,
           width: width,
           height: height * 0.4,
-          background: "linear-gradient(180deg, " + SCENE_PARAMS.deskColor.value + " 0%, #0f172a 100%)",
+          background: "linear-gradient(180deg, " + (props.deskColor ?? SCENE_PARAMS.deskColor.value) + " 0%, #0f172a 100%)",
         }} />
         
         {/* Keyboard */}
@@ -249,7 +249,7 @@ function Scene() {
           height: keyboardHeight,
           transform: "translateX(-50%) perspective(800px) rotateX(25deg)",
           transformOrigin: "center top",
-          backgroundColor: SCENE_PARAMS.keyboardColor.value,
+          backgroundColor: (props.keyboardColor ?? SCENE_PARAMS.keyboardColor.value),
           borderRadius: minDim * 0.015,
           padding: minDim * 0.012,
           boxSizing: "border-box",
@@ -290,7 +290,7 @@ function Scene() {
             left: "10%",
             right: "10%",
             height: minDim * 0.03,
-            background: "radial-gradient(ellipse, " + SCENE_PARAMS.monitorGlow.value + "20 0%, transparent 70%)",
+            background: "radial-gradient(ellipse, " + (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value) + "20 0%, transparent 70%)",
             filter: "blur(" + minDim * 0.01 + "px)",
           }} />
         </div>
@@ -307,7 +307,7 @@ function Scene() {
           <div style={{
             width: minDim * 0.1,
             height: minDim * 0.08,
-            backgroundColor: SCENE_PARAMS.skinTone.value,
+            backgroundColor: (props.skinTone ?? SCENE_PARAMS.skinTone.value),
             borderRadius: "40% 40% 50% 50%",
             position: "relative",
             boxShadow: "inset -5px -5px 15px rgba(0,0,0,0.15)",
@@ -319,7 +319,7 @@ function Scene() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "linear-gradient(0deg, transparent 50%, " + SCENE_PARAMS.monitorGlow.value + "20 100%)",
+              background: "linear-gradient(0deg, transparent 50%, " + (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value) + "20 100%)",
               borderRadius: "40% 40% 50% 50%",
             }} />
           </div>
@@ -331,7 +331,7 @@ function Scene() {
             left: -minDim * 0.015,
             width: minDim * 0.13,
             height: minDim * 0.08,
-            backgroundColor: SCENE_PARAMS.sleeveColor.value,
+            backgroundColor: (props.sleeveColor ?? SCENE_PARAMS.sleeveColor.value),
             borderRadius: "20% 20% 40% 40%",
           }} />
           
@@ -350,7 +350,7 @@ function Scene() {
                 top: fingerTop,
                 width: fingerWidth,
                 height: fingerHeight,
-                backgroundColor: SCENE_PARAMS.skinTone.value,
+                backgroundColor: (props.skinTone ?? SCENE_PARAMS.skinTone.value),
                 borderRadius: minDim * 0.008,
                 transform: "translateY(" + fingerY + "px) rotate(" + (finger === 0 ? -30 : -5 + finger * 2) + "deg)",
                 boxShadow: "inset -2px -2px 5px rgba(0,0,0,0.1)",
@@ -383,7 +383,7 @@ function Scene() {
           <div style={{
             width: minDim * 0.1,
             height: minDim * 0.08,
-            backgroundColor: SCENE_PARAMS.skinTone.value,
+            backgroundColor: (props.skinTone ?? SCENE_PARAMS.skinTone.value),
             borderRadius: "40% 40% 50% 50%",
             position: "relative",
             boxShadow: "inset 5px -5px 15px rgba(0,0,0,0.15)",
@@ -395,7 +395,7 @@ function Scene() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "linear-gradient(0deg, transparent 50%, " + SCENE_PARAMS.monitorGlow.value + "20 100%)",
+              background: "linear-gradient(0deg, transparent 50%, " + (props.monitorGlow ?? SCENE_PARAMS.monitorGlow.value) + "20 100%)",
               borderRadius: "40% 40% 50% 50%",
             }} />
           </div>
@@ -407,7 +407,7 @@ function Scene() {
             right: -minDim * 0.015,
             width: minDim * 0.13,
             height: minDim * 0.08,
-            backgroundColor: SCENE_PARAMS.sleeveColor.value,
+            backgroundColor: (props.sleeveColor ?? SCENE_PARAMS.sleeveColor.value),
             borderRadius: "20% 20% 40% 40%",
           }} />
           
@@ -426,7 +426,7 @@ function Scene() {
                 top: fingerTop,
                 width: fingerWidth,
                 height: fingerHeight,
-                backgroundColor: SCENE_PARAMS.skinTone.value,
+                backgroundColor: (props.skinTone ?? SCENE_PARAMS.skinTone.value),
                 borderRadius: minDim * 0.008,
                 transform: "translateY(" + fingerY + "px) rotate(" + (finger === 0 ? 30 : 5 - finger * 2) + "deg)",
                 boxShadow: "inset 2px -2px 5px rgba(0,0,0,0.1)",

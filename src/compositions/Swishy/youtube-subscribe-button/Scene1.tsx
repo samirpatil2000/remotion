@@ -18,14 +18,14 @@ const SCENE_PARAMS = {
   clickFrame: { type: "number", label: "Click Frame", value: 45, min: 30, max: 80, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const clickFrame = SCENE_PARAMS.clickFrame.value;
+  const clickFrame = (props.clickFrame ?? SCENE_PARAMS.clickFrame.value);
   
   // Button dimensions
   const buttonWidth = minDim * 0.55;
@@ -79,7 +79,7 @@ function Scene() {
     : 0;
   
   // Button color transition
-  const buttonColor = isClicked ? SCENE_PARAMS.buttonClickedColor.value : SCENE_PARAMS.buttonColor.value;
+  const buttonColor = isClicked ? (props.buttonClickedColor ?? SCENE_PARAMS.buttonClickedColor.value) : (props.buttonColor ?? SCENE_PARAMS.buttonColor.value);
   
   // Subscribed text animation
   const showSubscribed = isClicked;
@@ -98,12 +98,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center" 
     }}>
       <div style={{ 
-        transform: `scale(${SCENE_PARAMS.scale.value})`, 
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`, 
         transformOrigin: "center center",
         position: "relative"
       }}>
@@ -121,7 +121,7 @@ function Scene() {
               left: "50%",
               width: buttonWidth,
               height: buttonHeight,
-              backgroundColor: SCENE_PARAMS.buttonClickedColor.value,
+              backgroundColor: (props.buttonClickedColor ?? SCENE_PARAMS.buttonClickedColor.value),
               borderRadius: borderRadius,
               transform: `translate(-50%, -50%) scale(${rippleScale})`,
               opacity: rippleOpacity,
@@ -147,7 +147,7 @@ function Scene() {
             <div style={{
               width: iconSize,
               height: iconSize,
-              backgroundColor: SCENE_PARAMS.textColor.value,
+              backgroundColor: (props.textColor ?? SCENE_PARAMS.textColor.value),
               borderRadius: iconSize * 0.15,
               display: "flex",
               alignItems: "center",
@@ -166,13 +166,13 @@ function Scene() {
             
             {/* Button Text */}
             <span style={{
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               fontSize: minDim * 0.055,
               fontWeight: 600,
-              fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`,
+              fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`,
               letterSpacing: "0.5px",
             }}>
-              {showSubscribed ? "Subscribed" : SCENE_PARAMS.buttonText.value}
+              {showSubscribed ? "Subscribed" : (props.buttonText ?? SCENE_PARAMS.buttonText.value)}
             </span>
             
             {/* Checkmark for subscribed state */}
@@ -189,7 +189,7 @@ function Scene() {
                 >
                   <path 
                     d="M5 13l4 4L19 7" 
-                    stroke={SCENE_PARAMS.textColor.value} 
+                    stroke={(props.textColor ?? SCENE_PARAMS.textColor.value)} 
                     strokeWidth="3" 
                     strokeLinecap="round" 
                     strokeLinejoin="round"
@@ -222,7 +222,7 @@ function Scene() {
             {/* Cursor outline */}
             <path 
               d="M8 2V18L12 14L15 22L19 20L16 12H24L8 2Z" 
-              fill={SCENE_PARAMS.cursorColor.value}
+              fill={(props.cursorColor ?? SCENE_PARAMS.cursorColor.value)}
               stroke="#000000"
               strokeWidth="1.5"
               strokeLinejoin="round"

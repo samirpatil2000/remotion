@@ -22,61 +22,61 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps } = useVideoConfig();
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const headlineDelay = 0;
-  const detailDelay = SCENE_PARAMS.staggerDelay.value;
+  const detailDelay = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
 
   const headlineProgress = spring({ frame: Math.max(0, adjustedFrame - headlineDelay), fps, config: { damping: 20, stiffness: 90 } });
   const detailProgress = spring({ frame: Math.max(0, adjustedFrame - detailDelay), fps, config: { damping: 20, stiffness: 90 } });
 
   const headlineScale = interpolate(headlineProgress, [0, 1], [0.95, 1], { extrapolateRight: "clamp" });
-  const headlineOpacity = interpolate(headlineProgress, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const headlineOpacity = interpolate(headlineProgress, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   const detailScale = interpolate(detailProgress, [0, 1], [0.96, 1], { extrapolateRight: "clamp" });
-  const detailOpacity = interpolate(detailProgress, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const detailOpacity = interpolate(detailProgress, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   const layoutTop = isPortrait ? "36%" : "30%";
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         left: "10%",
         top: layoutTop,
         width: "80%",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "left top",
       }}>
         <div style={{
           fontSize: minDim * 0.095,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
           letterSpacing: 0.2,
           opacity: headlineOpacity,
           transform: "scale(" + headlineScale + ")",
           lineHeight: 1.05,
         }}>
-          {SCENE_PARAMS.headline.value}
+          {(props.headline ?? SCENE_PARAMS.headline.value)}
         </div>
 
         <div style={{
           marginTop: minDim * 0.03,
           fontSize: minDim * 0.038,
           fontWeight: 500,
-          color: SCENE_PARAMS.accentColor.value,
-          fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+          color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+          fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
           opacity: detailOpacity,
           transform: "scale(" + detailScale + ")",
           lineHeight: 1.4,
         }}>
-          {SCENE_PARAMS.detail.value}
+          {(props.detail ?? SCENE_PARAMS.detail.value)}
         </div>
       </div>
     </AbsoluteFill>

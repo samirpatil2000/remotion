@@ -28,14 +28,14 @@ const SCENE_PARAMS = {
   letterSpacing: { type: "number", label: "Letter Spacing", value: -2, min: -20, max: 10, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Main "future" text animation with blur and slide
   const mainProgress = spring({ 
@@ -44,8 +44,8 @@ function Scene() {
     config: { damping: 22, stiffness: 70 } 
   });
   
-  const mainX = interpolate(mainProgress, [0, 1], [-SCENE_PARAMS.slideDistance.value, 0]);
-  const mainBlur = interpolate(mainProgress, [0, 0.6, 1], [SCENE_PARAMS.blurAmount.value, 5, 0]);
+  const mainX = interpolate(mainProgress, [0, 1], [-(props.slideDistance ?? SCENE_PARAMS.slideDistance.value), 0]);
+  const mainBlur = interpolate(mainProgress, [0, 0.6, 1], [(props.blurAmount ?? SCENE_PARAMS.blurAmount.value), 5, 0]);
   const mainOpacity = interpolate(mainProgress, [0, 0.3, 1], [0, 0.8, 1]);
   
   // Small text and subtext animations (delayed)
@@ -75,7 +75,7 @@ function Scene() {
           {/* Small "the" text - positioned above the "u" in "future" */}
           <div style={{
             position: "absolute",
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.055,
             fontFamily: "system-ui, -apple-system, sans-serif",
             fontWeight: 400,
@@ -86,30 +86,30 @@ function Scene() {
             left: "50%",
             marginLeft: minDim * -0.11, // Positioned to align with the "u" in "future"
           }}>
-            {SCENE_PARAMS.smallText.value}
+            {(props.smallText ?? SCENE_PARAMS.smallText.value)}
           </div>
           
           {/* Main "future" text with glow effect */}
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.18,
             fontFamily: "Georgia, serif",
             fontWeight: 400,
             fontStyle: "italic",
             margin: 0,
-            letterSpacing: `${SCENE_PARAMS.letterSpacing.value}px`,
+            letterSpacing: `${(props.letterSpacing ?? SCENE_PARAMS.letterSpacing.value)}px`,
             opacity: mainOpacity,
             transform: `translateX(${mainX}px)`,
-            filter: `blur(${mainBlur}px) drop-shadow(0 0 ${SCENE_PARAMS.glowIntensity.value}px ${SCENE_PARAMS.glowColor.value})`,
-            textShadow: `0 0 ${SCENE_PARAMS.glowIntensity.value * 0.5}px ${SCENE_PARAMS.glowColor.value}`,
+            filter: `blur(${mainBlur}px) drop-shadow(0 0 ${(props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)})`,
+            textShadow: `0 0 ${(props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * 0.5}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}`,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.mainText.value}
+            {(props.mainText ?? SCENE_PARAMS.mainText.value)}
           </h1>
           
           {/* Sub text "OF DESIGN" */}
           <div style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.042,
             fontFamily: "system-ui, -apple-system, sans-serif",
             fontWeight: 600,
@@ -119,7 +119,7 @@ function Scene() {
             letterSpacing: minDim * 0.008,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.subText.value}
+            {(props.subText ?? SCENE_PARAMS.subText.value)}
           </div>
         </div>
       </div>

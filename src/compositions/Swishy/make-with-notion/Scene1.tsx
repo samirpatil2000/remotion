@@ -16,12 +16,12 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1.4, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const fontSize = minDim * 0.11;
@@ -54,7 +54,7 @@ function Scene() {
     return { shapeRotation, showLetter, shapeVisible, tiltProgress };
   };
   
-  const LetterWithShape = ({ letter, index, shapeColor, shapeType }) => {
+  const LetterWithShape = ({ props, letter, index, shapeColor, shapeType }: any) => {
     const { shapeRotation, showLetter, shapeVisible, tiltProgress } = getLetterAnim(index);
     
     return (
@@ -81,10 +81,10 @@ function Scene() {
           </div>
         )}
         <span style={{
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           fontSize: fontSize,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: showLetter ? 1 : 0,
           lineHeight: 1,
         }}>{letter}</span>
@@ -92,7 +92,7 @@ function Scene() {
     );
   };
   
-  const PureShape = ({ index, shapeColor, shapeType, size }) => {
+  const PureShape = ({ props, index, shapeColor, shapeType, size }: any) => {
     const { shapeRotation, tiltProgress } = getLetterAnim(index);
     const delay = index * stagger;
     const shapeAppear = interpolate(adjustedFrame, [delay, delay + 6], [0, 1], { extrapolateRight: "clamp", extrapolateLeft: "clamp" });
@@ -136,40 +136,40 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
       }}>
-        <LetterWithShape letter="M" index={0} shapeColor={SCENE_PARAMS.blueColor.value} shapeType="octagon" />
-        <PureShape index={1} shapeColor={SCENE_PARAMS.redColor.value} shapeType="triangle" size={shapeSize * 1.1} />
-        <LetterWithShape letter="k" index={2} shapeColor={SCENE_PARAMS.yellowColor.value} shapeType="triangle" />
-        <LetterWithShape letter="e" index={3} shapeColor={SCENE_PARAMS.blueColor.value} shapeType="octagon" />
+        <LetterWithShape props={props}  letter="M" index={0} shapeColor={(props.blueColor ?? SCENE_PARAMS.blueColor.value)} shapeType="octagon" />
+        <PureShape props={props}  index={1} shapeColor={(props.redColor ?? SCENE_PARAMS.redColor.value)} shapeType="triangle" size={shapeSize * 1.1} />
+        <LetterWithShape props={props}  letter="k" index={2} shapeColor={(props.yellowColor ?? SCENE_PARAMS.yellowColor.value)} shapeType="triangle" />
+        <LetterWithShape props={props}  letter="e" index={3} shapeColor={(props.blueColor ?? SCENE_PARAMS.blueColor.value)} shapeType="octagon" />
         
         <span style={{
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           fontSize: fontSize,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: withShow ? 1 : 0,
           lineHeight: 1,
           marginLeft: fontSize * 0.3,
           marginRight: fontSize * 0.3,
         }}>with</span>
         
-        <LetterWithShape letter="N" index={5} shapeColor={SCENE_PARAMS.redColor.value} shapeType="triangle" />
-        <PureShape index={6} shapeColor={SCENE_PARAMS.yellowColor.value} shapeType="octagon" size={shapeSize * 0.9} />
-        <LetterWithShape letter="t" index={7} shapeColor={SCENE_PARAMS.blueColor.value} shapeType="triangle" />
-        <LetterWithShape letter="i" index={8} shapeColor={SCENE_PARAMS.redColor.value} shapeType="octagon" />
-        <LetterWithShape letter="o" index={9} shapeColor={SCENE_PARAMS.yellowColor.value} shapeType="triangle" />
-        <LetterWithShape letter="n" index={10} shapeColor={SCENE_PARAMS.blueColor.value} shapeType="octagon" />
+        <LetterWithShape props={props}  letter="N" index={5} shapeColor={(props.redColor ?? SCENE_PARAMS.redColor.value)} shapeType="triangle" />
+        <PureShape props={props}  index={6} shapeColor={(props.yellowColor ?? SCENE_PARAMS.yellowColor.value)} shapeType="octagon" size={shapeSize * 0.9} />
+        <LetterWithShape props={props}  letter="t" index={7} shapeColor={(props.blueColor ?? SCENE_PARAMS.blueColor.value)} shapeType="triangle" />
+        <LetterWithShape props={props}  letter="i" index={8} shapeColor={(props.redColor ?? SCENE_PARAMS.redColor.value)} shapeType="octagon" />
+        <LetterWithShape props={props}  letter="o" index={9} shapeColor={(props.yellowColor ?? SCENE_PARAMS.yellowColor.value)} shapeType="triangle" />
+        <LetterWithShape props={props}  letter="n" index={10} shapeColor={(props.blueColor ?? SCENE_PARAMS.blueColor.value)} shapeType="octagon" />
       </div>
     </AbsoluteFill>
   );
