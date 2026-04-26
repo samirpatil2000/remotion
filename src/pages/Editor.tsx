@@ -1,7 +1,7 @@
 import { useState, useMemo, CSSProperties, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Player, type PlayerRef } from "@remotion/player";
-import { Check, Download, X, Loader2, ExternalLink } from "lucide-react";
+import { Check, Download, X, Loader2 } from "lucide-react";
 import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
 import type { Control } from "../compositions/Gallery/compositionRegistry";
 
@@ -107,6 +107,76 @@ function TextField({ ctrl, value, onChange }: { ctrl: Control; value: unknown; o
   );
 }
 
+function ImageField({ ctrl, value, onChange }: { ctrl: Control; value: unknown; onChange: (v: unknown) => void }) {
+  const url = (value as string) ?? "";
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onChange(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div style={{ padding: "10px 0", borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: C.subtle, marginBottom: 8 }}>
+        {ctrl.label}
+      </div>
+      <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+        {/* Thumbnail */}
+        <div
+          onClick={() => fileRef.current?.click()}
+          style={{
+            width: 52, height: 52, borderRadius: 10, flexShrink: 0,
+            background: C.elevated, border: `1.5px dashed ${C.border}`,
+            backgroundImage: url ? `url(${url})` : "none",
+            backgroundSize: "cover", backgroundPosition: "center",
+            cursor: "pointer", display: "flex", alignItems: "center",
+            justifyContent: "center", overflow: "hidden",
+            transition: "border-color 0.15s",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)")}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = C.border)}
+        >
+          {!url && <span style={{ fontSize: 18, opacity: 0.3 }}>+</span>}
+        </div>
+
+        {/* URL input + upload button */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
+          <input
+            type="text"
+            placeholder="Paste image URL…"
+            value={url}
+            onChange={e => onChange(e.target.value)}
+            style={{
+              width: "100%", boxSizing: "border-box" as const,
+              background: C.elevated, border: `1px solid ${C.border}`,
+              borderRadius: 8, color: C.text, fontSize: 12,
+              padding: "7px 10px", outline: "none",
+            }}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            style={{
+              all: "unset", cursor: "pointer", fontSize: 11, fontWeight: 600,
+              color: C.muted, padding: "5px 10px", borderRadius: 7,
+              background: C.faint, border: `1px solid ${C.border}`,
+              textAlign: "center" as const, transition: "background 0.15s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.1)")}
+            onMouseLeave={e => (e.currentTarget.style.background = C.faint)}
+          >
+            Upload from device
+          </button>
+        </div>
+      </div>
+      <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display: "none" }} />
+    </div>
+  );
+}
+
 function ToggleField({ ctrl, value, onChange }: { ctrl: Control; value: unknown; onChange: (v: unknown) => void }) {
   const on = Boolean(value);
   return (
@@ -135,6 +205,8 @@ function renderField(ctrl: Control, value: unknown, onChange: (v: unknown) => vo
     case "color":   return <ColorField  key={ctrl.key} ctrl={ctrl} value={value} onChange={onChange} />;
     case "number":  return <SliderField key={ctrl.key} ctrl={ctrl} value={value} onChange={onChange} />;
     case "boolean": return <ToggleField key={ctrl.key} ctrl={ctrl} value={value} onChange={onChange} />;
+    case "image":
+    case "url":     return <ImageField  key={ctrl.key} ctrl={ctrl} value={value} onChange={onChange} />;
     default:        return <TextField   key={ctrl.key} ctrl={ctrl} value={value} onChange={onChange} />;
   }
 }
@@ -247,77 +319,89 @@ export default function Editor() {
 
   const resetProps = () => setProps({ ...def.defaultProps });
 
+  const compWidth  = def.width  ?? 1080;
+  const compHeight = def.height ?? 1920;
+  const aspectRatio = `${compWidth} / ${compHeight}`;
+
   return (
     <div style={{
       display: "flex", flexDirection: "column",
       height: "100vh", backgroundColor: C.bg,
-      fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif",
       color: C.text, overflow: "hidden",
     }}>
 
       {/* ── Top bar ──────────────────────────────────────────────────────── */}
       <header style={{
-        height: 52, flexShrink: 0,
+        height: 56, flexShrink: 0,
         display: "flex", alignItems: "center",
-        padding: "0 20px",
+        padding: "0 24px",
         borderBottom: `1px solid ${C.border}`,
-        gap: 16,
+        position: "relative",
       }}>
-        {/* Back */}
+        {/* Back — left edge */}
         <button onClick={() => navigate("/")} style={{
           all: "unset", cursor: "pointer",
-          width: 30, height: 30, borderRadius: 8,
-          background: C.faint, border: `1px solid ${C.border}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          color: C.text, fontSize: 16, flexShrink: 0,
-        }}>
-          ‹
-        </button>
-
-        {/* Divider */}
-        <div style={{ width: 1, height: 16, background: C.border }} />
-
-        {/* Template identity */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 22, height: 22, borderRadius: 6,
-            backgroundColor: def.color,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 12, boxShadow: `0 2px 6px ${def.color}44`,
-          }}>
-            {def.icon}
-          </div>
-          <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: "-0.01em" }}>{def.title}</span>
-        </div>
-
-        <div style={{ flex: 1 }} />
-
-        {/* Reset */}
-        <button onClick={resetProps} style={{
-          all: "unset", cursor: "pointer",
-          fontSize: 12, color: C.muted,
-          padding: "5px 12px", borderRadius: 7,
-          border: `1px solid ${C.border}`,
+          display: "flex", alignItems: "center", gap: 4,
+          fontSize: 13, color: C.muted,
           transition: "color 0.15s",
         }}
           onMouseEnter={e => (e.currentTarget.style.color = C.text)}
           onMouseLeave={e => (e.currentTarget.style.color = C.muted)}
         >
+          <span style={{ fontSize: 18, lineHeight: 1, marginTop: -1 }}>‹</span>
+          <span style={{ letterSpacing: "-0.01em" }}>Back</span>
+        </button>
+
+        {/* Title — dead center via absolute */}
+        <div style={{
+          position: "absolute", left: "50%", top: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex", alignItems: "center", gap: 9,
+          pointerEvents: "none",
+        }}>
+          <div style={{
+            width: 24, height: 24, borderRadius: 7,
+            backgroundColor: def.color,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 12, boxShadow: `0 0 14px ${def.color}66`,
+          }}>
+            {def.icon}
+          </div>
+          <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
+            {def.title}
+          </span>
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        {/* Reset — ghost text, far right */}
+        <button onClick={resetProps} style={{
+          all: "unset", cursor: "pointer",
+          fontSize: 12, color: C.subtle,
+          marginRight: 14, letterSpacing: "-0.01em",
+          transition: "color 0.15s",
+        }}
+          onMouseEnter={e => (e.currentTarget.style.color = C.muted)}
+          onMouseLeave={e => (e.currentTarget.style.color = C.subtle)}
+        >
           Reset
         </button>
 
-        {/* Export */}
+        {/* Export — the only button that matters */}
         <button
           onClick={handleExport}
           style={{
             all: "unset", cursor: "pointer",
-            fontSize: 12, fontWeight: 600,
-            color: "#000", background: "#fff",
-            padding: "6px 16px", borderRadius: 8,
-            letterSpacing: "-0.01em",
-            display: "flex", alignItems: "center", gap: 6,
-          }}>
-          Export <ExternalLink size={13} strokeWidth={2.5} />
+            fontSize: 13, fontWeight: 600, letterSpacing: "-0.01em",
+            color: "#000", background: "#ffffff",
+            padding: "7px 22px", borderRadius: 100,
+            transition: "opacity 0.15s",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+        >
+          Export
         </button>
       </header>
 
@@ -326,37 +410,28 @@ export default function Editor() {
 
         {/* ── Left: parameter panel ──────────────────────────────────────── */}
         <aside style={{
-          width: 280, flexShrink: 0,
-          backgroundColor: C.panel,
+          width: 268, flexShrink: 0,
+          backgroundColor: C.bg,
           borderRight: `1px solid ${C.border}`,
           display: "flex", flexDirection: "column",
           overflow: "hidden",
         }}>
-          {/* Panel header */}
-          <div style={{
-            padding: "16px 20px 14px",
-            borderBottom: `1px solid ${C.border}`,
-            flexShrink: 0,
-          }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: C.text }}>Properties</div>
-            <div style={{ fontSize: 11, color: C.subtle, marginTop: 2 }}>Edit live — changes appear instantly</div>
-          </div>
-
-          {/* Scrollable controls */}
-          <div style={{ flex: 1, overflowY: "auto", padding: "6px 20px 40px" }}>
-            {groups.map(([group, controls]) => (
-              <div key={group} style={{ marginTop: 22 }}>
-                {/* Section header */}
+          {/* Scrollable controls — no header, controls start immediately */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 60px" }}>
+            {groups.map(([group, controls], gi) => (
+              <div key={group} style={{ marginTop: gi === 0 ? 0 : 32 }}>
                 <div style={{
-                  fontSize: 10, fontWeight: 700,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase" as const,
-                  color: C.subtle,
-                  paddingBottom: 8,
-                  borderBottom: `1px solid ${C.borderMd}`,
-                  marginBottom: 2,
+                  display: "flex", alignItems: "center", gap: 8,
+                  marginBottom: 12,
                 }}>
-                  {group}
+                  <div style={{ width: 4, height: 4, borderRadius: "50%", backgroundColor: C.subtle, flexShrink: 0 }} />
+                  <span style={{
+                    fontSize: 11, fontWeight: 500,
+                    letterSpacing: "0.04em",
+                    color: C.subtle,
+                  }}>
+                    {group}
+                  </span>
                 </div>
                 {controls.map(ctrl => renderField(ctrl, props[ctrl.key], v => updateProp(ctrl.key, v)))}
               </div>
@@ -370,27 +445,26 @@ export default function Editor() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#040404",
+          backgroundColor: "#080808",
           position: "relative",
           overflow: "hidden",
         }}>
-          {/* Dot-grid */}
+          {/* Subtle radial vignette */}
           <div style={{
             position: "absolute", inset: 0,
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px)",
-            backgroundSize: "26px 26px",
+            background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%)",
             pointerEvents: "none",
           }} />
 
-          {/* Player wrapper — fixed 9:16, shrinks to fit */}
+          {/* Player — sized by actual composition aspect ratio */}
           <div style={{
             position: "relative",
-            height: "calc(100vh - 52px - 32px)",
-            aspectRatio: "9 / 16",
-            maxHeight: "calc(100vh - 52px - 32px)",
-            borderRadius: 20,
+            height: "calc(100vh - 56px - 40px)",
+            aspectRatio,
+            maxHeight: "calc(100vh - 56px - 40px)",
+            borderRadius: 18,
             overflow: "hidden",
-            boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.07)",
+            boxShadow: "0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06)",
             flexShrink: 0,
           }}>
             {LoadedComponent ? (
@@ -400,8 +474,8 @@ export default function Editor() {
                 inputProps={props}
                 durationInFrames={def.durationInFrames}
                 fps={def.fps}
-                compositionWidth={1080}
-                compositionHeight={1920}
+                compositionWidth={compWidth}
+                compositionHeight={compHeight}
                 style={{ width: "100%", height: "100%", display: "block" }}
                 controls
                 autoPlay
@@ -411,9 +485,9 @@ export default function Editor() {
               <div style={{
                 width: "100%", height: "100%",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                background: "#040404",
+                background: "#080808",
               }}>
-                <Loader2 size={24} style={{ color: "rgba(255,255,255,0.3)", animation: "spin 1s linear infinite" }} />
+                <Loader2 size={22} style={{ color: "rgba(255,255,255,0.2)", animation: "spin 1s linear infinite" }} />
               </div>
             )}
           </div>
@@ -448,36 +522,28 @@ export default function Editor() {
             )}
 
             {!isComplete ? (
-              <div style={{ textAlign: "center", padding: "10px 0" }}>
-                <div style={{
-                  width: 56, height: 56, borderRadius: 16,
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  margin: "0 auto 24px", color: "#fff",
-                }}>
-                  <Loader2 className="animate-spin" size={24} />
-                </div>
-                <h2 style={{ fontSize: 20, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
-                  Exporting Video
+              <div style={{ textAlign: "center", padding: "8px 0" }}>
+                <h2 style={{ fontSize: 19, fontWeight: 700, margin: "0 0 6px", letterSpacing: "-0.03em" }}>
+                  Rendering
                 </h2>
-                <p style={{ fontSize: 14, color: C.muted, margin: "0 0 32px" }}>
+                <p style={{ fontSize: 13, color: C.muted, margin: "0 0 28px", letterSpacing: "-0.01em" }}>
                   {exportStatus}
                 </p>
 
-                {/* Progress bar container */}
+                {/* Progress track */}
                 <div style={{
-                  height: 6, width: "100%", backgroundColor: "rgba(255,255,255,0.06)",
-                  borderRadius: 3, overflow: "hidden", marginBottom: 12,
+                  height: 3, width: "100%", backgroundColor: "rgba(255,255,255,0.07)",
+                  borderRadius: 2, overflow: "hidden", marginBottom: 10,
                 }}>
                   <div style={{
                     height: "100%", width: `${exportProgress}%`,
-                    backgroundColor: "#fff", borderRadius: 3,
-                    transition: "width 0.1s linear",
-                    boxShadow: "0 0 12px rgba(255,255,255,0.3)",
+                    background: "linear-gradient(90deg, rgba(255,255,255,0.6), #fff)",
+                    borderRadius: 2,
+                    transition: "width 0.25s ease-out",
                   }} />
                 </div>
-                <div style={{ fontSize: 11, color: C.subtle, fontFamily: C.mono }}>
-                  {exportProgress}% complete
+                <div style={{ fontSize: 11, color: C.subtle, fontFamily: C.mono, letterSpacing: "0.04em" }}>
+                  {exportProgress}%
                 </div>
               </div>
             ) : (

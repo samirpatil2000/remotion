@@ -178,6 +178,103 @@ export const TextControl: React.FC<ControlProps> = ({ control, value, onChange }
   </div>
 );
 
+// ── Image ─────────────────────────────────────────────────────────────────────
+export const ImageControl: React.FC<ControlProps> = ({ control, value, onChange }) => (
+  <div style={{ padding: "12px 0", borderBottom: `1px solid ${T.border}` }}>
+    <div style={{
+      color: T.textTertiary,
+      fontSize: 10,
+      fontWeight: 600,
+      letterSpacing: "0.09em",
+      textTransform: "uppercase",
+      marginBottom: 7,
+    }}>
+      {control.label}
+    </div>
+    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+      <div style={{
+        width: 48,
+        height: 48,
+        borderRadius: 8,
+        background: T.surface,
+        border: `1px solid ${T.border}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+        flexShrink: 0,
+      }}>
+        {(value as string) ? (
+          <img
+            src={value as string}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            onError={(e) => (e.currentTarget.style.display = "none")}
+          />
+        ) : (
+          <span style={{ fontSize: 20 }}>🖼️</span>
+        )}
+      </div>
+      <div style={{ flex: 1 }}>
+        <input
+          type="text"
+          value={(value as string) ?? ""}
+          placeholder="Paste image URL here…"
+          onChange={e => onChange(e.target.value)}
+          style={{
+            width: "100%",
+            background: T.surface,
+            border: `1px solid ${T.border}`,
+            borderRadius: 8,
+            color: T.text,
+            fontSize: 12,
+            padding: "8px 11px",
+            outline: "none",
+            fontFamily: T.mono,
+            boxSizing: "border-box",
+          }}
+        />
+        <div style={{ color: T.textTertiary, fontSize: 9, marginTop: 4, fontStyle: "italic" }}>
+          External URLs work best (Unsplash, Supabase, etc.)
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// ── URL ───────────────────────────────────────────────────────────────────────
+export const UrlControl: React.FC<ControlProps> = ({ control, value, onChange }) => (
+  <div style={{ padding: "10px 0", borderBottom: `1px solid ${T.border}` }}>
+    <div style={{
+      color: T.textTertiary,
+      fontSize: 10,
+      fontWeight: 600,
+      letterSpacing: "0.09em",
+      textTransform: "uppercase",
+      marginBottom: 7,
+    }}>
+      {control.label}
+    </div>
+    <input
+      type="url"
+      value={(value as string) ?? ""}
+      placeholder="https://…"
+      onChange={e => onChange(e.target.value)}
+      style={{
+        width: "100%",
+        background: T.surface,
+        border: `1px solid ${T.border}`,
+        borderRadius: 8,
+        color: "#60a5fa",
+        fontSize: 13,
+        padding: "8px 11px",
+        outline: "none",
+        fontFamily: T.mono,
+        boxSizing: "border-box",
+      }}
+    />
+  </div>
+);
+
 // ── Font ──────────────────────────────────────────────────────────────────────
 export const FontControl: React.FC<ControlProps> = ({ control, value, onChange }) => (
   <div style={{ padding: "10px 0", borderBottom: `1px solid ${T.border}` }}>
@@ -263,6 +360,8 @@ export const renderControl = (
     case "number":  return <SliderControl key={control.key} control={control} value={value} onChange={onChange} />;
     case "boolean": return <ToggleControl key={control.key} control={control} value={value} onChange={onChange} />;
     case "font":    return <FontControl   key={control.key} control={control} value={value} onChange={onChange} />;
+    case "image":   return <ImageControl  key={control.key} control={control} value={value} onChange={onChange} />;
+    case "url":     return <UrlControl    key={control.key} control={control} value={value} onChange={onChange} />;
     default:        return <TextControl   key={control.key} control={control} value={value} onChange={onChange} />;
   }
 };
