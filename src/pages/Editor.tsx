@@ -505,19 +505,21 @@ export default function Editor() {
                       width: 56, height: 56, borderRadius: 16,
                       backgroundColor: "rgba(34,197,94,0.15)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      margin: "0 auto 24px", color: "#22c55e",
+                      margin: "0 auto 20px", color: "#22c55e",
                     }}>
                       <Check size={28} strokeWidth={3} />
                     </div>
-                    <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
-                      Your video is ready!
+                    <h2 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 6px", letterSpacing: "-0.03em" }}>
+                      Rendered in your browser.
                     </h2>
-                    <p style={{ fontSize: 14, color: C.muted, margin: "0 0 32px" }}>
-                      Click below to save the MP4 to your device.
+                    <p style={{ fontSize: 13, color: C.muted, margin: "0 0 28px", lineHeight: 1.5 }}>
+                      No server. No upload. Just you.
                     </p>
+
+                    {/* Primary: download */}
                     <button onClick={downloadVideo} style={{
                       all: "unset", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                      width: "100%", padding: "14px 20px", borderRadius: 12,
+                      width: "100%", padding: "14px 20px", borderRadius: 12, boxSizing: "border-box",
                       background: "#22c55e", color: "#000",
                       fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em",
                       transition: "opacity 0.15s",
@@ -528,6 +530,7 @@ export default function Editor() {
                       <Download size={18} />
                       Download MP4
                     </button>
+
                   </>
                 )}
                 <button onClick={() => { setIsExporting(false); setRenderError(null); setVideoBlob(null); }} style={{
