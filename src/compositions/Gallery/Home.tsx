@@ -199,7 +199,12 @@ const Editor: React.FC<{
   onUpdateProp: (key: string, value: unknown) => void;
   onBack:       () => void;
 }> = ({ def, props, onUpdateProp, onBack }) => {
-  const Composition = def.component;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [Composition, setComposition] = useState<React.ComponentType<any> | null>(null);
+
+  React.useEffect(() => {
+    def.loadComponent().then(c => setComposition(() => c));
+  }, [def]);
 
   // Group controls once — stable because def comes from static registry
   const groups = useMemo(() => {
@@ -353,7 +358,11 @@ const Editor: React.FC<{
             transform: `scale(${PREVIEW_SCALE})`,
             transformOrigin: "top left",
           }}>
-            <Composition {...(props as Record<string, unknown>)} />
+            {Composition ? (
+              <Composition {...(props as Record<string, unknown>)} />
+            ) : (
+              <div style={{ width: "100%", height: "100%", background: "#060606" }} />
+            )}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 export type ControlType = "color" | "text" | "url" | "number" | "boolean" | "font";
 
@@ -19,7 +19,7 @@ export interface CompositionDef {
   color: string;
   icon: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: React.ComponentType<any>;
+  loadComponent: () => Promise<React.ComponentType<any>>;
   defaultProps: Record<string, unknown>;
   durationInFrames: number;
   fps: number;
@@ -33,7 +33,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Vinyl record animation with marquee text and playback controls.",
     color: "#1DB954",
     icon: "🎵",
-    component: React.lazy(() => import("../SpotifyPlayer/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../SpotifyPlayer/Scene").then(m => m.Scene),
     defaultProps: {
       trackTitle: "You've Got The Love (Jamie xx Rework feat. The xx)",
       artistName: "Florence + The Machine, The xx, Jamie xx",
@@ -88,7 +88,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Physics-based typography animation with blur and glow effects.",
     color: "#6366f1",
     icon: "✨",
-    component: React.lazy(() => import("../FutureOfDesign/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../FutureOfDesign/Scene").then(m => m.Scene),
     defaultProps: {
       smallText: "the",
       mainText: "future",
@@ -128,7 +128,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Vibrant high-contrast typography with elastic spring-based animations.",
     color: "#ff1d1d",
     icon: "😊",
-    component: React.lazy(() => import("../GoodMood/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../GoodMood/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 0.9,
       colorO1: "#006eff",
@@ -164,7 +164,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Multi-scene kinetic typography for motivational stories and insights.",
     color: "#f97316",
     icon: "🔥",
-    component: React.lazy(() => import("../Swishy/Motivational/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/Motivational/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -191,7 +191,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Condensed editorial text sequence with premium typography.",
     color: "#8b5cf6",
     icon: "📖",
-    component: React.lazy(() => import("../Swishy/Storytime/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/Storytime/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -215,7 +215,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Diverse kinetic typography sequence exploring creation and discovery.",
     color: "#0ea5e9",
     icon: "🌍",
-    component: React.lazy(() => import("../Swishy/AStoryAboutTheWorld/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/AStoryAboutTheWorld/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -243,7 +243,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Magical character animations with glowing effects and mystical forests.",
     color: "#a855f7",
     icon: "🦄",
-    component: React.lazy(() => import("../Swishy/AnimateCharacters/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/AnimateCharacters/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -267,7 +267,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#f13443",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/2026/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/2026/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -285,7 +285,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c88f39",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/3d-cube/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/3d-cube/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -303,7 +303,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e7abdd",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/a-storm-of-info/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/a-storm-of-info/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -321,7 +321,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#93c1a4",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/ad-spend/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/ad-spend/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -339,7 +339,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#77c6e5",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/alarm-toggle-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/alarm-toggle-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -357,7 +357,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#999d61",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/animate-netflix-logo/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/animate-netflix-logo/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -375,7 +375,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#1b8061",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/animated-app-list/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/animated-app-list/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -393,7 +393,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#4ffc4b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/animated-blob/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/animated-blob/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -411,7 +411,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#b88d79",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/animated-emoji-button/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/animated-emoji-button/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -429,7 +429,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#573ca7",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/animated-year/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/animated-year/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -447,7 +447,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#11dd7c",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/app-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/app-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -465,7 +465,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#68d4f1",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/app-video-showcase/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/app-video-showcase/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -483,7 +483,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#312664",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/apple-style-30-sec-counter-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/apple-style-30-sec-counter-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -501,7 +501,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c66ffc",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/bar-chart/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/bar-chart/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -519,7 +519,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#3cd6d3",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/bar-chart-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/bar-chart-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -537,7 +537,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#48abb3",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/bar-chart-2/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/bar-chart-2/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -555,7 +555,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#a1e723",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/bouncing-image/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/bouncing-image/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -573,7 +573,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ea29e9",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/branching/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/branching/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -591,7 +591,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#206538",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/brand-spinning/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/brand-spinning/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -609,7 +609,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#b11f4d",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/calendar-grid-drop/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/calendar-grid-drop/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -627,7 +627,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#a6f125",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/car-crash-story/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/car-crash-story/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -645,7 +645,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#7ac827",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/car-racing/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/car-racing/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -663,7 +663,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#85269b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/card/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/card/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -681,7 +681,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#fca01b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/charming-letting/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/charming-letting/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -699,7 +699,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#5e9bc4",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/chart-with/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/chart-with/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -717,7 +717,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#410e6b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/click-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/click-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -735,7 +735,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#7bc3b5",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/clock-and-text/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/clock-and-text/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -753,7 +753,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#f98bd3",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/comic-style/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/comic-style/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -771,7 +771,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#967521",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/concert-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/concert-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -789,7 +789,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ae7980",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/copy-and-paste/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/copy-and-paste/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -807,7 +807,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#cf16cd",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/create/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/create/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -825,7 +825,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#cf1361",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/energy-text/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/energy-text/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -843,7 +843,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#de8cbb",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/error-error/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/error-error/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -861,7 +861,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#94c6a2",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/explainer-spheres/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/explainer-spheres/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -879,7 +879,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#fe60a1",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/extend/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/extend/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -897,7 +897,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#9412f5",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/financials/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/financials/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -915,7 +915,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#5a7c52",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/fintech-dashboard/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/fintech-dashboard/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -933,7 +933,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#02c9b6",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/flight-progress/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/flight-progress/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -951,7 +951,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#41db23",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/flights-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/flights-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -969,7 +969,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0b7d1f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/folder-gallery-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/folder-gallery-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -987,7 +987,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ac6dc1",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/friendship-beads-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/friendship-beads-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1005,7 +1005,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ef48f2",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/funnel-text-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/funnel-text-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1023,7 +1023,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#9cd8f4",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/generate-ai-voice-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/generate-ai-voice-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1041,7 +1041,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#a44c49",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/github-star-comparison/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/github-star-comparison/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1059,7 +1059,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#58344f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/github-stars-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/github-stars-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1077,7 +1077,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#b42946",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/goals/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/goals/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1095,7 +1095,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#067f59",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/gravity-thought/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/gravity-thought/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1113,7 +1113,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#4265ff",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/heart-crush-button/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/heart-crush-button/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1131,7 +1131,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#1162a8",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/i-want-a-smooth-animation-where-the-text-with-2-li/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/i-want-a-smooth-animation-where-the-text-with-2-li/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1149,7 +1149,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0db218",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/image-shuffle-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/image-shuffle-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1167,7 +1167,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#5c3291",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/instagram-logo-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/instagram-logo-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1185,7 +1185,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#62e1c5",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/instagram-profile/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/instagram-profile/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1203,7 +1203,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#b581b6",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/instagram-stories/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/instagram-stories/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1221,7 +1221,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#dd8107",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/instagram-story-3-images/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/instagram-story-3-images/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1239,7 +1239,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#3cb2d7",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/instagram-update-notification-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/instagram-update-notification-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1257,7 +1257,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e96a83",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/interactive-pixel-art-waves/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/interactive-pixel-art-waves/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1275,7 +1275,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#1bbdaa",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/ios-notification/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/ios-notification/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1293,7 +1293,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#322c6d",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/january/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/january/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1311,7 +1311,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#2296ca",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/june/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/june/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1329,7 +1329,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#1d29f2",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/life-line-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/life-line-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1347,7 +1347,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#63b759",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/like/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/like/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1365,7 +1365,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#f2a4ae",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/list-of-things/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/list-of-things/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1383,7 +1383,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#697e21",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/loading/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/loading/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1401,7 +1401,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e2de0a",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/location-pop-up/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/location-pop-up/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1419,7 +1419,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#2d790a",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/logo-code/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/logo-code/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1437,7 +1437,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#b8a975",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/logo-reveal-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/logo-reveal-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1455,7 +1455,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#4179d7",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/logo-spin/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/logo-spin/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1473,7 +1473,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#623efa",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/make-with-notion/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/make-with-notion/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1491,7 +1491,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#825156",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/makin-bank/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/makin-bank/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1509,7 +1509,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e088d4",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/map/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/map/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1527,7 +1527,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#dae3ac",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/mario-game/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/mario-game/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1545,7 +1545,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#613933",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/mobile-bookshelf/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/mobile-bookshelf/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1563,7 +1563,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#237c24",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/money-falling/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/money-falling/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1581,7 +1581,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#03abf0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/moneyyyy/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/moneyyyy/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1599,7 +1599,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#22ccb4",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/morph-blocks/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/morph-blocks/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1617,7 +1617,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#636db2",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/naval-quote/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/naval-quote/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1635,7 +1635,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0428e7",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/newspaper-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/newspaper-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1653,7 +1653,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#d5d146",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/night-street-market/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/night-street-market/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1671,7 +1671,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e4f6ac",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/notepad/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/notepad/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1689,7 +1689,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ed1976",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/notion-animated-hub/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/notion-animated-hub/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1707,7 +1707,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c233f9",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/on-off-toggle/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/on-off-toggle/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1725,7 +1725,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#622c2f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/outsidelands-poster/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/outsidelands-poster/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1743,7 +1743,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c30869",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/particle-explosion/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/particle-explosion/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1761,7 +1761,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#5b2284",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/phone-messages/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/phone-messages/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1779,7 +1779,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#18f2fa",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/phone-messages-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/phone-messages-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1797,7 +1797,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#899ac0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/phone-notification-pop-up/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/phone-notification-pop-up/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1815,7 +1815,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#6e2811",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/photobooth-animation-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/photobooth-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1833,7 +1833,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e5167c",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/photos-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/photos-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1851,7 +1851,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#706690",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/photoshop-animation-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/photoshop-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1869,7 +1869,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c5412a",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/pins/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/pins/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1887,7 +1887,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#4e2173",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/pop-up-message-bubble/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/pop-up-message-bubble/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1905,7 +1905,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#e28dc0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/population/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/population/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1923,7 +1923,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#da3d8b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/premiere-pro-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/premiere-pro-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1941,7 +1941,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#d10c0f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/retro-phone/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/retro-phone/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1959,7 +1959,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#80ae91",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/saas-security/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/saas-security/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1977,7 +1977,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#383bcc",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/scattered-text/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/scattered-text/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -1995,7 +1995,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0e9830",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/science-club/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/science-club/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2013,7 +2013,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#635bf6",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/search-box/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/search-box/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2031,7 +2031,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#664393",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/sentence-reveal/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/sentence-reveal/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2049,7 +2049,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#d4d7cd",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/simple-chart/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/simple-chart/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2067,7 +2067,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#eec07f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/simple-timelapse/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/simple-timelapse/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2085,7 +2085,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#34d8cb",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/simple-timelapse-2/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/simple-timelapse-2/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2103,7 +2103,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0fc531",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/simulation-terminated/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/simulation-terminated/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2121,7 +2121,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#2b29bd",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/spill-word/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/spill-word/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2139,7 +2139,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#23052b",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/spinning-vinyl-player-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/spinning-vinyl-player-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2157,7 +2157,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#f08fc0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/spotify-player-animation-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/spotify-player-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2175,7 +2175,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#8f7997",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/sticky-notes/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/sticky-notes/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2193,7 +2193,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#188faa",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/sticky-notes-animation/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/sticky-notes-animation/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2211,7 +2211,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#5af5f0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/system/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/system/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2229,7 +2229,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c934e7",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/tech-youtube-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/tech-youtube-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2247,7 +2247,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#6547e0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/terminal-showcase/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/terminal-showcase/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2265,7 +2265,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#45f0f0",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/terminal-typing/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/terminal-typing/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2283,7 +2283,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#0c850f",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/text-intro/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/text-intro/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2301,7 +2301,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#91fe33",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/the-future-of-design-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/the-future-of-design-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2319,7 +2319,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#df399e",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/thinking/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/thinking/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2337,7 +2337,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#a4a2af",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/timeline/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/timeline/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2355,7 +2355,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#7adaff",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/typewriter/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/typewriter/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2373,7 +2373,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#18f983",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/typing-effect/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/typing-effect/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2391,7 +2391,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#ff60af",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/upwork-ad/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/upwork-ad/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2409,7 +2409,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#277000",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/view-cart-animation-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/view-cart-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2427,7 +2427,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#beccf6",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/website-reveal/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/website-reveal/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2445,7 +2445,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#4e1c7d",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/wedding-announcement/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/wedding-announcement/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2463,7 +2463,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#c7389c",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/wellness-app-moods/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/wellness-app-moods/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2481,7 +2481,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#35a7da",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/whatsapp-convo/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/whatsapp-convo/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2499,7 +2499,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#35dfa1",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/wiggle-text/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/wiggle-text/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2517,7 +2517,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#68be42",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/windows-98-style/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/windows-98-style/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2535,7 +2535,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#830a74",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/wins-vs-losses/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/wins-vs-losses/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2553,7 +2553,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#2982e2",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/working-on-a-computer/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/working-on-a-computer/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2571,7 +2571,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#627879",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/writing-diary-1/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/writing-diary-1/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2589,7 +2589,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#36a003",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/years-rolling-text/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/years-rolling-text/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,
@@ -2607,7 +2607,7 @@ export const REGISTRY: CompositionDef[] = [
     description: "Swishy template",
     color: "#9fc038",
     icon: "🎬",
-    component: React.lazy(() => import("../Swishy/youtube-subscribe-button/Scene").then(m => ({ default: m.Scene }))),
+    loadComponent: () => import("../Swishy/youtube-subscribe-button/Scene").then(m => m.Scene),
     defaultProps: {
       scale: 1,
       animationSpeed: 1,

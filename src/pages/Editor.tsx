@@ -1,4 +1,4 @@
-import { useState, useMemo, CSSProperties, useEffect, useRef, Suspense } from "react";
+import { useState, useMemo, CSSProperties, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Player, type PlayerRef } from "@remotion/player";
 import { Check, Copy, Download, X, Loader2, Video, Image as ImageIcon, FileJson, Terminal, ExternalLink } from "lucide-react";
@@ -157,6 +157,16 @@ export default function Editor() {
   const [isComplete, setIsComplete] = useState(false);
   const [copied, setCopied] = useState(false);
   const playerRef = useRef<PlayerRef>(null);
+
+  // ── Load composition component on demand ──────────────────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [LoadedComponent, setLoadedComponent] = useState<React.ComponentType<any> | null>(null);
+
+  useEffect(() => {
+    if (!def) return;
+    setLoadedComponent(null);
+    def.loadComponent().then(comp => setLoadedComponent(() => comp));
+  }, [def]);
 
   const handleExport = () => {
     setIsExporting(true);
@@ -395,36 +405,29 @@ export default function Editor() {
             boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.07)",
             flexShrink: 0,
           }}>
-            <Suspense fallback={
-              <div style={{
-                width: "100%", height: "100%",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                background: "#040404",
-              }}>
-                <div style={{
-                  width: 24, height: 24,
-                  border: "2px solid rgba(255,255,255,0.08)",
-                  borderTopColor: "rgba(255,255,255,0.4)",
-                  borderRadius: "50%",
-                  animation: "spin 0.7s linear infinite",
-                }} />
-              </div>
-            }>
+            {LoadedComponent ? (
               <Player
                 ref={playerRef}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                component={def.component as any}
+                component={LoadedComponent}
                 inputProps={props}
                 durationInFrames={def.durationInFrames}
                 fps={def.fps}
-                compositionWidth={def.durationInFrames > 150 ? 1080 : 1080}
+                compositionWidth={1080}
                 compositionHeight={1920}
                 style={{ width: "100%", height: "100%", display: "block" }}
                 controls
                 autoPlay
                 loop
               />
-            </Suspense>
+            ) : (
+              <div style={{
+                width: "100%", height: "100%",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: "#040404",
+              }}>
+                <Loader2 size={24} style={{ color: "rgba(255,255,255,0.3)", animation: "spin 1s linear infinite" }} />
+              </div>
+            )}
           </div>
         </main>
       </div>

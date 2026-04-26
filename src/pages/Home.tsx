@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@remotion/player";
 import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
@@ -282,18 +282,36 @@ function ImportModal({ onClose }: { onClose: () => void }) {
 
 const CompositionPreview = ({ def }: { def: CompositionDef }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [Comp, setComp] = useState<React.ComponentType<any> | null>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    
+    let isMounted = true;
+
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { rootMargin: "200px" }
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          def.loadComponent().then(c => {
+            if (isMounted) {
+              setComp(prev => prev || c);
+            }
+          });
+        }
+      },
+      { rootMargin: "400px" }
     );
+    
     observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      isMounted = false;
+      observer.disconnect();
+    };
+  }, [def]);
 
   return (
     <div ref={ref} style={{
@@ -307,23 +325,19 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
       position: "relative",
       overflow: "hidden",
     }}>
-      {visible ? (
-        <Suspense fallback={
-          <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%)` }} />
-        }>
-          <Player
-            component={def.component}
-            inputProps={def.defaultProps}
-            durationInFrames={def.durationInFrames}
-            fps={def.fps}
-            compositionWidth={1080}
-            compositionHeight={1920}
-            style={{ width: "100%", height: "100%" }}
-            autoPlay
-            loop
-            controls={false}
-          />
-        </Suspense>
+      {isVisible && Comp ? (
+        <Player
+          component={Comp}
+          inputProps={def.defaultProps}
+          durationInFrames={def.durationInFrames}
+          fps={def.fps}
+          compositionWidth={1080}
+          compositionHeight={1920}
+          style={{ width: "100%", height: "100%" }}
+          autoPlay
+          loop
+          controls={false}
+        />
       ) : (
         <>
           <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${def.color}15 0%, transparent 50%)` }} />
