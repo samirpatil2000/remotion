@@ -93,6 +93,8 @@ export const CORE_REGISTRY: CompositionDef[] = [
       { key: "colorD",         label: "Color D",          type: "color", group: "Colors" },
       { key: "backgroundColor",label: "Background",       type: "color", group: "Colors" },
       
+      { key: "wordTop",        label: "Top Word",         type: "text",  group: "Content" },
+      { key: "wordBottom",     label: "Bottom Word",      type: "text",  group: "Content" },
       { key: "fontFamily",     label: "Font Family",      type: "font",  group: "Content" },
     ],
   },

@@ -14,6 +14,8 @@ export const goodMoodSchema = z.object({
   animationSpeed: z.number().min(0.1).max(2).step(0.1),
   stretchIntensity: z.number().min(0).max(0.5).step(0.01),
   fontFamily: z.string(),
+  wordTop: z.string(),
+  wordBottom: z.string(),
 });
 
 export const defaultGoodMoodProps: z.infer<typeof goodMoodSchema> = {
@@ -27,6 +29,8 @@ export const defaultGoodMoodProps: z.infer<typeof goodMoodSchema> = {
   animationSpeed: 0.8,
   stretchIntensity: 0.28,
   fontFamily: "Bebas Neue, Impact, sans-serif",
+  wordTop: "GOOD",
+  wordBottom: "MOOD",
 };
 
 export const Scene: React.FC<z.infer<typeof goodMoodSchema>> = (props) => {
@@ -35,8 +39,10 @@ export const Scene: React.FC<z.infer<typeof goodMoodSchema>> = (props) => {
   
   const minDim = Math.min(width, height) * props.scale;
 
-  const wordTop = "GOOD";
-  const wordBottom = "MOOD";
+  const wordTop = props.wordTop || "GOOD";
+  const wordBottom = props.wordBottom || "MOOD";
+  
+  const maxLength = Math.max(wordTop.length, wordBottom.length);
   
   const colors = [
     props.colorO1,
@@ -45,10 +51,10 @@ export const Scene: React.FC<z.infer<typeof goodMoodSchema>> = (props) => {
     props.colorD
   ];
 
-  const columns = wordTop.split("").map((char, i) => ({
-    top: char,
-    bottom: wordBottom[i],
-    bottomColor: colors[i]
+  const columns = Array.from({ length: maxLength }).map((_, i) => ({
+    top: wordTop[i] || " ",
+    bottom: wordBottom[i] || " ",
+    bottomColor: colors[i % colors.length]
   }));
 
   return (
@@ -77,7 +83,7 @@ export const Scene: React.FC<z.infer<typeof goodMoodSchema>> = (props) => {
               display: "flex", 
               flexDirection: "column",
               height: minDim * 0.8,
-              width: minDim * 0.22,
+              width: minDim * (0.88 / Math.max(maxLength, 4)),
             }}>
               {/* Top Letter (GOOD) */}
               <div style={{ 
