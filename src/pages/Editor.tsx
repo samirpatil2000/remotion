@@ -1,7 +1,7 @@
 import { useState, useMemo, CSSProperties, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Player, type PlayerRef } from "@remotion/player";
-import { Check, Copy, Download, X, Loader2, Video, Image as ImageIcon, FileJson, Terminal, ExternalLink } from "lucide-react";
+import { Check, Download, X, Loader2, ExternalLink } from "lucide-react";
 import { REGISTRY } from "../compositions/Gallery/compositionRegistry";
 import type { Control } from "../compositions/Gallery/compositionRegistry";
 
@@ -155,7 +155,8 @@ export default function Editor() {
   const [exportProgress, setExportProgress] = useState(0);
   const [exportStatus, setExportStatus] = useState("");
   const [isComplete, setIsComplete] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [renderError, setRenderError] = useState<string | null>(null);
+  const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
   const playerRef = useRef<PlayerRef>(null);
 
   // ── Load composition component on demand ──────────────────────────────────
@@ -168,70 +169,57 @@ export default function Editor() {
     def.loadComponent().then(comp => setLoadedComponent(() => comp));
   }, [def]);
 
-  const handleExport = () => {
+  const handleExport = async () => {
+    if (!LoadedComponent || !def) return;
     setIsExporting(true);
     setExportProgress(0);
     setIsComplete(false);
-    setExportStatus("Gathering assets...");
-  };
+    setRenderError(null);
+    setVideoBlob(null);
+    setExportStatus("Starting render...");
 
-  useEffect(() => {
-    if (!isExporting || isComplete) return;
-
-    const stages = [
-      { p: 15, s: "Optimizing composition..." },
-      { p: 40, s: "Preparing render engine..." },
-      { p: 65, s: "Encoding frames..." },
-      { p: 85, s: "Finalizing video..." },
-      { p: 100, s: "Export successful!" },
-    ];
-
-    let currentStage = 0;
-    const interval = setInterval(() => {
-      setExportProgress(prev => {
-        const next = prev + 1;
-        if (currentStage < stages.length && next >= stages[currentStage].p) {
-          setExportStatus(stages[currentStage].s);
-          currentStage++;
-        }
-        if (next >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setIsComplete(true), 400);
-          return 100;
-        }
-        return next;
+    try {
+      const { renderMediaOnWeb } = await import("@remotion/web-renderer");
+      const result = await renderMediaOnWeb({
+        composition: {
+          id: def.id,
+          component: LoadedComponent,
+          durationInFrames: def.durationInFrames,
+          fps: def.fps,
+          width: def.width ?? 1080,
+          height: def.height ?? 1920,
+          defaultProps: def.defaultProps,
+        },
+        inputProps: props,
+        container: "mp4",
+        onProgress: ({ progress }) => {
+          const pct = Math.round(progress * 100);
+          setExportProgress(pct);
+          setExportStatus(
+            pct < 30 ? "Rendering frames..." :
+            pct < 70 ? "Encoding video..." :
+            pct < 95 ? "Finalizing..." : "Almost done..."
+          );
+        },
       });
-    }, 40);
 
-    return () => clearInterval(interval);
-  }, [isExporting, isComplete]);
-
-  const copyCommand = () => {
-    const json = JSON.stringify(props).replace(/"/g, "'");
-    const cmd = `npx remotion render src/index.ts ${def.id} out/${def.id}.mp4 --props="${json}"`;
-    navigator.clipboard.writeText(cmd);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+      const blob = await result.getBlob();
+      setVideoBlob(blob);
+      setIsComplete(true);
+    } catch (e) {
+      setRenderError(String(e));
+      setIsComplete(true);
+    }
   };
 
-  const downloadProps = () => {
-    const blob = new Blob([JSON.stringify(props, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
+  const downloadVideo = () => {
+    if (!videoBlob) return;
+    const url = URL.createObjectURL(videoBlob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${def.id}-props.json`;
+    a.download = `${def.id}.mp4`;
     a.click();
-  };
-
-  const downloadFrame = () => {
-    const canvas = playerRef.current?.getCanvas();
-    if (canvas) {
-      const url = canvas.toDataURL("image/png");
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${def.id}-frame.png`;
-      a.click();
-    }
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
   };
 
   const groups = useMemo(() => {
@@ -494,66 +482,63 @@ export default function Editor() {
               </div>
             ) : (
               <div style={{ textAlign: "center" }}>
-                <div style={{
-                  width: 56, height: 56, borderRadius: 16,
-                  backgroundColor: "rgba(34,197,94,0.15)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  margin: "0 auto 24px", color: "#22c55e",
-                }}>
-                  <Check size={28} strokeWidth={3} />
-                </div>
-                <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
-                  Success!
-                </h2>
-                <p style={{ fontSize: 14, color: C.muted, margin: "0 0 32px" }}>
-                  Your video is ready. Choose an option below.
-                </p>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {/* CLI Command */}
-                  <button onClick={copyCommand} style={{
-                    all: "unset", cursor: "pointer", display: "flex", alignItems: "center", gap: 12,
-                    padding: "14px 18px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.06)", transition: "background 0.2s",
-                  }} onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.07)"}
-                    onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}>
-                    <Terminal size={18} color={C.muted} />
-                    <div style={{ flex: 1, textAlign: "left" }}>
-                      <div style={{ fontSize: 13, fontWeight: 600 }}>{copied ? "Copied to clipboard!" : "Copy Render Command"}</div>
-                      <div style={{ fontSize: 11, color: C.subtle, marginTop: 1 }}>Run in your terminal to get MP4</div>
+                {renderError ? (
+                  <>
+                    <div style={{
+                      width: 56, height: 56, borderRadius: 16,
+                      backgroundColor: "rgba(239,68,68,0.15)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 24px", color: "#ef4444",
+                    }}>
+                      <X size={28} strokeWidth={3} />
                     </div>
-                    {copied ? <Check size={16} color="#22c55e" /> : <Copy size={16} color={C.subtle} />}
-                  </button>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                    {/* Frame Snapshot */}
-                    <button onClick={downloadFrame} style={{
-                      all: "unset", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-                      padding: "16px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
+                    <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px", letterSpacing: "-0.02em" }}>
+                      Render Failed
+                    </h2>
+                    <p style={{ fontSize: 12, color: C.muted, margin: "0 0 32px", fontFamily: C.mono, wordBreak: "break-all" }}>
+                      {renderError}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div style={{
+                      width: 56, height: 56, borderRadius: 16,
+                      backgroundColor: "rgba(34,197,94,0.15)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 20px", color: "#22c55e",
                     }}>
-                      <ImageIcon size={20} color={C.muted} />
-                      <span style={{ fontSize: 12, fontWeight: 600 }}>Save PNG</span>
+                      <Check size={28} strokeWidth={3} />
+                    </div>
+                    <h2 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 6px", letterSpacing: "-0.03em" }}>
+                      Rendered in your browser.
+                    </h2>
+                    <p style={{ fontSize: 13, color: C.muted, margin: "0 0 28px", lineHeight: 1.5 }}>
+                      No server. No upload. Just you.
+                    </p>
+
+                    {/* Primary: download */}
+                    <button onClick={downloadVideo} style={{
+                      all: "unset", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                      width: "100%", padding: "14px 20px", borderRadius: 12, boxSizing: "border-box",
+                      background: "#22c55e", color: "#000",
+                      fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em",
+                      transition: "opacity 0.15s",
+                    }}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+                    >
+                      <Download size={18} />
+                      Download MP4
                     </button>
 
-                    {/* Props JSON */}
-                    <button onClick={downloadProps} style={{
-                      all: "unset", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-                      padding: "16px", borderRadius: 12, background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                    }}>
-                      <FileJson size={20} color={C.muted} />
-                      <span style={{ fontSize: 12, fontWeight: 600 }}>Save Props</span>
-                    </button>
-                  </div>
-
-                  <button onClick={() => setIsExporting(false)} style={{
-                    all: "unset", cursor: "pointer", marginTop: 12,
-                    fontSize: 13, color: C.muted, padding: "8px",
-                  }}>
-                    Done
-                  </button>
-                </div>
+                  </>
+                )}
+                <button onClick={() => { setIsExporting(false); setRenderError(null); setVideoBlob(null); }} style={{
+                  all: "unset", cursor: "pointer", marginTop: 20,
+                  fontSize: 13, color: C.muted, padding: "8px",
+                }}>
+                  Close
+                </button>
               </div>
             )}
           </div>
