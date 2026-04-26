@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
+import { Player } from "@remotion/player";
 import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
@@ -280,8 +281,22 @@ function ImportModal({ onClose }: { onClose: () => void }) {
 }
 
 const CompositionPreview = ({ def }: { def: CompositionDef }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div style={{
+    <div ref={ref} style={{
       width: "100%",
       height: "100%",
       pointerEvents: "none",
@@ -292,22 +307,29 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
       position: "relative",
       overflow: "hidden",
     }}>
-      {/* Background brand color wash */}
-      <div style={{
-        position: "absolute",
-        inset: 0,
-        background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${def.color}15 0%, transparent 50%)`,
-      }} />
-
-      {/* Icon */}
-      <span style={{
-        fontSize: 52,
-        opacity: 0.45,
-        filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.4))",
-        zIndex: 1,
-      }}>
-        {def.icon}
-      </span>
+      {visible ? (
+        <Suspense fallback={
+          <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%)` }} />
+        }>
+          <Player
+            component={def.component}
+            inputProps={def.defaultProps}
+            durationInFrames={def.durationInFrames}
+            fps={def.fps}
+            compositionWidth={1080}
+            compositionHeight={1920}
+            style={{ width: "100%", height: "100%" }}
+            autoPlay
+            loop
+            controls={false}
+          />
+        </Suspense>
+      ) : (
+        <>
+          <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 30% 40%, ${def.color}25 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, ${def.color}15 0%, transparent 50%)` }} />
+          <span style={{ fontSize: 52, opacity: 0.45, filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.4))", zIndex: 1 }}>{def.icon}</span>
+        </>
+      )}
     </div>
   );
 };
