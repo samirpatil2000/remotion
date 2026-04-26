@@ -222,6 +222,10 @@ export default function Editor() {
     () => def ? { ...def.defaultProps } : {}
   );
 
+  const animationSpeed = typeof props.animationSpeed === "number" ? props.animationSpeed : 1;
+  // Cap at minimum speed of 0.1 to prevent infinite duration
+  const effectiveDuration = Math.floor(def.durationInFrames / Math.max(0.1, animationSpeed));
+
   // ── Export State ───────────────────────────────────────────────────────────
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
@@ -256,7 +260,7 @@ export default function Editor() {
         composition: {
           id: def.id,
           component: LoadedComponent,
-          durationInFrames: def.durationInFrames,
+          durationInFrames: effectiveDuration,
           fps: def.fps,
           width: def.width ?? 1080,
           height: def.height ?? 1920,
@@ -472,7 +476,7 @@ export default function Editor() {
                 ref={playerRef}
                 component={LoadedComponent}
                 inputProps={props}
-                durationInFrames={def.durationInFrames}
+                durationInFrames={effectiveDuration}
                 fps={def.fps}
                 compositionWidth={compWidth}
                 compositionHeight={compHeight}
