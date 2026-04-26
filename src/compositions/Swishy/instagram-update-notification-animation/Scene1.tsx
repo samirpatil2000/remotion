@@ -24,11 +24,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const animationWindow = durationInFrames * 0.65;
   const adjustedFrame = (frame / animationWindow) * 60 * speed;
@@ -44,8 +44,8 @@ function Scene() {
   const badgeScale = interpolate(badgeProgress, [0, 1], [0.6, 1], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{
           width: minDim * 0.56,
           height: minDim * 0.2128,
@@ -57,10 +57,10 @@ function Scene() {
           <div style={{
             width: "100%",
             height: "100%",
-            backgroundColor: SCENE_PARAMS.cardColor.value,
+            backgroundColor: (props.cardColor ?? SCENE_PARAMS.cardColor.value),
             borderRadius: minDim * 0.04,
-            border: "1px solid " + SCENE_PARAMS.subtleStroke.value,
-            boxShadow: "0 " + minDim * 0.02 + "px " + minDim * 0.08 + "px " + SCENE_PARAMS.shadowColor.value,
+            border: "1px solid " + (props.subtleStroke ?? SCENE_PARAMS.subtleStroke.value),
+            boxShadow: "0 " + minDim * 0.02 + "px " + minDim * 0.08 + "px " + (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
             position: "relative"
           }}>
             <div style={{ position: "absolute", top: minDim * 0.055, left: minDim * 0.055, display: "flex", alignItems: "center", gap: minDim * 0.025 }}>
@@ -77,16 +77,16 @@ function Scene() {
                 overflow: "hidden"
               }}>
                 <Img
-                  src={SCENE_PARAMS.iconImage.value}
+                  src={(props.iconImage ?? SCENE_PARAMS.iconImage.value)}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
               <div style={{ opacity: textProgress, transform: "translateY(" + textY + "px)" }}>
-                <div style={{ fontSize: minDim * 0.043, fontWeight: 700, color: SCENE_PARAMS.primaryColor.value, fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif" }}>
-                  {SCENE_PARAMS.title.value}
+                <div style={{ fontSize: minDim * 0.043, fontWeight: 700, color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value), fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif" }}>
+                  {(props.title ?? SCENE_PARAMS.title.value)}
                 </div>
-                <div style={{ fontSize: minDim * 0.028, color: SCENE_PARAMS.secondaryTextColor.value, marginTop: minDim * 0.008, fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif" }}>
-                  {SCENE_PARAMS.subtitle.value}
+                <div style={{ fontSize: minDim * 0.028, color: (props.secondaryTextColor ?? SCENE_PARAMS.secondaryTextColor.value), marginTop: minDim * 0.008, fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif" }}>
+                  {(props.subtitle ?? SCENE_PARAMS.subtitle.value)}
                 </div>
               </div>
             </div>
@@ -98,18 +98,18 @@ function Scene() {
               width: minDim * 0.075,
               height: minDim * 0.075,
               borderRadius: "50%",
-              background: "linear-gradient(135deg, " + SCENE_PARAMS.brandGradientStart.value + ", " + SCENE_PARAMS.brandGradientEnd.value + ")",
-              color: SCENE_PARAMS.badgeTextColor.value,
+              background: "linear-gradient(135deg, " + (props.brandGradientStart ?? SCENE_PARAMS.brandGradientStart.value) + ", " + (props.brandGradientEnd ?? SCENE_PARAMS.brandGradientEnd.value) + ")",
+              color: (props.badgeTextColor ?? SCENE_PARAMS.badgeTextColor.value),
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               fontSize: minDim * 0.03,
               fontWeight: 700,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               opacity: badgeProgress,
               transform: "scale(" + badgeScale + ")"
             }}>
-              {SCENE_PARAMS.badgeText.value}
+              {(props.badgeText ?? SCENE_PARAMS.badgeText.value)}
             </div>
           </div>
         </div>

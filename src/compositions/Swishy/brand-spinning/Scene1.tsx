@@ -19,17 +19,17 @@ const SCENE_PARAMS = {
   trailEffect: { type: "boolean", label: "Trail Effect", value: false },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const word = SCENE_PARAMS.word.value;
-  const wordCount = Math.round(SCENE_PARAMS.wordCount.value);
-  const patternIntensity = SCENE_PARAMS.patternIntensity.value;
-  const spiralTightness = SCENE_PARAMS.spiralTightness.value;
+  const word = (props.word ?? SCENE_PARAMS.word.value);
+  const wordCount = Math.round((props.wordCount ?? SCENE_PARAMS.wordCount.value));
+  const patternIntensity = (props.patternIntensity ?? SCENE_PARAMS.patternIntensity.value);
+  const spiralTightness = (props.spiralTightness ?? SCENE_PARAMS.spiralTightness.value);
   
   const centerX = width / 2;
   const centerY = height / 2;
@@ -78,7 +78,7 @@ function Scene() {
       index: i,
     });
     
-    if (SCENE_PARAMS.trailEffect.value && entranceProgress > 0.5) {
+    if ((props.trailEffect ?? SCENE_PARAMS.trailEffect.value) && entranceProgress > 0.5) {
       const trailCount = 2;
       for (let t = 1; t <= trailCount; t++) {
         const trailTimeOffset = (adjustedFrame - t * 3) * 0.025 * patternIntensity;
@@ -100,11 +100,11 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       overflow: "hidden",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -123,11 +123,11 @@ function Scene() {
             }}
           >
             <span style={{
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               fontSize: fontSize,
               fontWeight: 500,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-              letterSpacing: fontSize * SCENE_PARAMS.letterSpacing.value,
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+              letterSpacing: fontSize * (props.letterSpacing ?? SCENE_PARAMS.letterSpacing.value),
               textTransform: "capitalize",
             }}>
               {word}
@@ -143,7 +143,7 @@ function Scene() {
           width: minDim * 0.15,
           height: minDim * 0.15,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.textColor.value + "10 0%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.textColor ?? SCENE_PARAMS.textColor.value) + "10 0%, transparent 70%)",
           opacity: 0.5 + Math.sin(adjustedFrame * 0.04) * 0.2,
         }} />
       </div>

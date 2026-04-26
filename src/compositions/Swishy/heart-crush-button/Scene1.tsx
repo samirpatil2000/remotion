@@ -17,15 +17,15 @@ const SCENE_PARAMS = {
   separationDistance: { type: "number", label: "Separation Distance", value: 35, min: 20, max: 80, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const toggleFrame = SCENE_PARAMS.toggleFrame.value;
-  const separationDist = SCENE_PARAMS.separationDistance.value;
+  const toggleFrame = (props.toggleFrame ?? SCENE_PARAMS.toggleFrame.value);
+  const separationDist = (props.separationDistance ?? SCENE_PARAMS.separationDistance.value);
   
   // State transitions - each happens only once:
   // Phase 1 (0 to toggleFrame): Outline only heart (empty inside)
@@ -83,7 +83,7 @@ function Scene() {
     
     if (frameInPulse < 5) {
       const beatProgress = frameInPulse / 5;
-      pulseScale = 1 + (SCENE_PARAMS.pulseIntensity.value - 1) * Math.sin(beatProgress * Math.PI);
+      pulseScale = 1 + ((props.pulseIntensity ?? SCENE_PARAMS.pulseIntensity.value) - 1) * Math.sin(beatProgress * Math.PI);
     } else if (frameInPulse < 8) {
       pulseScale = 1;
     } else if (frameInPulse < 11) {
@@ -187,12 +187,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center" 
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -210,7 +210,7 @@ function Scene() {
             width: circleSize,
             height: circleSize,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.circleBackground.value,
+            backgroundColor: (props.circleBackground ?? SCENE_PARAMS.circleBackground.value),
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -234,7 +234,7 @@ function Scene() {
                 <path
                   d={fullHeartPath}
                   fill="none"
-                  stroke={SCENE_PARAMS.heartColor.value}
+                  stroke={(props.heartColor ?? SCENE_PARAMS.heartColor.value)}
                   strokeWidth="1.8"
                   strokeLinejoin="round"
                   strokeLinecap="round"
@@ -250,13 +250,13 @@ function Scene() {
                   overflow: "visible",
                   opacity: heartOpacity,
                   transform: "scale(" + finalHeartScale + ")",
-                  filter: "drop-shadow(0 0 " + glowBlur + "px " + SCENE_PARAMS.accentColor.value + ")",
+                  filter: "drop-shadow(0 0 " + glowBlur + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ")",
                 }}
               >
                 <defs>
                   <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor={SCENE_PARAMS.accentColor.value} />
-                    <stop offset="50%" stopColor={SCENE_PARAMS.heartColor.value} />
+                    <stop offset="0%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
+                    <stop offset="50%" stopColor={(props.heartColor ?? SCENE_PARAMS.heartColor.value)} />
                     <stop offset="100%" stopColor="#c42d44" />
                   </linearGradient>
                 </defs>
@@ -286,13 +286,13 @@ function Scene() {
                     overflow: "visible",
                     transform: "translateX(" + leftSeparation + "px) translateY(" + leftDrop + "px) rotate(" + leftRotation + "deg)",
                     transformOrigin: "center center",
-                    filter: "drop-shadow(0 0 " + brokenGlow + "px " + SCENE_PARAMS.heartColor.value + ")",
+                    filter: "drop-shadow(0 0 " + brokenGlow + "px " + (props.heartColor ?? SCENE_PARAMS.heartColor.value) + ")",
                   }}
                 >
                   <defs>
                     <linearGradient id="leftHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={SCENE_PARAMS.accentColor.value} />
-                      <stop offset="50%" stopColor={SCENE_PARAMS.heartColor.value} />
+                      <stop offset="0%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
+                      <stop offset="50%" stopColor={(props.heartColor ?? SCENE_PARAMS.heartColor.value)} />
                       <stop offset="100%" stopColor="#c42d44" />
                     </linearGradient>
                   </defs>
@@ -315,13 +315,13 @@ function Scene() {
                     overflow: "visible",
                     transform: "translateX(" + rightSeparation + "px) translateY(" + rightDrop + "px) rotate(" + rightRotation + "deg)",
                     transformOrigin: "center center",
-                    filter: "drop-shadow(0 0 " + brokenGlow + "px " + SCENE_PARAMS.heartColor.value + ")",
+                    filter: "drop-shadow(0 0 " + brokenGlow + "px " + (props.heartColor ?? SCENE_PARAMS.heartColor.value) + ")",
                   }}
                 >
                   <defs>
                     <linearGradient id="rightHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={SCENE_PARAMS.accentColor.value} />
-                      <stop offset="50%" stopColor={SCENE_PARAMS.heartColor.value} />
+                      <stop offset="0%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} />
+                      <stop offset="50%" stopColor={(props.heartColor ?? SCENE_PARAMS.heartColor.value)} />
                       <stop offset="100%" stopColor="#c42d44" />
                     </linearGradient>
                   </defs>
@@ -355,11 +355,11 @@ function Scene() {
                         top: "50%",
                         width: 4 + (i % 3) * 2,
                         height: 4 + (i % 3) * 2,
-                        backgroundColor: SCENE_PARAMS.heartColor.value,
+                        backgroundColor: (props.heartColor ?? SCENE_PARAMS.heartColor.value),
                         borderRadius: i % 2 === 0 ? "50%" : "0",
                         transform: "translate(" + particleX + "px, " + particleY + "px) rotate(" + particleRotation + "deg)",
                         opacity: particleOpacity,
-                        boxShadow: "0 0 4px " + SCENE_PARAMS.accentColor.value,
+                        boxShadow: "0 0 4px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                       }}
                     />
                   );

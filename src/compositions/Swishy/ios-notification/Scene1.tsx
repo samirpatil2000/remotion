@@ -23,15 +23,15 @@ const SCENE_PARAMS = {
   showAppIcon: { type: "boolean", label: "Show App Icon", value: true }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const entranceOffset = SCENE_PARAMS.entranceOffset.value;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const entranceOffset = (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value);
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const isPortrait = height > width;
   const notificationWidth = isPortrait ? width * 0.9 : Math.min(width * 0.5, 420);
@@ -89,7 +89,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "flex-start",
       alignItems: "center",
       paddingTop: height * 0.12,
@@ -101,7 +101,7 @@ function Scene() {
         {/* Notification Card */}
         <div style={{
           width: notificationWidth,
-          backgroundColor: SCENE_PARAMS.notificationBg.value,
+          backgroundColor: (props.notificationBg ?? SCENE_PARAMS.notificationBg.value),
           borderRadius: minDim * 0.035,
           padding: padding,
           boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 0, 0, 0.2)",
@@ -119,12 +119,12 @@ function Scene() {
             opacity: contentOpacity,
           }}>
             {/* App Icon */}
-            {SCENE_PARAMS.showAppIcon.value && (
+            {(props.showAppIcon ?? SCENE_PARAMS.showAppIcon.value) && (
               <div style={{
                 width: iconSize,
                 height: iconSize,
                 borderRadius: iconSize * 0.22,
-                backgroundColor: SCENE_PARAMS.iconColor.value,
+                backgroundColor: (props.iconColor ?? SCENE_PARAMS.iconColor.value),
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -144,14 +144,14 @@ function Scene() {
             
             {/* App Name */}
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", -apple-system, BlinkMacSystemFont, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", -apple-system, BlinkMacSystemFont, sans-serif",
               fontSize: minDim * 0.025,
               fontWeight: 600,
-              color: SCENE_PARAMS.subtleColor.value,
+              color: (props.subtleColor ?? SCENE_PARAMS.subtleColor.value),
               textTransform: "uppercase",
               letterSpacing: 0.5,
             }}>
-              {SCENE_PARAMS.appName.value}
+              {(props.appName ?? SCENE_PARAMS.appName.value)}
             </span>
             
             {/* Spacer */}
@@ -159,13 +159,13 @@ function Scene() {
             
             {/* Time */}
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", -apple-system, BlinkMacSystemFont, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", -apple-system, BlinkMacSystemFont, sans-serif",
               fontSize: minDim * 0.022,
               fontWeight: 400,
-              color: SCENE_PARAMS.subtleColor.value,
+              color: (props.subtleColor ?? SCENE_PARAMS.subtleColor.value),
               opacity: timePulse,
             }}>
-              {SCENE_PARAMS.timeAgo.value}
+              {(props.timeAgo ?? SCENE_PARAMS.timeAgo.value)}
             </span>
           </div>
           
@@ -174,13 +174,13 @@ function Scene() {
             opacity: contentOpacity,
           }}>
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", -apple-system, BlinkMacSystemFont, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", -apple-system, BlinkMacSystemFont, sans-serif",
               fontSize: minDim * 0.032,
               fontWeight: 600,
-              color: SCENE_PARAMS.titleColor.value,
+              color: (props.titleColor ?? SCENE_PARAMS.titleColor.value),
               lineHeight: 1.3,
             }}>
-              {SCENE_PARAMS.notificationTitle.value}
+              {(props.notificationTitle ?? SCENE_PARAMS.notificationTitle.value)}
             </span>
           </div>
           
@@ -189,13 +189,13 @@ function Scene() {
             opacity: contentOpacity,
           }}>
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", -apple-system, BlinkMacSystemFont, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", -apple-system, BlinkMacSystemFont, sans-serif",
               fontSize: minDim * 0.028,
               fontWeight: 400,
-              color: SCENE_PARAMS.messageColor.value,
+              color: (props.messageColor ?? SCENE_PARAMS.messageColor.value),
               lineHeight: 1.4,
             }}>
-              {SCENE_PARAMS.notificationMessage.value}
+              {(props.notificationMessage ?? SCENE_PARAMS.notificationMessage.value)}
             </span>
           </div>
         </div>

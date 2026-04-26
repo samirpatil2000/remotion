@@ -17,22 +17,22 @@ const SCENE_PARAMS = {
   cycleSpeed: { type: "number", label: "Cycle Speed (frames)", value: 3, min: 1, max: 6, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const word = SCENE_PARAMS.mainWord.value;
+  const word = (props.mainWord ?? SCENE_PARAMS.mainWord.value);
   const letters = word.split("");
   
   const scrambleChars = ["+", "-", "=", ";", "*", ".", ":", "/", "\\", "|", "_", "#", "@", "&", "%", "^", "~", "<", ">", "{", "}", "[", "]"];
   
-  const letterStagger = SCENE_PARAMS.letterStagger.value;
-  const scrambleCycles = SCENE_PARAMS.scrambleCycles.value;
-  const cycleSpeed = SCENE_PARAMS.cycleSpeed.value;
+  const letterStagger = (props.letterStagger ?? SCENE_PARAMS.letterStagger.value);
+  const scrambleCycles = (props.scrambleCycles ?? SCENE_PARAMS.scrambleCycles.value);
+  const cycleSpeed = (props.cycleSpeed ?? SCENE_PARAMS.cycleSpeed.value);
   
   const getLetterDisplay = (letter, index) => {
     const letterStartFrame = index * letterStagger;
@@ -80,12 +80,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
         opacity: containerOpacity,
       }}>
@@ -103,10 +103,10 @@ function Scene() {
               <span
                 key={index}
                 style={{
-                  fontFamily: `"${SCENE_PARAMS.fontFamily.value}", monospace`,
+                  fontFamily: `"${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}", monospace`,
                   fontSize: fontSize,
                   fontWeight: 400,
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                   opacity: display.opacity,
                   transform: `scale(${display.scale || 1})`,
                   display: "inline-block",

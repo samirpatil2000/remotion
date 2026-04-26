@@ -41,11 +41,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const isPortrait = height > width;
 
   const fadeIn = interpolate(adjustedFrame, [0, 25], [0, 1], { extrapolateRight: "clamp" });
@@ -71,7 +71,7 @@ function Scene() {
   const gridOpacity = interpolate(adjustedFrame, [20, 50], [0, 1], { extrapolateRight: "clamp" });
   const barsStart = 40;
 
-  const thursdayDelay = barsStart + 3 * SCENE_PARAMS.staggerDelay.value;
+  const thursdayDelay = barsStart + 3 * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   const thursdayProgress = spring({ frame: Math.max(0, adjustedFrame - thursdayDelay), fps, config: { damping: 20, stiffness: 90 } });
   const ceilingOpacity = interpolate(adjustedFrame, [thursdayDelay + 10, thursdayDelay + 25], [0, 1], { extrapolateRight: "clamp" });
   const tooltipOpacity = interpolate(adjustedFrame, [thursdayDelay + 20, thursdayDelay + 35], [0, 1], { extrapolateRight: "clamp" });
@@ -89,7 +89,7 @@ function Scene() {
   const thuX = 3 * columnW + (columnW - barW) / 2;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         width: "100%",
         height: "100%",
@@ -102,11 +102,11 @@ function Scene() {
           top: cardY,
           width: cardW,
           height: cardH,
-          backgroundColor: SCENE_PARAMS.cardColor.value,
+          backgroundColor: (props.cardColor ?? SCENE_PARAMS.cardColor.value),
           borderRadius: minDim * 0.035,
           boxShadow: "0 " + minDim * 0.02 + "px " + minDim * 0.08 + "px rgba(0,0,0,0.6), inset 0 0 " + minDim * 0.05 + "px rgba(255,255,255,0.02)",
           opacity: cardOpacity,
-          transform: "scale(" + (cardScale * zoom * SCENE_PARAMS.scale.value) + ")",
+          transform: "scale(" + (cardScale * zoom * (props.scale ?? SCENE_PARAMS.scale.value)) + ")",
           transformOrigin: "center center",
           backdropFilter: "blur(10px)",
         }}>
@@ -114,23 +114,23 @@ function Scene() {
             position: "absolute",
             left: cardW * 0.06,
             top: cardH * 0.08,
-            color: SCENE_PARAMS.secondaryText.value,
-            fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+            color: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
+            fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.02,
             fontWeight: 500,
           }}>
-            {SCENE_PARAMS.title.value}
+            {(props.title ?? SCENE_PARAMS.title.value)}
           </div>
           <div style={{
             position: "absolute",
             left: cardW * 0.06,
             top: cardH * 0.15,
-            color: SCENE_PARAMS.textColor.value,
-            fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.04,
             fontWeight: 700,
           }}>
-            {SCENE_PARAMS.amount.value}
+            {(props.amount ?? SCENE_PARAMS.amount.value)}
           </div>
 
           <div style={{
@@ -143,18 +143,18 @@ function Scene() {
             borderRadius: minDim * 0.02,
             padding: minDim * 0.005,
             gap: minDim * 0.008,
-            fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.018,
-            color: SCENE_PARAMS.secondaryText.value,
+            color: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
           }}>
-            <div style={{ padding: minDim * 0.006 + "px " + minDim * 0.015 + "px" }}>{SCENE_PARAMS.toggleLeft.value}</div>
+            <div style={{ padding: minDim * 0.006 + "px " + minDim * 0.015 + "px" }}>{(props.toggleLeft ?? SCENE_PARAMS.toggleLeft.value)}</div>
             <div style={{
               padding: minDim * 0.006 + "px " + minDim * 0.015 + "px",
-              background: "linear-gradient(90deg, " + SCENE_PARAMS.accentStart.value + ", " + SCENE_PARAMS.accentEnd.value + ")",
+              background: "linear-gradient(90deg, " + (props.accentStart ?? SCENE_PARAMS.accentStart.value) + ", " + (props.accentEnd ?? SCENE_PARAMS.accentEnd.value) + ")",
               borderRadius: minDim * 0.018,
               color: "#ffffff",
               fontWeight: 600,
-            }}>{SCENE_PARAMS.toggleRight.value}</div>
+            }}>{(props.toggleRight ?? SCENE_PARAMS.toggleRight.value)}</div>
           </div>
 
           <div style={{ position: "absolute", left: graphX, top: graphY, width: graphW, height: graphH }}>
@@ -167,7 +167,7 @@ function Scene() {
                   top: y,
                   width: "100%",
                   height: 1,
-                  backgroundColor: SCENE_PARAMS.gridColor.value,
+                  backgroundColor: (props.gridColor ?? SCENE_PARAMS.gridColor.value),
                   opacity: gridOpacity,
                 }} />
               );
@@ -179,13 +179,13 @@ function Scene() {
               top: graphH - (50 / maxVal) * graphH,
               width: "100%",
               height: 1,
-              backgroundColor: SCENE_PARAMS.accentEnd.value,
+              backgroundColor: (props.accentEnd ?? SCENE_PARAMS.accentEnd.value),
               opacity: ceilingOpacity,
               boxShadow: "0 0 " + minDim * 0.01 + "px rgba(255,90,0,0.5)",
             }} />
 
             {barValues.map((val, i) => {
-              const barDelay = barsStart + i * SCENE_PARAMS.staggerDelay.value;
+              const barDelay = barsStart + i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
               const barProgress = spring({ frame: Math.max(0, adjustedFrame - barDelay), fps, config: { damping: 20, stiffness: 90 } });
               const barH = barProgress * graphH * (val / maxVal);
               const x = i * columnW + (columnW - barW) / 2;
@@ -200,8 +200,8 @@ function Scene() {
                   height: barH,
                   borderRadius: minDim * 0.015,
                   background: isThu
-                    ? "linear-gradient(180deg, " + SCENE_PARAMS.accentStart.value + " 0%, " + SCENE_PARAMS.accentEnd.value + " 60%, #ffffff 100%)"
-                    : SCENE_PARAMS.barColor.value,
+                    ? "linear-gradient(180deg, " + (props.accentStart ?? SCENE_PARAMS.accentStart.value) + " 0%, " + (props.accentEnd ?? SCENE_PARAMS.accentEnd.value) + " 60%, #ffffff 100%)"
+                    : (props.barColor ?? SCENE_PARAMS.barColor.value),
                   boxShadow: glow,
                 }} />
               );
@@ -215,7 +215,7 @@ function Scene() {
                 width: minDim * 0.02,
                 height: minDim * 0.02,
                 borderRadius: minDim * 0.02,
-                backgroundColor: SCENE_PARAMS.accentStart.value,
+                backgroundColor: (props.accentStart ?? SCENE_PARAMS.accentStart.value),
                 opacity: 0.6 + 0.4 * pulse,
                 boxShadow: "0 0 " + minDim * 0.03 + "px rgba(255,90,0,0.8)",
               }} />
@@ -230,14 +230,14 @@ function Scene() {
               borderRadius: minDim * 0.015,
               padding: minDim * 0.012,
               opacity: tooltipOpacity,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.018,
               boxShadow: "0 " + minDim * 0.01 + "px " + minDim * 0.04 + "px rgba(0,0,0,0.6)",
               textAlign: "center",
               whiteSpace: "nowrap",
             }}>
-              {SCENE_PARAMS.tooltipText.value}
+              {(props.tooltipText ?? SCENE_PARAMS.tooltipText.value)}
             </div>
 
             <svg style={{
@@ -251,14 +251,14 @@ function Scene() {
               <path d="M3 3 L21 12 L13 14 L11 21 Z" fill="#f3f4f6" />
             </svg>
 
-            {[SCENE_PARAMS.dayMon.value, SCENE_PARAMS.dayTue.value, SCENE_PARAMS.dayWed.value, SCENE_PARAMS.dayThu.value, SCENE_PARAMS.dayFri.value, SCENE_PARAMS.daySat.value, SCENE_PARAMS.daySun.value].map((d, i) => (
+            {[(props.dayMon ?? SCENE_PARAMS.dayMon.value), (props.dayTue ?? SCENE_PARAMS.dayTue.value), (props.dayWed ?? SCENE_PARAMS.dayWed.value), (props.dayThu ?? SCENE_PARAMS.dayThu.value), (props.dayFri ?? SCENE_PARAMS.dayFri.value), (props.daySat ?? SCENE_PARAMS.daySat.value), (props.daySun ?? SCENE_PARAMS.daySun.value)].map((d, i) => (
               <div key={i} style={{
                 position: "absolute",
                 left: i * columnW + columnW / 2,
                 bottom: -minDim * 0.045,
                 transform: "translateX(-50%)",
-                color: i === 3 ? SCENE_PARAMS.textColor.value : SCENE_PARAMS.secondaryText.value,
-                fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+                color: i === 3 ? (props.textColor ?? SCENE_PARAMS.textColor.value) : (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
+                fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.018,
               }}>{d}</div>
             ))}
@@ -271,8 +271,8 @@ function Scene() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              color: SCENE_PARAMS.secondaryText.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+              color: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.018,
             }}>
               <div>50</div>

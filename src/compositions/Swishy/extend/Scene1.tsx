@@ -16,11 +16,11 @@ const SCENE_PARAMS = {
   diagonalAngle: { type: "number", label: "Diagonal Angle", value: 15, min: 0, max: 45, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   const adjustedFrame = frame * speed;
   
@@ -76,8 +76,8 @@ function Scene() {
   const easedReset2 = resetProgress2 * resetProgress2 * (3 - 2 * resetProgress2);
   
   // Calculate stretch values
-  const maxStretch = SCENE_PARAMS.stretchIntensity.value;
-  const maxAngle = SCENE_PARAMS.diagonalAngle.value;
+  const maxStretch = (props.stretchIntensity ?? SCENE_PARAMS.stretchIntensity.value);
+  const maxAngle = (props.diagonalAngle ?? SCENE_PARAMS.diagonalAngle.value);
   
   // Determine current phase
   const isPhase1 = adjustedFrame >= stretchStart1 && adjustedFrame < resetStart1;
@@ -179,8 +179,8 @@ function Scene() {
     alignItems: "center",
     width: "100%",
     overflow: "visible",
-    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-    color: SCENE_PARAMS.textColor.value,
+    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
     fontWeight: 900,
     lineHeight: 0.85,
     textTransform: "uppercase",
@@ -189,13 +189,13 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden"
     }}>
       <div style={{ 
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -216,7 +216,7 @@ function Scene() {
           `,
           transformOrigin: "center center"
         }}>
-          {SCENE_PARAMS.text.value}
+          {(props.text ?? SCENE_PARAMS.text.value)}
         </div>
 
         {/* Middle Row */}
@@ -234,7 +234,7 @@ function Scene() {
           marginTop: minDim * 0.01,
           marginBottom: minDim * 0.01,
         }}>
-          {SCENE_PARAMS.text.value}
+          {(props.text ?? SCENE_PARAMS.text.value)}
         </div>
 
         {/* Bottom Row */}
@@ -250,7 +250,7 @@ function Scene() {
           `,
           transformOrigin: "center center"
         }}>
-          {SCENE_PARAMS.text.value}
+          {(props.text ?? SCENE_PARAMS.text.value)}
         </div>
 
       </div>

@@ -19,23 +19,23 @@ const SCENE_PARAMS = {
   entranceOffset: { type: "number", label: "Entrance Distance", value: 80, min: 30, max: 150, step: 10 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const itemDelay = SCENE_PARAMS.itemDelay.value;
-  const entranceOffset = SCENE_PARAMS.entranceOffset.value;
+  const itemDelay = (props.itemDelay ?? SCENE_PARAMS.itemDelay.value);
+  const entranceOffset = (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value);
   
   const items = [
-    { text: SCENE_PARAMS.item1.value, direction: "left", delay: 15 },
-    { text: SCENE_PARAMS.item2.value, direction: "right", delay: 15 + itemDelay },
-    { text: SCENE_PARAMS.item3.value, direction: "top", delay: 15 + itemDelay * 2 },
+    { text: (props.item1 ?? SCENE_PARAMS.item1.value), direction: "left", delay: 15 },
+    { text: (props.item2 ?? SCENE_PARAMS.item2.value), direction: "right", delay: 15 + itemDelay },
+    { text: (props.item3 ?? SCENE_PARAMS.item3.value), direction: "top", delay: 15 + itemDelay * 2 },
   ];
   
-  const CheckMark = ({ progress, size }) => {
+  const CheckMark = ({ props, progress, size }: any) => {
     const strokeLength = 24;
     const dashOffset = interpolate(progress, [0, 1], [strokeLength, 0], { extrapolateRight: "clamp" });
     const checkScale = interpolate(progress, [0, 0.5, 1], [0.8, 1.1, 1], { extrapolateRight: "clamp" });
@@ -53,7 +53,7 @@ function Scene() {
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
           <path
             d="M5 12l5 5L19 7"
-            stroke={SCENE_PARAMS.accentColor.value}
+            stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -65,7 +65,7 @@ function Scene() {
     );
   };
   
-  const AccentLine = ({ progress, position }) => {
+  const AccentLine = ({ props, progress, position }: any) => {
     const lineWidth = interpolate(progress, [0, 1], [0, 100], { extrapolateRight: "clamp" });
     const opacity = interpolate(progress, [0, 0.3, 0.7, 1], [0, 1, 1, 0], { extrapolateRight: "clamp" });
     
@@ -76,14 +76,14 @@ function Scene() {
         left: 0,
         width: lineWidth + "%",
         height: 2,
-        backgroundColor: SCENE_PARAMS.accentColor.value,
+        backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
         opacity: opacity,
         borderRadius: 1,
       }} />
     );
   };
   
-  const ChecklistItem = ({ text, direction, delay, index }) => {
+  const ChecklistItem = ({ props, text, direction, delay, index }: any) => {
     const itemFrame = Math.max(0, adjustedFrame - delay);
     
     const textProgress = spring({
@@ -128,18 +128,18 @@ function Scene() {
         opacity: textProgress,
         transform: "translate(" + translateX + "px, " + translateY + "px)",
       }}>
-        <CheckMark progress={checkProgress} size={checkSize} />
+        <CheckMark props={props}  progress={checkProgress} size={checkSize} />
         <div style={{ position: "relative" }}>
           <span style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: fontSize,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             letterSpacing: "-0.02em",
           }}>
             {text}
           </span>
-          <AccentLine progress={lineProgress} position="bottom" />
+          <AccentLine props={props}  progress={lineProgress} position="bottom" />
         </div>
       </div>
     );
@@ -147,12 +147,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -160,7 +160,7 @@ function Scene() {
         padding: minDim * 0.05,
       }}>
         {items.map((item, index) => (
-          <ChecklistItem
+          <ChecklistItem props={props} 
             key={index}
             text={item.text}
             direction={item.direction}

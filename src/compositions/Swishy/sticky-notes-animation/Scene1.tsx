@@ -22,25 +22,25 @@ const SCENE_PARAMS = {
   showShadow: { type: "boolean", label: "Show Shadow", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const noteDelay = SCENE_PARAMS.noteDelay.value;
-  const writingSpeed = SCENE_PARAMS.writingSpeed.value;
+  const noteDelay = (props.noteDelay ?? SCENE_PARAMS.noteDelay.value);
+  const writingSpeed = (props.writingSpeed ?? SCENE_PARAMS.writingSpeed.value);
   
   const noteWidth = isPortrait ? width * 0.55 : width * 0.22;
   const noteHeight = noteWidth * 1.0;
   const fontSize = minDim * 0.045;
   
   const notes = [
-    { text: SCENE_PARAMS.note1Text.value, color: SCENE_PARAMS.note1Color.value, delay: 0, x: 0, rotation: -3 },
-    { text: SCENE_PARAMS.note2Text.value, color: SCENE_PARAMS.note2Color.value, delay: noteDelay, x: isPortrait ? 0 : -noteWidth * 1.1, rotation: 2 },
-    { text: SCENE_PARAMS.note3Text.value, color: SCENE_PARAMS.note3Color.value, delay: noteDelay * 2, x: isPortrait ? 0 : noteWidth * 1.1, rotation: -1 },
+    { text: (props.note1Text ?? SCENE_PARAMS.note1Text.value), color: (props.note1Color ?? SCENE_PARAMS.note1Color.value), delay: 0, x: 0, rotation: -3 },
+    { text: (props.note2Text ?? SCENE_PARAMS.note2Text.value), color: (props.note2Color ?? SCENE_PARAMS.note2Color.value), delay: noteDelay, x: isPortrait ? 0 : -noteWidth * 1.1, rotation: 2 },
+    { text: (props.note3Text ?? SCENE_PARAMS.note3Text.value), color: (props.note3Color ?? SCENE_PARAMS.note3Color.value), delay: noteDelay * 2, x: isPortrait ? 0 : noteWidth * 1.1, rotation: -1 },
   ];
   
   const portraitOffsets = [
@@ -49,7 +49,7 @@ function Scene() {
     { y: noteHeight * 1.6 },
   ];
   
-  function StickyNote({ text, color, delay, xOffset, rotation, index }) {
+  function StickyNote({ props, text, color, delay, xOffset, rotation, index }: any) {
     const noteFrame = Math.max(0, adjustedFrame - delay);
     
     const entranceProgress = spring({
@@ -79,7 +79,7 @@ function Scene() {
     const cursorVisible = visibleChars < text.length && noteFrame > 20;
     const cursorBlink = Math.sin(adjustedFrame * 0.3) > 0;
     
-    const shadowStyle = SCENE_PARAMS.showShadow.value ? {
+    const shadowStyle = (props.showShadow ?? SCENE_PARAMS.showShadow.value) ? {
       boxShadow: "4px 6px 12px rgba(0,0,0,0.15), 2px 3px 6px rgba(0,0,0,0.1)",
     } : {};
     
@@ -110,10 +110,10 @@ function Scene() {
         
         <div style={{
           marginTop: noteHeight * 0.1,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", cursive, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", cursive, sans-serif",
           fontSize: fontSize,
           fontWeight: 500,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           lineHeight: 1.4,
           wordWrap: "break-word",
           position: "relative",
@@ -124,7 +124,7 @@ function Scene() {
               display: "inline-block",
               width: 2,
               height: fontSize * 0.9,
-              backgroundColor: SCENE_PARAMS.textColor.value,
+              backgroundColor: (props.textColor ?? SCENE_PARAMS.textColor.value),
               marginLeft: 2,
               verticalAlign: "text-bottom",
             }} />
@@ -149,7 +149,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       backgroundImage: deskGrain,
       justifyContent: "center",
       alignItems: "center",
@@ -178,7 +178,7 @@ function Scene() {
       }} />
       
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         position: "relative",
         display: "flex",
@@ -188,7 +188,7 @@ function Scene() {
         height: isPortrait ? noteHeight * 3 : noteHeight,
       }}>
         {notes.map((note, index) => (
-          <StickyNote
+          <StickyNote props={props} 
             key={index}
             text={note.text}
             color={note.color}

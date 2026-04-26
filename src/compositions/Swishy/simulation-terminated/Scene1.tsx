@@ -20,16 +20,16 @@ const SCENE_PARAMS = {
   showGrid: { type: "boolean", label: "Show Grid", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   const isPortrait = height > width;
   
-  const text = SCENE_PARAMS.mainText.value;
+  const text = (props.mainText ?? SCENE_PARAMS.mainText.value);
   const charCount = text.length;
   
   // Typing animation - characters appear one by one
@@ -42,7 +42,7 @@ function Scene() {
   ));
   
   // Cursor blink
-  const cursorVisible = SCENE_PARAMS.showCursor.value && Math.floor(adjustedFrame / 8) % 2 === 0;
+  const cursorVisible = (props.showCursor ?? SCENE_PARAMS.showCursor.value) && Math.floor(adjustedFrame / 8) % 2 === 0;
   
   // Glitch effect timing
   const glitchActive = (adjustedFrame > 60 && adjustedFrame < 68) || 
@@ -50,7 +50,7 @@ function Scene() {
                        (adjustedFrame > 110 && adjustedFrame < 115);
   
   const glitchOffset = glitchActive ? 
-    (Math.sin(adjustedFrame * 50) * 3 * SCENE_PARAMS.glitchIntensity.value) : 0;
+    (Math.sin(adjustedFrame * 50) * 3 * (props.glitchIntensity ?? SCENE_PARAMS.glitchIntensity.value)) : 0;
   
   // Final reveal glow pulse
   const textComplete = adjustedFrame > (15 + typewriterDuration + 5);
@@ -99,13 +99,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
     }}>
       {/* Grid background */}
-      {SCENE_PARAMS.showGrid.value && (
+      {(props.showGrid ?? SCENE_PARAMS.showGrid.value) && (
         <div style={{
           position: "absolute",
           top: 0,
@@ -114,8 +114,8 @@ function Scene() {
           bottom: 0,
           opacity: gridOpacity,
           backgroundImage: `
-            linear-gradient(${SCENE_PARAMS.secondaryColor.value}22 1px, transparent 1px),
-            linear-gradient(90deg, ${SCENE_PARAMS.secondaryColor.value}22 1px, transparent 1px)
+            linear-gradient(${(props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value)}22 1px, transparent 1px),
+            linear-gradient(90deg, ${(props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value)}22 1px, transparent 1px)
           `,
           backgroundSize: `${minDim * 0.04}px ${minDim * 0.04}px`,
         }} />
@@ -133,9 +133,9 @@ function Scene() {
             position: "absolute",
             left: xPos,
             top: yPos,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
             fontSize: minDim * 0.018,
-            color: SCENE_PARAMS.secondaryColor.value,
+            color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
             opacity: fragOpacity,
             transform: `translateY(${(1 - prog) * 20}px)`,
           }}>
@@ -146,7 +146,7 @@ function Scene() {
       
       {/* Main content container */}
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -165,14 +165,14 @@ function Scene() {
             width: minDim * 0.012,
             height: minDim * 0.012,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.primaryColor.value,
+            backgroundColor: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
             opacity: statusPulse,
-            boxShadow: `0 0 ${minDim * 0.015}px ${SCENE_PARAMS.primaryColor.value}`,
+            boxShadow: `0 0 ${minDim * 0.015}px ${(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)}`,
           }} />
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
             fontSize: statusFontSize,
-            color: SCENE_PARAMS.secondaryColor.value,
+            color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
             letterSpacing: minDim * 0.003,
             textTransform: "uppercase",
           }}>
@@ -188,9 +188,9 @@ function Scene() {
         }}>
           {/* Left bracket */}
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
             fontSize: fontSize * 1.3,
-            color: SCENE_PARAMS.secondaryColor.value,
+            color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
             opacity: bracketProgress,
             transform: `translateX(${(1 - bracketProgress) * 20}px)`,
           }}>[</span>
@@ -205,7 +205,7 @@ function Scene() {
             {glitchActive && (
               <span style={{
                 position: "absolute",
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
                 fontSize: fontSize,
                 fontWeight: 600,
                 color: "#ff0040",
@@ -223,10 +223,10 @@ function Scene() {
             {glitchActive && (
               <span style={{
                 position: "absolute",
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
                 fontSize: fontSize,
                 fontWeight: 600,
-                color: SCENE_PARAMS.secondaryColor.value,
+                color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
                 letterSpacing: minDim * 0.004,
                 textTransform: "uppercase",
                 transform: `translateX(${-glitchOffset}px)`,
@@ -239,14 +239,14 @@ function Scene() {
             
             {/* Main text */}
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
               fontSize: fontSize,
               fontWeight: 600,
-              color: SCENE_PARAMS.primaryColor.value,
+              color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
               letterSpacing: minDim * 0.004,
               textTransform: "uppercase",
               textShadow: textComplete ? 
-                `0 0 ${minDim * 0.02 * glowPulse}px ${SCENE_PARAMS.glowColor.value}, 0 0 ${minDim * 0.04 * glowPulse}px ${SCENE_PARAMS.glowColor.value}40` :
+                `0 0 ${minDim * 0.02 * glowPulse}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}, 0 0 ${minDim * 0.04 * glowPulse}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}40` :
                 "none",
             }}>
               {text.slice(0, charsRevealed)}
@@ -255,10 +255,10 @@ function Scene() {
             {/* Cursor */}
             {cursorVisible && charsRevealed < charCount && (
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
                 fontSize: fontSize,
                 fontWeight: 600,
-                color: SCENE_PARAMS.primaryColor.value,
+                color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
                 marginLeft: 2,
               }}>_</span>
             )}
@@ -266,9 +266,9 @@ function Scene() {
           
           {/* Right bracket */}
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
             fontSize: fontSize * 1.3,
-            color: SCENE_PARAMS.secondaryColor.value,
+            color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
             opacity: bracketProgress,
             transform: `translateX(${(1 - bracketProgress) * -20}px)`,
           }}>]</span>
@@ -283,16 +283,16 @@ function Scene() {
             { extrapolateRight: "clamp", extrapolateLeft: "clamp" }
           ),
           height: 2,
-          background: `linear-gradient(90deg, transparent, ${SCENE_PARAMS.secondaryColor.value}, ${SCENE_PARAMS.primaryColor.value}, ${SCENE_PARAMS.secondaryColor.value}, transparent)`,
+          background: `linear-gradient(90deg, transparent, ${(props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value)}, ${(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)}, ${(props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value)}, transparent)`,
           opacity: 0.6,
         }} />
         
         {/* Timestamp */}
         <div style={{
           opacity: interpolate(adjustedFrame, [70, 85], [0, 0.5], { extrapolateRight: "clamp", extrapolateLeft: "clamp" }),
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
           fontSize: minDim * 0.018,
-          color: SCENE_PARAMS.secondaryColor.value,
+          color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
           letterSpacing: minDim * 0.002,
         }}>
           [TIMESTAMP: {"2087.12.15_23:59:59"}]
@@ -310,8 +310,8 @@ function Scene() {
           0deg,
           transparent,
           transparent 2px,
-          rgba(0,0,0,${SCENE_PARAMS.scanlineOpacity.value}) 2px,
-          rgba(0,0,0,${SCENE_PARAMS.scanlineOpacity.value}) 4px
+          rgba(0,0,0,${(props.scanlineOpacity ?? SCENE_PARAMS.scanlineOpacity.value)}) 2px,
+          rgba(0,0,0,${(props.scanlineOpacity ?? SCENE_PARAMS.scanlineOpacity.value)}) 4px
         )`,
         pointerEvents: "none",
       }} />
@@ -323,7 +323,7 @@ function Scene() {
         left: 0,
         right: 0,
         height: 2,
-        background: `linear-gradient(90deg, transparent, ${SCENE_PARAMS.primaryColor.value}30, transparent)`,
+        background: `linear-gradient(90deg, transparent, ${(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)}30, transparent)`,
         pointerEvents: "none",
       }} />
       

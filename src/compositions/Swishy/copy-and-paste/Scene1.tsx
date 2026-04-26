@@ -23,25 +23,25 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
-  const copies = Math.round(SCENE_PARAMS.copies.value);
-  const columns = Math.round(SCENE_PARAMS.gridColumns.value);
+  const copies = Math.round((props.copies ?? SCENE_PARAMS.copies.value));
+  const columns = Math.round((props.gridColumns ?? SCENE_PARAMS.gridColumns.value));
   const rows = Math.ceil(copies / columns);
 
-  const docWidth = minDim * SCENE_PARAMS.docSize.value;
+  const docWidth = minDim * (props.docSize ?? SCENE_PARAMS.docSize.value);
   const docHeight = docWidth * 1.25;
-  const spacing = minDim * SCENE_PARAMS.spacingScale.value;
+  const spacing = minDim * (props.spacingScale ?? SCENE_PARAMS.spacingScale.value);
 
   const startX = -((columns - 1) * spacing) / 2;
   const startY = -((rows - 1) * spacing) / 2;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         left: "50%",
@@ -55,7 +55,7 @@ function Scene() {
           position: "absolute",
           left: "50%",
           top: "50%",
-          transform: "translate(-50%, -50%) rotateX(60deg) rotateZ(45deg) scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "translate(-50%, -50%) rotateX(60deg) rotateZ(45deg) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformStyle: "preserve-3d",
           width: "100%",
           height: "100%"
@@ -66,7 +66,7 @@ function Scene() {
             const baseX = startX + col * spacing;
             const baseY = startY + row * spacing;
 
-            const delay = i * SCENE_PARAMS.staggerFrames.value;
+            const delay = i * (props.staggerFrames ?? SCENE_PARAMS.staggerFrames.value);
             const progress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 12, stiffness: 180 } });
 
             const opacity = interpolate(progress, [0, 1], [0, 1], { extrapolateRight: "clamp" });
@@ -90,8 +90,8 @@ function Scene() {
                 <div style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: SCENE_PARAMS.docColor.value,
-                  border: "1px solid " + SCENE_PARAMS.docStrokeColor.value,
+                  backgroundColor: (props.docColor ?? SCENE_PARAMS.docColor.value),
+                  border: "1px solid " + (props.docStrokeColor ?? SCENE_PARAMS.docStrokeColor.value),
                   borderRadius: minDim * 0.01,
                   boxShadow: "0 " + (minDim * 0.01) + "px " + (minDim * 0.03) + "px rgba(17,24,39,0.18)"
                 }} />
@@ -101,7 +101,7 @@ function Scene() {
                   top: 0,
                   width: docWidth * 0.28,
                   height: docWidth * 0.28,
-                  backgroundColor: SCENE_PARAMS.docFoldColor.value,
+                  backgroundColor: (props.docFoldColor ?? SCENE_PARAMS.docFoldColor.value),
                   clipPath: "polygon(0 0, 100% 0, 100% 100%)",
                   borderTopRightRadius: minDim * 0.01
                 }} />
@@ -111,7 +111,7 @@ function Scene() {
                   top: "20%",
                   width: "76%",
                   height: "6%",
-                  backgroundColor: SCENE_PARAMS.docLineColor.value,
+                  backgroundColor: (props.docLineColor ?? SCENE_PARAMS.docLineColor.value),
                   borderRadius: minDim * 0.004
                 }} />
                 <div style={{
@@ -120,7 +120,7 @@ function Scene() {
                   top: "36%",
                   width: "64%",
                   height: "6%",
-                  backgroundColor: SCENE_PARAMS.docLineColor.value,
+                  backgroundColor: (props.docLineColor ?? SCENE_PARAMS.docLineColor.value),
                   borderRadius: minDim * 0.004
                 }} />
                 <div style={{
@@ -129,7 +129,7 @@ function Scene() {
                   top: "52%",
                   width: "58%",
                   height: "6%",
-                  backgroundColor: SCENE_PARAMS.docLineColor.value,
+                  backgroundColor: (props.docLineColor ?? SCENE_PARAMS.docLineColor.value),
                   borderRadius: minDim * 0.004
                 }} />
                 <div style={{
@@ -138,7 +138,7 @@ function Scene() {
                   bottom: "12%",
                   width: "34%",
                   height: "8%",
-                  backgroundColor: SCENE_PARAMS.accentColor.value,
+                  backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                   borderRadius: minDim * 0.004
                 }} />
               </div>

@@ -18,20 +18,20 @@ const SCENE_PARAMS = {
   stopMotionSteps: { type: "number", label: "Stop Motion Steps", value: 8, min: 4, max: 15, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const word = SCENE_PARAMS.word.value.toUpperCase();
+  const word = (props.word ?? SCENE_PARAMS.word.value).toUpperCase();
   const letters = word.split('');
-  const beadSize = minDim * SCENE_PARAMS.beadSize.value;
+  const beadSize = minDim * (props.beadSize ?? SCENE_PARAMS.beadSize.value);
   const spacing = beadSize * 1.15;
-  const scatterMult = SCENE_PARAMS.scatterAmount.value;
-  const steps = SCENE_PARAMS.stopMotionSteps.value;
+  const scatterMult = (props.scatterAmount ?? SCENE_PARAMS.scatterAmount.value);
+  const steps = (props.stopMotionSteps ?? SCENE_PARAMS.stopMotionSteps.value);
   
   const totalWidth = letters.length * spacing - (spacing - beadSize);
   const startX = (width - totalWidth) / 2;
@@ -64,7 +64,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
@@ -78,7 +78,7 @@ function Scene() {
       }} />
       
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
         position: "relative",
         width: width,
@@ -145,7 +145,7 @@ function Scene() {
                 width: beadSize * 1.1,
                 height: beadSize * 0.3,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.shadowColor.value,
+                backgroundColor: (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
                 transform: `translate(${beadSize * 0.08}px, ${beadSize * 0.42}px)`,
                 filter: `blur(${beadSize * 0.12}px)`,
                 opacity: 0.45,
@@ -173,7 +173,7 @@ function Scene() {
                 width: beadSize,
                 height: beadSize,
                 borderRadius: "50%",
-                background: `radial-gradient(ellipse at 35% 30%, #FFFCF7 0%, ${SCENE_PARAMS.beadColor.value} 25%, #EDE9E3 70%, #D8D4CE 100%)`,
+                background: `radial-gradient(ellipse at 35% 30%, #FFFCF7 0%, ${(props.beadColor ?? SCENE_PARAMS.beadColor.value)} 25%, #EDE9E3 70%, #D8D4CE 100%)`,
                 marginLeft: -beadSize / 2,
                 marginTop: -beadSize / 2,
                 boxShadow: `
@@ -248,7 +248,7 @@ function Scene() {
                   alignItems: "center",
                 }}>
                   <span style={{
-                    color: SCENE_PARAMS.letterColor.value,
+                    color: (props.letterColor ?? SCENE_PARAMS.letterColor.value),
                     fontSize: beadSize * 0.5,
                     fontWeight: 800,
                     fontFamily: "Georgia, 'Times New Roman', serif",

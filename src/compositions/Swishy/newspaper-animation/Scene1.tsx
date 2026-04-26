@@ -43,11 +43,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const animationWindow = durationInFrames * 0.78;
   const adjustedFrame = (frame / animationWindow) * 120 * speed;
@@ -61,16 +61,16 @@ function Scene() {
   const bylineProgress = spring({ frame: Math.max(0, adjustedFrame - 46), fps, config: { damping: 24, stiffness: 80 } });
   const dateProgress = spring({ frame: Math.max(0, adjustedFrame - 50), fps, config: { damping: 24, stiffness: 80 } });
 
-  const gridSize = SCENE_PARAMS.gridSize.value;
-  const lineWidth = SCENE_PARAMS.gridLineWidth.value;
+  const gridSize = (props.gridSize ?? SCENE_PARAMS.gridSize.value);
+  const lineWidth = (props.gridLineWidth ?? SCENE_PARAMS.gridLineWidth.value);
   const horizontalLines = Math.ceil(height / gridSize) + 1;
   const verticalLines = Math.ceil(width / gridSize) + 1;
 
   const headlineWidth = width * 0.84;
   const highlightHeight = minDim * 0.09;
 
-  const col1Lines = SCENE_PARAMS.bodyCol1.value.split("\n");
-  const col2Lines = SCENE_PARAMS.bodyCol2.value.split("\n");
+  const col1Lines = (props.bodyCol1 ?? SCENE_PARAMS.bodyCol1.value).split("\n");
+  const col2Lines = (props.bodyCol2 ?? SCENE_PARAMS.bodyCol2.value).split("\n");
   const bodyStart = 64;
   const lineStagger = 5;
 
@@ -80,8 +80,8 @@ function Scene() {
   const sweepX = interpolate(frame * speed, [0, durationInFrames * speed], [-0.4 * width, 1.2 * width], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <AbsoluteFill style={{ opacity: SCENE_PARAMS.gridOpacity.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <AbsoluteFill style={{ opacity: (props.gridOpacity ?? SCENE_PARAMS.gridOpacity.value) }}>
         <svg width={width} height={height} style={{ width: "100%", height: "100%" }}>
           {Array.from({ length: horizontalLines }).map((_, i) => {
             const y = i * gridSize;
@@ -92,7 +92,7 @@ function Scene() {
                 y1={y}
                 x2={width}
                 y2={y}
-                stroke={SCENE_PARAMS.gridColor.value}
+                stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
                 strokeWidth={lineWidth}
               />
             );
@@ -106,7 +106,7 @@ function Scene() {
                 y1={0}
                 x2={x}
                 y2={height}
-                stroke={SCENE_PARAMS.gridColor.value}
+                stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
                 strokeWidth={lineWidth}
               />
             );
@@ -119,29 +119,29 @@ function Scene() {
         left: "8%",
         top: "9%",
         width: "84%",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "left top"
       }}>
         <div style={{
           fontSize: minDim * 0.022,
           letterSpacing: "0.16em",
-          color: SCENE_PARAMS.subtitleColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           textTransform: "uppercase",
           opacity: tagProgress,
           transform: "translateY(" + interpolate(tagProgress, [0, 1], [5, 0], { extrapolateRight: "clamp" }) + "px)"
-        }}>{SCENE_PARAMS.tag.value}</div>
+        }}>{(props.tag ?? SCENE_PARAMS.tag.value)}</div>
 
         <div style={{
           fontSize: minDim * 0.02,
           letterSpacing: "0.14em",
-          color: SCENE_PARAMS.subtitleColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           textTransform: "uppercase",
           marginTop: minDim * 0.012,
           opacity: sectionProgress,
           transform: "translateY(" + interpolate(sectionProgress, [0, 1], [5, 0], { extrapolateRight: "clamp" }) + "px)"
-        }}>{SCENE_PARAMS.section.value}</div>
+        }}>{(props.section ?? SCENE_PARAMS.section.value)}</div>
 
         <div style={{ position: "relative", width: headlineWidth, marginTop: minDim * 0.018 }}>
           <div style={{
@@ -150,7 +150,7 @@ function Scene() {
             top: minDim * 0.014,
             height: highlightHeight,
             width: headlineWidth,
-            backgroundColor: SCENE_PARAMS.highlightColor.value,
+            backgroundColor: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value),
             transform: "scaleX(" + highlightProgress + ")",
             transformOrigin: "left center"
           }} />
@@ -158,44 +158,44 @@ function Scene() {
             position: "relative",
             fontSize: minDim * 0.095,
             fontWeight: 700,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             lineHeight: 1.04,
             opacity: titleProgress,
             transform: "translateY(" + interpolate(titleProgress, [0, 1], [8, 0], { extrapolateRight: "clamp" }) + "px)",
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-          }}>{SCENE_PARAMS.title.value}</div>
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+          }}>{(props.title ?? SCENE_PARAMS.title.value)}</div>
         </div>
 
         <div style={{
           marginTop: minDim * 0.03,
           fontSize: minDim * 0.034,
-          color: SCENE_PARAMS.subtitleColor.value,
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
           maxWidth: "92%",
           opacity: subtitleProgress,
           transform: "translateY(" + interpolate(subtitleProgress, [0, 1], [6, 0], { extrapolateRight: "clamp" }) + "px)",
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-        }}>{SCENE_PARAMS.subtitle.value}</div>
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+        }}>{(props.subtitle ?? SCENE_PARAMS.subtitle.value)}</div>
 
         <div style={{
           marginTop: minDim * 0.02,
           fontSize: minDim * 0.028,
-          color: SCENE_PARAMS.subtitleColor.value,
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
           maxWidth: "90%",
           opacity: tagDetailProgress,
           transform: "translateY(" + interpolate(tagDetailProgress, [0, 1], [6, 0], { extrapolateRight: "clamp" }) + "px)",
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-        }}>{SCENE_PARAMS.tagDetail.value}</div>
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+        }}>{(props.tagDetail ?? SCENE_PARAMS.tagDetail.value)}</div>
 
         <div style={{
           marginTop: minDim * 0.018,
           display: "flex",
           gap: minDim * 0.03,
-          color: SCENE_PARAMS.subtitleColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           fontSize: minDim * 0.022
         }}>
-          <div style={{ opacity: bylineProgress, transform: "translateY(" + interpolate(bylineProgress, [0, 1], [4, 0], { extrapolateRight: "clamp" }) + "px)" }}>{SCENE_PARAMS.byline.value}</div>
-          <div style={{ opacity: dateProgress, transform: "translateY(" + interpolate(dateProgress, [0, 1], [4, 0], { extrapolateRight: "clamp" }) + "px)" }}>{SCENE_PARAMS.date.value}</div>
+          <div style={{ opacity: bylineProgress, transform: "translateY(" + interpolate(bylineProgress, [0, 1], [4, 0], { extrapolateRight: "clamp" }) + "px)" }}>{(props.byline ?? SCENE_PARAMS.byline.value)}</div>
+          <div style={{ opacity: dateProgress, transform: "translateY(" + interpolate(dateProgress, [0, 1], [4, 0], { extrapolateRight: "clamp" }) + "px)" }}>{(props.date ?? SCENE_PARAMS.date.value)}</div>
         </div>
 
         <div style={{
@@ -211,11 +211,11 @@ function Scene() {
                 <div key={"c1" + i} style={{
                   fontSize: minDim * 0.022,
                   lineHeight: 1.45,
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                   marginBottom: minDim * 0.012,
                   opacity: lineProgress,
                   transform: "translateY(" + interpolate(lineProgress, [0, 1], [6, 0], { extrapolateRight: "clamp" }) + "px)",
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                 }}>{line}</div>
               );
             })}
@@ -223,7 +223,7 @@ function Scene() {
 
           <div style={{ width: "47%" }}>
             <div style={{
-              backgroundColor: SCENE_PARAMS.quoteBgColor.value,
+              backgroundColor: (props.quoteBgColor ?? SCENE_PARAMS.quoteBgColor.value),
               padding: minDim * 0.02,
               marginBottom: minDim * 0.018,
               opacity: spring({ frame: Math.max(0, adjustedFrame - (bodyStart + 3)), fps, config: { damping: 20, stiffness: 90 } }),
@@ -232,9 +232,9 @@ function Scene() {
               <div style={{
                 fontSize: minDim * 0.026,
                 lineHeight: 1.3,
-                color: SCENE_PARAMS.quoteTextColor.value,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-              }}>{SCENE_PARAMS.pullQuote.value}</div>
+                color: (props.quoteTextColor ?? SCENE_PARAMS.quoteTextColor.value),
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+              }}>{(props.pullQuote ?? SCENE_PARAMS.pullQuote.value)}</div>
             </div>
             {col2Lines.map((line, i) => {
               const lineProgress = spring({ frame: Math.max(0, adjustedFrame - (bodyStart + 10 + i * lineStagger)), fps, config: { damping: 22, stiffness: 90 } });
@@ -242,11 +242,11 @@ function Scene() {
                 <div key={"c2" + i} style={{
                   fontSize: minDim * 0.022,
                   lineHeight: 1.45,
-                  color: SCENE_PARAMS.textColor.value,
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                   marginBottom: minDim * 0.012,
                   opacity: lineProgress,
                   transform: "translateY(" + interpolate(lineProgress, [0, 1], [6, 0], { extrapolateRight: "clamp" }) + "px)",
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                 }}>{line}</div>
               );
             })}
@@ -261,26 +261,26 @@ function Scene() {
           transform: "translateY(" + interpolate(statProgress, [0, 1], [10, 0], { extrapolateRight: "clamp" }) + "px)"
         }}>
           {[
-            { v: SCENE_PARAMS.stat1Value.value, l: SCENE_PARAMS.stat1Label.value },
-            { v: SCENE_PARAMS.stat2Value.value, l: SCENE_PARAMS.stat2Label.value },
-            { v: SCENE_PARAMS.stat3Value.value, l: SCENE_PARAMS.stat3Label.value }
+            { v: (props.stat1Value ?? SCENE_PARAMS.stat1Value.value), l: (props.stat1Label ?? SCENE_PARAMS.stat1Label.value) },
+            { v: (props.stat2Value ?? SCENE_PARAMS.stat2Value.value), l: (props.stat2Label ?? SCENE_PARAMS.stat2Label.value) },
+            { v: (props.stat3Value ?? SCENE_PARAMS.stat3Value.value), l: (props.stat3Label ?? SCENE_PARAMS.stat3Label.value) }
           ].map((s, i) => (
             <div key={"stat" + i} style={{
               flex: 1,
-              backgroundColor: SCENE_PARAMS.statBgColor.value,
+              backgroundColor: (props.statBgColor ?? SCENE_PARAMS.statBgColor.value),
               padding: minDim * 0.018
             }}>
               <div style={{
                 fontSize: minDim * 0.035,
                 fontWeight: 700,
-                color: SCENE_PARAMS.textColor.value,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
               }}>{s.v}</div>
               <div style={{
                 fontSize: minDim * 0.02,
-                color: SCENE_PARAMS.subtitleColor.value,
+                color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
                 marginTop: minDim * 0.006,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
               }}>{s.l}</div>
             </div>
           ))}
@@ -288,8 +288,8 @@ function Scene() {
       </div>
 
       <AbsoluteFill style={{
-        backgroundImage: "radial-gradient(circle at center, rgba(0,0,0,0) 45%, " + SCENE_PARAMS.vignetteColor.value + " 100%)",
-        opacity: SCENE_PARAMS.vignetteOpacity.value
+        backgroundImage: "radial-gradient(circle at center, rgba(0,0,0,0) 45%, " + (props.vignetteColor ?? SCENE_PARAMS.vignetteColor.value) + " 100%)",
+        opacity: (props.vignetteOpacity ?? SCENE_PARAMS.vignetteOpacity.value)
       }} />
 
       <AbsoluteFill>
@@ -300,12 +300,12 @@ function Scene() {
           width: "35%",
           height: "120%",
           transform: "rotate(-10deg)",
-          background: "linear-gradient(90deg, rgba(0,0,0,0) 0%, " + SCENE_PARAMS.lightSweepColor.value + " 50%, rgba(0,0,0,0) 100%)",
-          opacity: SCENE_PARAMS.lightSweepOpacity.value
+          background: "linear-gradient(90deg, rgba(0,0,0,0) 0%, " + (props.lightSweepColor ?? SCENE_PARAMS.lightSweepColor.value) + " 50%, rgba(0,0,0,0) 100%)",
+          opacity: (props.lightSweepOpacity ?? SCENE_PARAMS.lightSweepOpacity.value)
         }} />
       </AbsoluteFill>
 
-      <AbsoluteFill style={{ opacity: SCENE_PARAMS.grainOpacity.value }}>
+      <AbsoluteFill style={{ opacity: (props.grainOpacity ?? SCENE_PARAMS.grainOpacity.value) }}>
         <svg width={width} height={height} style={{ width: "100%", height: "100%" }}>
           <filter id="noiseFilter">
             <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed={Math.floor(frame * speed)} />

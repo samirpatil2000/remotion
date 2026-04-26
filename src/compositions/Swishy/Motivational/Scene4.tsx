@@ -20,29 +20,29 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
-  const opacity = interpolate(adjustedFrame, [8, 28], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
-  const slideY = interpolate(adjustedFrame, [8, 28], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const opacity = interpolate(adjustedFrame, [8, 28], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
+  const slideY = interpolate(adjustedFrame, [8, 28], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{
           fontSize: minDim * 0.085,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, serif",
           opacity,
           transform: "translateY(" + slideY + "px)",
           textAlign: "center",
           letterSpacing: 0.2
         }}>
-          {SCENE_PARAMS.message.value}
+          {(props.message ?? SCENE_PARAMS.message.value)}
         </div>
       </div>
     </AbsoluteFill>

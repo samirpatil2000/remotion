@@ -23,18 +23,18 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const titleProgress = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
-  const titleY = interpolate(titleProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+  const titleY = interpolate(titleProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
 
   const metricProgress = spring({ frame: Math.max(0, adjustedFrame - 10), fps, config: { damping: 20, stiffness: 90 } });
-  const metricY = interpolate(metricProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value * 0.6, 0], { extrapolateRight: "clamp" });
+  const metricY = interpolate(metricProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) * 0.6, 0], { extrapolateRight: "clamp" });
 
   const lineProgress = interpolate(adjustedFrame, [10, 60], [0, 1], { extrapolateRight: "clamp" });
 
@@ -44,19 +44,19 @@ function Scene() {
   const barGap = width * (isPortrait ? 0.04 : 0.03);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ width: "100%", height: "100%", transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ width: "100%", height: "100%", transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ position: "absolute", top: "8%", left: "8%", opacity: titleProgress, transform: "translateY(" + titleY + "px)" }}>
-          <div style={{ fontSize: minDim * 0.08, fontWeight: 700, color: SCENE_PARAMS.textColor.value, fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui" }}>
-            {SCENE_PARAMS.title.value}
+          <div style={{ fontSize: minDim * 0.08, fontWeight: 700, color: (props.textColor ?? SCENE_PARAMS.textColor.value), fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui" }}>
+            {(props.title ?? SCENE_PARAMS.title.value)}
           </div>
         </div>
 
         <div style={{ position: "absolute", top: "22%", left: "8%", opacity: metricProgress, transform: "translateY(" + metricY + "px)" }}>
-          <div style={{ fontSize: minDim * 0.12, fontWeight: 800, color: SCENE_PARAMS.textColor.value, fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui" }}>
-            {SCENE_PARAMS.metric.value}
+          <div style={{ fontSize: minDim * 0.12, fontWeight: 800, color: (props.textColor ?? SCENE_PARAMS.textColor.value), fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui" }}>
+            {(props.metric ?? SCENE_PARAMS.metric.value)}
           </div>
-          <div style={{ marginTop: minDim * 0.008, fontSize: minDim * 0.03, fontWeight: 500, color: SCENE_PARAMS.secondaryColor.value, fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui" }}>
+          <div style={{ marginTop: minDim * 0.008, fontSize: minDim * 0.03, fontWeight: 500, color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value), fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui" }}>
             Weekly trend
           </div>
         </div>
@@ -64,7 +64,7 @@ function Scene() {
         <svg style={{ position: "absolute", left: "6%", top: "40%", width: "88%", height: "25%" }} viewBox={"0 0 " + width + " " + height * 0.25}>
           <path
             d={"M 0 " + height * 0.21 + " Q " + width * 0.2 + " " + height * 0.1 + " " + width * 0.4 + " " + height * 0.16 + " T " + width * 0.7 + " " + height * 0.05 + " T " + width + " " + height * 0.12}
-            stroke={SCENE_PARAMS.accentColor.value}
+            stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
             strokeWidth={3}
             fill="none"
             strokeDasharray={width * 2}
@@ -74,7 +74,7 @@ function Scene() {
 
         <div style={{ position: "absolute", left: "8%", bottom: "10%", display: "flex", alignItems: "flex-end" }}>
           {bars.map((h, i) => {
-            const delay = 10 + i * SCENE_PARAMS.staggerDelay.value;
+            const delay = 10 + i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const barProgress = interpolate(adjustedFrame, [delay, delay + 30], [0, 1], { extrapolateRight: "clamp" });
             const barHeight = barMaxHeight * h * barProgress;
             return (
@@ -82,9 +82,9 @@ function Scene() {
                 width: barWidth,
                 height: barHeight,
                 marginRight: i === bars.length - 1 ? 0 : barGap,
-                backgroundColor: SCENE_PARAMS.accentColor.value,
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 borderRadius: barWidth * 0.15,
-                opacity: SCENE_PARAMS.opacity.value
+                opacity: (props.opacity ?? SCENE_PARAMS.opacity.value)
               }} />
             );
           })}

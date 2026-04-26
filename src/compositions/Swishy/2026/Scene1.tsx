@@ -18,14 +18,14 @@ const SCENE_PARAMS = {
   flickerEnabled: { type: "boolean", label: "Digital Flicker", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const text = SCENE_PARAMS.displayText.value.slice(0, 4);
+  const text = (props.displayText ?? SCENE_PARAMS.displayText.value).slice(0, 4);
   
   // Split text into two rows for the "stacked" look
   const row1 = text.substring(0, 2);
@@ -45,8 +45,8 @@ function Scene() {
     ' ': ['      ','      ','      ','      ','      ','      '],
   };
 
-  const transitionStart = SCENE_PARAMS.transitionStart.value;
-  const transitionDuration = SCENE_PARAMS.transitionDuration.value;
+  const transitionStart = (props.transitionStart ?? SCENE_PARAMS.transitionStart.value);
+  const transitionDuration = (props.transitionDuration ?? SCENE_PARAMS.transitionDuration.value);
   
   const morphProgress = interpolate(
     adjustedFrame,
@@ -55,13 +55,13 @@ function Scene() {
     { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
   );
 
-  const flicker = SCENE_PARAMS.flickerEnabled.value 
+  const flicker = (props.flickerEnabled ?? SCENE_PARAMS.flickerEnabled.value) 
     ? interpolate(Math.sin(adjustedFrame * 0.8), [-1, 1], [0.92, 1]) 
     : 1;
 
   const renderBlockDigit = (char, index, isTopRow) => {
     const pattern = asciiPatterns[char] || asciiPatterns[' '];
-    const size = SCENE_PARAMS.blockSize.value;
+    const size = (props.blockSize ?? SCENE_PARAMS.blockSize.value);
     const charDelay = (isTopRow ? 0 : 10) + (index * 5);
     
     const entrance = spring({
@@ -87,10 +87,10 @@ function Scene() {
         {/* Standard High-Res Text Layer */}
         <div style={{
           position: 'absolute',
-          fontFamily: SCENE_PARAMS.fontFamily.value + ', system-ui, sans-serif',
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ', system-ui, sans-serif',
           fontSize: minDim * 0.45,
           fontWeight: 900,
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: 1 - morphProgress,
           zIndex: 2,
         }}>
@@ -111,7 +111,7 @@ function Scene() {
                 <div key={cIdx} style={{
                   width: size,
                   height: size,
-                  backgroundColor: cell === '█' ? SCENE_PARAMS.textColor.value : 'transparent',
+                  backgroundColor: cell === '█' ? (props.textColor ?? SCENE_PARAMS.textColor.value) : 'transparent',
                 }} />
               ))}
             </div>
@@ -123,13 +123,13 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: 'center', 
       alignItems: 'center', 
       overflow: 'hidden'
     }}>
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

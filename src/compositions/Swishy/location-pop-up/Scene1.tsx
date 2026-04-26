@@ -22,15 +22,15 @@ const SCENE_PARAMS = {
   showPulse: { type: "boolean", label: "Show Pulse", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const pinBaseSize = minDim * 0.12 * SCENE_PARAMS.pinSize.value;
+  const pinBaseSize = minDim * 0.12 * (props.pinSize ?? SCENE_PARAMS.pinSize.value);
   
   // Pin drop animation (frames 0-25)
   const dropProgress = spring({
@@ -111,7 +111,7 @@ function Scene() {
     [40, 50, 60, 70, 80, 90],
     [0.4, 0.8, 0.5, 0.9, 0.6, 0.7]
   );
-  const glowOpacity = dropProgress * glowPulse * SCENE_PARAMS.glowIntensity.value;
+  const glowOpacity = dropProgress * glowPulse * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   
   // Pin opacity
   const pinOpacity = interpolate(dropProgress, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
@@ -125,13 +125,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -139,7 +139,7 @@ function Scene() {
       }}>
         
         {/* Pulse rings */}
-        {SCENE_PARAMS.showPulse.value && (
+        {(props.showPulse ?? SCENE_PARAMS.showPulse.value) && (
           <>
             <div style={{
               position: "absolute",
@@ -148,7 +148,7 @@ function Scene() {
               width: pinBaseSize * 1.2,
               height: pinBaseSize * 1.2,
               borderRadius: "50%",
-              border: "3px solid " + SCENE_PARAMS.pinColor.value,
+              border: "3px solid " + (props.pinColor ?? SCENE_PARAMS.pinColor.value),
               transform: "translate(-50%, -50%) scale(" + pulseScale + ")",
               opacity: pulseOpacity,
             }} />
@@ -159,7 +159,7 @@ function Scene() {
               width: pinBaseSize * 1.2,
               height: pinBaseSize * 1.2,
               borderRadius: "50%",
-              border: "2px solid " + SCENE_PARAMS.pinColor.value,
+              border: "2px solid " + (props.pinColor ?? SCENE_PARAMS.pinColor.value),
               transform: "translate(-50%, -50%) scale(" + pulse2Scale + ")",
               opacity: pulse2Opacity,
             }} />
@@ -174,7 +174,7 @@ function Scene() {
           width: pinBaseSize * 3,
           height: pinBaseSize * 3,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + " 0%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + " 0%, transparent 70%)",
           transform: "translate(-50%, -50%)",
           opacity: glowOpacity,
           filter: "blur(" + (minDim * 0.03) + "px)",
@@ -212,7 +212,7 @@ function Scene() {
             <defs>
               <linearGradient id="pinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#f87171" />
-                <stop offset="50%" stopColor={SCENE_PARAMS.pinColor.value} />
+                <stop offset="50%" stopColor={(props.pinColor ?? SCENE_PARAMS.pinColor.value)} />
                 <stop offset="100%" stopColor="#b91c1c" />
               </linearGradient>
               <filter id="pinShadow">
@@ -225,7 +225,7 @@ function Scene() {
               filter="url(#pinShadow)"
             />
             <circle cx="12" cy="11" r="5" fill="white" />
-            <circle cx="12" cy="11" r="3" fill={SCENE_PARAMS.pinColor.value} opacity="0.6" />
+            <circle cx="12" cy="11" r="3" fill={(props.pinColor ?? SCENE_PARAMS.pinColor.value)} opacity="0.6" />
           </svg>
         </div>
         
@@ -238,7 +238,7 @@ function Scene() {
           transformOrigin: "center bottom",
           opacity: popupProgress,
           width: popupWidth,
-          backgroundColor: SCENE_PARAMS.popupBgColor.value,
+          backgroundColor: (props.popupBgColor ?? SCENE_PARAMS.popupBgColor.value),
           borderRadius: minDim * 0.025,
           padding: minDim * 0.03,
           boxShadow: "0 " + (minDim * 0.015) + "px " + (minDim * 0.04) + "px rgba(0,0,0,0.3), 0 " + (minDim * 0.005) + "px " + (minDim * 0.015) + "px rgba(0,0,0,0.2)",
@@ -257,7 +257,7 @@ function Scene() {
             height: 0,
             borderLeft: (minDim * 0.025) + "px solid transparent",
             borderRight: (minDim * 0.025) + "px solid transparent",
-            borderTop: (minDim * 0.02) + "px solid " + SCENE_PARAMS.popupBgColor.value,
+            borderTop: (minDim * 0.02) + "px solid " + (props.popupBgColor ?? SCENE_PARAMS.popupBgColor.value),
           }} />
           
           {/* Location icon */}
@@ -265,27 +265,27 @@ function Scene() {
             width: minDim * 0.05,
             height: minDim * 0.05,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.accentColor.value + "30",
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "30",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             marginBottom: minDim * 0.005,
           }}>
-            <svg width={minDim * 0.025} height={minDim * 0.03} viewBox="0 0 24 32" fill={SCENE_PARAMS.accentColor.value}>
+            <svg width={minDim * 0.025} height={minDim * 0.03} viewBox="0 0 24 32" fill={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}>
               <path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20c0-6.6-5.4-12-12-12zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" />
             </svg>
           </div>
           
           {/* Location name */}
           <h2 style={{
-            color: SCENE_PARAMS.popupTextColor.value,
+            color: (props.popupTextColor ?? SCENE_PARAMS.popupTextColor.value),
             fontSize: minDim * 0.045,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             margin: 0,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.locationName.value}
+            {(props.locationName ?? SCENE_PARAMS.locationName.value)}
           </h2>
           
           {/* Location detail */}
@@ -293,11 +293,11 @@ function Scene() {
             color: "#94a3b8",
             fontSize: minDim * 0.028,
             fontWeight: 400,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             margin: 0,
             textAlign: "center",
           }}>
-            {SCENE_PARAMS.locationDetail.value}
+            {(props.locationDetail ?? SCENE_PARAMS.locationDetail.value)}
           </p>
         </div>
         

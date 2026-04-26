@@ -22,17 +22,17 @@ const SCENE_PARAMS = {
   typingSpeed: { type: "number", label: "Typing Speed (frames)", value: 8, min: 3, max: 15, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const typingSpeed = SCENE_PARAMS.typingSpeed.value;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const typingSpeed = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value);
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
-  const text = SCENE_PARAMS.typedText.value;
+  const text = (props.typedText ?? SCENE_PARAMS.typedText.value);
   const charIndex = Math.floor(Math.max(0, adjustedFrame - 40) / typingSpeed);
   const displayedText = text.slice(0, Math.min(charIndex, text.length));
   const currentChar = charIndex < text.length ? text[charIndex] : null;
@@ -98,12 +98,12 @@ function Scene() {
         style={{
           width: keyWidth,
           height: keySize,
-          backgroundColor: SCENE_PARAMS.keyColor.value,
+          backgroundColor: (props.keyColor ?? SCENE_PARAMS.keyColor.value),
           borderRadius: keySize * 0.5,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          color: SCENE_PARAMS.keyTextColor.value,
+          color: (props.keyTextColor ?? SCENE_PARAMS.keyTextColor.value),
           fontSize: isSpace ? keySize * 0.25 : keySize * 0.4,
           fontWeight: 500,
           fontFamily: "Georgia, serif",
@@ -145,7 +145,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -176,7 +176,7 @@ function Scene() {
           <div style={{
             width: paperWidth,
             height: paperHeight,
-            backgroundColor: SCENE_PARAMS.paperColor.value,
+            backgroundColor: (props.paperColor ?? SCENE_PARAMS.paperColor.value),
             position: "relative",
             margin: "0 auto",
             marginBottom: -minDim * 0.02,
@@ -218,9 +218,9 @@ function Scene() {
               <div style={{
                 position: "relative",
                 zIndex: 1,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", monospace",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", monospace",
                 fontSize: minDim * 0.026,
-                color: SCENE_PARAMS.inkColor.value,
+                color: (props.inkColor ?? SCENE_PARAMS.inkColor.value),
                 lineHeight: minDim * 0.035 + "px",
                 whiteSpace: "pre",
                 marginLeft: minDim * 0.04,
@@ -245,7 +245,7 @@ function Scene() {
           <div style={{
             width: typewriterWidth,
             height: minDim * 0.08,
-            backgroundColor: SCENE_PARAMS.typewriterAccent.value,
+            backgroundColor: (props.typewriterAccent ?? SCENE_PARAMS.typewriterAccent.value),
             borderRadius: minDim * 0.01 + " " + minDim * 0.01 + " 0 0",
             display: "flex",
             alignItems: "center",
@@ -294,7 +294,7 @@ function Scene() {
               transform: "translateY(-50%)",
               width: minDim * 0.025,
               height: minDim * 0.025,
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               borderRadius: "50%",
               boxShadow: "inset 0 -2px 4px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3)",
               opacity: bellOpacity,
@@ -306,7 +306,7 @@ function Scene() {
               top: minDim * 0.015,
               width: minDim * 0.12,
               height: minDim * 0.012,
-              backgroundColor: SCENE_PARAMS.ribbonColor.value,
+              backgroundColor: (props.ribbonColor ?? SCENE_PARAMS.ribbonColor.value),
               borderRadius: minDim * 0.002,
               boxShadow: "inset 0 1px 2px rgba(255,255,255,0.1)",
             }} />
@@ -316,7 +316,7 @@ function Scene() {
               top: minDim * 0.015,
               width: minDim * 0.12,
               height: minDim * 0.012,
-              backgroundColor: SCENE_PARAMS.ribbonColor.value,
+              backgroundColor: (props.ribbonColor ?? SCENE_PARAMS.ribbonColor.value),
               borderRadius: minDim * 0.002,
               boxShadow: "inset 0 1px 2px rgba(255,255,255,0.1)",
             }} />
@@ -324,7 +324,7 @@ function Scene() {
           
           <div style={{
             width: typewriterWidth,
-            backgroundColor: SCENE_PARAMS.typewriterColor.value,
+            backgroundColor: (props.typewriterColor ?? SCENE_PARAMS.typewriterColor.value),
             borderRadius: "0 0 " + minDim * 0.02 + "px " + minDim * 0.02 + "px",
             padding: minDim * 0.02,
             paddingTop: minDim * 0.03,
@@ -373,12 +373,12 @@ function Scene() {
               <div style={{
                 width: minDim * 0.05,
                 height: minDim * 0.003,
-                backgroundColor: SCENE_PARAMS.accentColor.value,
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 borderRadius: minDim * 0.001,
               }} />
               <div style={{
                 fontSize: minDim * 0.012,
-                color: SCENE_PARAMS.accentColor.value,
+                color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 fontFamily: "Georgia, serif",
                 letterSpacing: minDim * 0.004,
                 fontWeight: 600,
@@ -388,7 +388,7 @@ function Scene() {
               <div style={{
                 width: minDim * 0.05,
                 height: minDim * 0.003,
-                backgroundColor: SCENE_PARAMS.accentColor.value,
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                 borderRadius: minDim * 0.001,
               }} />
             </div>

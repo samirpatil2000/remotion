@@ -18,11 +18,11 @@ const SCENE_PARAMS = {
   paddingVertical: { type: "number", label: "Padding Vertical", value: 64, min: 20, max: 120, step: 8 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Scale animation - badge scales up with a slight bounce
@@ -44,9 +44,9 @@ function Scene() {
 
   // Calculate responsive sizes
   const fontSize = minDim * 0.065;
-  const badgePaddingH = (minDim * SCENE_PARAMS.paddingHorizontal.value) / 1000;
-  const badgePaddingV = (minDim * SCENE_PARAMS.paddingVertical.value) / 1000;
-  const borderRadius = (minDim * SCENE_PARAMS.borderRadius.value) / 1000;
+  const badgePaddingH = (minDim * (props.paddingHorizontal ?? SCENE_PARAMS.paddingHorizontal.value)) / 1000;
+  const badgePaddingV = (minDim * (props.paddingVertical ?? SCENE_PARAMS.paddingVertical.value)) / 1000;
+  const borderRadius = (minDim * (props.borderRadius ?? SCENE_PARAMS.borderRadius.value)) / 1000;
   const triangleSize = minDim * 0.04;
 
   const badgeScale = interpolate(scaleProgress, [0, 1], [0.3, 1]);
@@ -55,12 +55,12 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center"
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         position: "relative",
         display: "flex",
@@ -69,7 +69,7 @@ function Scene() {
       }}>
         {/* Main badge */}
         <div style={{
-          backgroundColor: SCENE_PARAMS.badgeColor.value,
+          backgroundColor: (props.badgeColor ?? SCENE_PARAMS.badgeColor.value),
           borderRadius: borderRadius,
           padding: badgePaddingV + "px " + badgePaddingH + "px",
           boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
@@ -79,7 +79,7 @@ function Scene() {
           transform: "scale(" + badgeScale + ")"
         }}>
           <h1 style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: fontSize,
             fontWeight: 900,
             margin: 0,
@@ -88,9 +88,9 @@ function Scene() {
             textTransform: "uppercase",
             whiteSpace: "nowrap",
             textAlign: "center",
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
           }}>
-            {SCENE_PARAMS.brandText.value}
+            {(props.brandText ?? SCENE_PARAMS.brandText.value)}
           </h1>
         </div>
 
@@ -113,7 +113,7 @@ function Scene() {
             preserveAspectRatio="none" 
             style={{ display: "block" }}
           >
-            <path d="M0 0 L100 0 L20 100 Z" fill={SCENE_PARAMS.badgeColor.value} />
+            <path d="M0 0 L100 0 L20 100 Z" fill={(props.badgeColor ?? SCENE_PARAMS.badgeColor.value)} />
           </svg>
         </div>
       </div>

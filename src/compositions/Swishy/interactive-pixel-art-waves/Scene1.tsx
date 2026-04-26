@@ -26,36 +26,36 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const isPortrait = height > width;
 
-  const pixelSize = minDim * SCENE_PARAMS.pixelScale.value * (isPortrait ? 1 : 0.9);
+  const pixelSize = minDim * (props.pixelScale ?? SCENE_PARAMS.pixelScale.value) * (isPortrait ? 1 : 0.9);
   const cols = Math.floor(width / pixelSize) + 1;
   const rows = Math.floor(height / pixelSize) + 1;
 
   const time = adjustedFrame / fps;
-  const bandRows = Math.max(2, Math.floor(rows * SCENE_PARAMS.bandScale.value));
+  const bandRows = Math.max(2, Math.floor(rows * (props.bandScale ?? SCENE_PARAMS.bandScale.value)));
   const crestRows = Math.max(1, Math.floor(bandRows * 0.35));
 
   const entranceProgress = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
-  const translateY = interpolate(entranceProgress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const containerOpacity = interpolate(entranceProgress, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const translateY = interpolate(entranceProgress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const containerOpacity = interpolate(entranceProgress, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   const blocks = [];
-  const layers = SCENE_PARAMS.layerCount.value;
+  const layers = (props.layerCount ?? SCENE_PARAMS.layerCount.value);
 
   for (let l = 0; l < layers; l++) {
     const depth = l / Math.max(1, layers - 1);
-    const base = Math.min(rows - 1, rows * (0.18 + l * SCENE_PARAMS.layerGap.value));
-    const amplitude = rows * SCENE_PARAMS.waveAmplitude.value * (1 - depth * 0.45);
-    const speed = SCENE_PARAMS.waveSpeed.value * (1 + depth * 0.35);
+    const base = Math.min(rows - 1, rows * (0.18 + l * (props.layerGap ?? SCENE_PARAMS.layerGap.value)));
+    const amplitude = rows * (props.waveAmplitude ?? SCENE_PARAMS.waveAmplitude.value) * (1 - depth * 0.45);
+    const speed = (props.waveSpeed ?? SCENE_PARAMS.waveSpeed.value) * (1 + depth * 0.35);
     const baseOpacity = 0.35 + (1 - depth) * 0.6;
     const crestOpacity = 0.4 + (1 - depth) * 0.6;
-    const layerColor = depth < 0.5 ? SCENE_PARAMS.primaryColor.value : SCENE_PARAMS.deepColor.value;
+    const layerColor = depth < 0.5 ? (props.primaryColor ?? SCENE_PARAMS.primaryColor.value) : (props.deepColor ?? SCENE_PARAMS.deepColor.value);
 
     for (let i = 0; i < cols; i++) {
       const phase = (i / cols) * Math.PI * 2;
@@ -74,7 +74,7 @@ function Scene() {
                 top: r * pixelSize,
                 width: pixelSize,
                 height: pixelSize,
-                backgroundColor: isCrest ? SCENE_PARAMS.accentColor.value : layerColor,
+                backgroundColor: isCrest ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : layerColor,
                 opacity: isCrest ? crestOpacity : baseOpacity
               }}
             />
@@ -85,15 +85,15 @@ function Scene() {
   }
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div
         style={{
           width: "100%",
           height: "100%",
-          transform: "translateY(" + translateY + "px) scale(" + SCENE_PARAMS.scale.value + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)",
+          transform: "translateY(" + translateY + "px) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
           transformOrigin: "center center",
           opacity: containerOpacity,
-          filter: "blur(" + SCENE_PARAMS.blur.value + "px)"
+          filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)"
         }}
       >
         {blocks}

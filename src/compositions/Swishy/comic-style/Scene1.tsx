@@ -19,14 +19,14 @@ const SCENE_PARAMS = {
   burstColor: { type: "color", label: "Burst Color", value: "#5933b0" },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const bounceIntensity = SCENE_PARAMS.bounceIntensity.value;
+  const bounceIntensity = (props.bounceIntensity ?? SCENE_PARAMS.bounceIntensity.value);
   
   const entryProgress = spring({ 
     frame: adjustedFrame, 
@@ -49,7 +49,7 @@ function Scene() {
   
   const wobble = Math.sin(adjustedFrame * 0.15) * 2;
   
-  const burstOpacity = SCENE_PARAMS.showBurst.value 
+  const burstOpacity = (props.showBurst ?? SCENE_PARAMS.showBurst.value) 
     ? interpolate(adjustedFrame, [8, 15, 50, 70], [0, 1, 1, 0], { extrapolateRight: "clamp" })
     : 0;
   
@@ -81,7 +81,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -90,17 +90,17 @@ function Scene() {
         position: "absolute",
         width: "100%",
         height: "100%",
-        backgroundImage: "radial-gradient(circle, " + SCENE_PARAMS.shadowColor.value + " 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(circle, " + (props.shadowColor ?? SCENE_PARAMS.shadowColor.value) + " 1px, transparent 1px)",
         backgroundSize: (minDim * 0.02) + "px " + (minDim * 0.02) + "px",
         opacity: halftoneOpacity,
       }} />
       
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         position: "relative",
       }}>
-        {SCENE_PARAMS.showBurst.value && (
+        {(props.showBurst ?? SCENE_PARAMS.showBurst.value) && (
           <div style={{
             position: "absolute",
             top: "50%",
@@ -113,7 +113,7 @@ function Scene() {
                 position: "absolute",
                 width: line.length,
                 height: minDim * 0.025,
-                backgroundColor: SCENE_PARAMS.burstColor.value,
+                backgroundColor: (props.burstColor ?? SCENE_PARAMS.burstColor.value),
                 transform: "rotate(" + line.angle + "deg) translateX(" + (minDim * 0.2) + "px)",
                 transformOrigin: "left center",
                 opacity: line.opacity,
@@ -130,32 +130,32 @@ function Scene() {
         }}>
           <h1 style={{
             position: "absolute",
-            color: SCENE_PARAMS.shadowColor.value,
+            color: (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
             fontSize: minDim * 0.22,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", Impact, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Impact, sans-serif",
             margin: 0,
             padding: "0 " + (minDim * 0.05) + "px",
             letterSpacing: "0.05em",
             transform: "translate(" + (minDim * 0.015) + "px, " + (minDim * 0.015) + "px)",
-            WebkitTextStroke: (minDim * 0.008) + "px " + SCENE_PARAMS.shadowColor.value,
+            WebkitTextStroke: (minDim * 0.008) + "px " + (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
           }}>
-            {SCENE_PARAMS.text.value}
+            {(props.text ?? SCENE_PARAMS.text.value)}
           </h1>
           
           <h1 style={{
             position: "relative",
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.22,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", Impact, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", Impact, sans-serif",
             margin: 0,
             padding: "0 " + (minDim * 0.05) + "px",
             letterSpacing: "0.05em",
-            WebkitTextStroke: (minDim * 0.012) + "px " + SCENE_PARAMS.outlineColor.value,
+            WebkitTextStroke: (minDim * 0.012) + "px " + (props.outlineColor ?? SCENE_PARAMS.outlineColor.value),
             paintOrder: "stroke fill",
           }}>
-            {SCENE_PARAMS.text.value}
+            {(props.text ?? SCENE_PARAMS.text.value)}
           </h1>
         </div>
       </div>

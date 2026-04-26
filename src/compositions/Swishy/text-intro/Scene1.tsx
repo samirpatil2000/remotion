@@ -27,14 +27,14 @@ const SCENE_PARAMS = {
   showLine: { type: "boolean", label: "Show Line", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const entranceOffset = SCENE_PARAMS.entranceOffset.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const entranceOffset = (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value);
   
   // Responsive calculations
   const minDim = Math.min(width, height);
@@ -49,15 +49,15 @@ function Scene() {
   const subtitleOpacity = interpolate(adjustedFrame, [20, 40], [0, 1], { extrapolateRight: "clamp" });
   const subtitleY = interpolate(adjustedFrame, [20, 45], [20, 0], { extrapolateRight: "clamp" });
   
-  const lineWidth = SCENE_PARAMS.showLine.value 
+  const lineWidth = (props.showLine ?? SCENE_PARAMS.showLine.value) 
     ? interpolate(adjustedFrame, [10, 40], [0, width * 0.3], { extrapolateRight: "clamp" })
     : 0;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center" }}>
         {/* Animated line */}
-        {SCENE_PARAMS.showLine.value && (
+        {(props.showLine ?? SCENE_PARAMS.showLine.value) && (
           <div style={{
             position: "absolute",
             top: height * 0.35,
@@ -65,14 +65,14 @@ function Scene() {
             transform: "translateX(-50%)",
             width: lineWidth,
             height: 3,
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             borderRadius: 2,
           }} />
         )}
         
         {/* Title */}
         <h1 style={{
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           fontSize: fontSize,
           fontWeight: 700,
           fontFamily: "system-ui, -apple-system, sans-serif",
@@ -81,12 +81,12 @@ function Scene() {
           textAlign: "center",
           margin: 0,
         }}>
-          {SCENE_PARAMS.title.value}
+          {(props.title ?? SCENE_PARAMS.title.value)}
         </h1>
         
         {/* Subtitle */}
         <p style={{
-          color: SCENE_PARAMS.subtitleColor.value,
+          color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
           fontSize: subtitleSize,
           fontFamily: "system-ui, -apple-system, sans-serif",
           opacity: subtitleOpacity,
@@ -94,7 +94,7 @@ function Scene() {
           marginTop: minDim * 0.02,
           textAlign: "center",
         }}>
-          {SCENE_PARAMS.subtitle.value}
+          {(props.subtitle ?? SCENE_PARAMS.subtitle.value)}
         </p>
       </div>
     </AbsoluteFill>

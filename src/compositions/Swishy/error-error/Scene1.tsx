@@ -17,11 +17,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Entrance animation
@@ -32,7 +32,7 @@ function Scene() {
   });
 
   // Continuous pulsing glow effect
-  const pulseSpeed = SCENE_PARAMS.pulseSpeed.value;
+  const pulseSpeed = (props.pulseSpeed ?? SCENE_PARAMS.pulseSpeed.value);
   const pulseCycle = (adjustedFrame * pulseSpeed) / fps;
   const pulseValue = Math.sin(pulseCycle * Math.PI * 2) * 0.5 + 0.5;
   
@@ -41,30 +41,30 @@ function Scene() {
   const scalePulse = scaleBase + (pulseValue * 0.1);
   
   // Glow pulse
-  const baseGlow = SCENE_PARAMS.glowIntensity.value;
+  const baseGlow = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   const glowPulse = baseGlow + (pulseValue * baseGlow * 0.5);
   
   // Opacity pulse for the glow
   const opacityPulse = 0.7 + (pulseValue * 0.3);
 
-  const iconSize = SCENE_PARAMS.iconSize.value * (minDim / 1080);
+  const iconSize = (props.iconSize ?? SCENE_PARAMS.iconSize.value) * (minDim / 1080);
   const strokeWidth = 2 * (minDim / 1080);
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center"
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center"
       }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={SCENE_PARAMS.iconColor.value}
+          stroke={(props.iconColor ?? SCENE_PARAMS.iconColor.value)}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -72,7 +72,7 @@ function Scene() {
             width: iconSize,
             height: iconSize,
             transform: "scale(" + (entranceProgress * scalePulse) + ")",
-            filter: "drop-shadow(0px 0px " + glowPulse + "px " + SCENE_PARAMS.glowColor.value + ")",
+            filter: "drop-shadow(0px 0px " + glowPulse + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + ")",
             opacity: entranceProgress * opacityPulse
           }}
         >

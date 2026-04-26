@@ -47,11 +47,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 0.9, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const isPortrait = height > width;
 
   const cameraProgress = interpolate(adjustedFrame, [0, 210], [0, 1], { extrapolateRight: "clamp" });
@@ -61,11 +61,11 @@ function Scene() {
   const cameraPanX = interpolate(cameraProgress, [0, 1], [-width * 0.012, width * 0.018], { extrapolateRight: "clamp" });
   const cameraPanY = interpolate(cameraProgress, [0, 1], [height * 0.012, -height * 0.01], { extrapolateRight: "clamp" });
 
-  const delayBase = SCENE_PARAMS.staggerDelay.value;
+  const delayBase = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
 
   const cardEntrance = (delay, depth) => {
     const progress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
-    const translateY = interpolate(progress, [0, 1], [SCENE_PARAMS.entranceOffset.value + depth, 0], { extrapolateRight: "clamp" });
+    const translateY = interpolate(progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value) + depth, 0], { extrapolateRight: "clamp" });
     const translateZ = interpolate(progress, [0, 1], [depth * -1, 0], { extrapolateRight: "clamp" });
     const rotateX = interpolate(progress, [0, 1], [4, 0], { extrapolateRight: "clamp" });
     const rotateY = interpolate(progress, [0, 1], [-3, 0], { extrapolateRight: "clamp" });
@@ -93,11 +93,11 @@ function Scene() {
 
   const statProgress = interpolate(adjustedFrame, [45, 105], [0, 1], { extrapolateRight: "clamp" });
   const statEase = statProgress * statProgress * (3 - 2 * statProgress);
-  const statValue = (SCENE_PARAMS.statValueNumber.value * statEase).toFixed(1);
+  const statValue = ((props.statValueNumber ?? SCENE_PARAMS.statValueNumber.value) * statEase).toFixed(1);
 
   const sideProgress = interpolate(adjustedFrame, [70, 130], [0, 1], { extrapolateRight: "clamp" });
   const sideEase = sideProgress * sideProgress * (3 - 2 * sideProgress);
-  const sideValue = (SCENE_PARAMS.sideMetricNumber.value * sideEase).toFixed(1);
+  const sideValue = ((props.sideMetricNumber ?? SCENE_PARAMS.sideMetricNumber.value) * sideEase).toFixed(1);
 
   const glowShadow = "0 30px 80px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(213,216,222,0.2), inset 0 0 16px rgba(79,141,255,0.12)";
 
@@ -115,12 +115,12 @@ function Scene() {
   const bottomY = topY + topRowHeight + rowGap;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         inset: 0,
-        background: "radial-gradient(120% 120% at 15% 0%, " + SCENE_PARAMS.glowColor.value + " 0%, " + SCENE_PARAMS.midColor.value + " 45%, " + SCENE_PARAMS.backgroundColor.value + " 100%)",
-        filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+        background: "radial-gradient(120% 120% at 15% 0%, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + " 0%, " + (props.midColor ?? SCENE_PARAMS.midColor.value) + " 45%, " + (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) + " 100%)",
+        filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
         opacity: 0.85
       }} />
 
@@ -135,7 +135,7 @@ function Scene() {
         position: "absolute",
         width: "100%",
         height: "100%",
-        transform: "scale(" + (SCENE_PARAMS.scale.value * cameraZoom) + ") translate(" + cameraPanX + "px," + cameraPanY + "px) perspective(1400px) rotateX(" + cameraRotateX + "deg) rotateY(" + cameraRotateY + "deg)",
+        transform: "scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * cameraZoom) + ") translate(" + cameraPanX + "px," + cameraPanY + "px) perspective(1400px) rotateX(" + cameraRotateX + "deg) rotateY(" + cameraRotateY + "deg)",
         transformOrigin: "center center",
         display: "flex",
         justifyContent: "center",
@@ -147,13 +147,13 @@ function Scene() {
           left: marginX,
           fontSize: minDim * 0.06,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
           letterSpacing: 0.6,
-          opacity: appTitleProgress * SCENE_PARAMS.opacity.value,
+          opacity: appTitleProgress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + titleY + "px)"
         }}>
-          {SCENE_PARAMS.appTitle.value}
+          {(props.appTitle ?? SCENE_PARAMS.appTitle.value)}
         </div>
 
         <div style={{
@@ -162,12 +162,12 @@ function Scene() {
           height: topRowHeight,
           top: topY,
           left: marginX,
-          backgroundColor: SCENE_PARAMS.glassTint.value,
+          backgroundColor: (props.glassTint ?? SCENE_PARAMS.glassTint.value),
           borderRadius: minDim * 0.04,
-          border: "1px solid " + SCENE_PARAMS.glassBorder.value,
+          border: "1px solid " + (props.glassBorder ?? SCENE_PARAMS.glassBorder.value),
           backdropFilter: "blur(16px)",
           boxShadow: glowShadow,
-          opacity: mainCard.progress * SCENE_PARAMS.opacity.value,
+          opacity: mainCard.progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + mainCard.translateY + "px) translateZ(" + mainCard.translateZ + "px) rotateX(" + mainCard.rotateX + "deg) rotateY(" + mainCard.rotateY + "deg)",
           padding: minDim * 0.04,
           display: "flex",
@@ -177,18 +177,18 @@ function Scene() {
           <div style={{
             fontSize: minDim * 0.032,
             fontWeight: 600,
-            color: SCENE_PARAMS.textColor.value,
-            fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif"
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif"
           }}>
-            {SCENE_PARAMS.cardTitle.value}
+            {(props.cardTitle ?? SCENE_PARAMS.cardTitle.value)}
           </div>
           <div style={{
             fontSize: minDim * 0.022,
             fontWeight: 500,
-            color: SCENE_PARAMS.mutedText.value,
-            fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif"
+            color: (props.mutedText ?? SCENE_PARAMS.mutedText.value),
+            fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif"
           }}>
-            {SCENE_PARAMS.cardSubtitle.value}
+            {(props.cardSubtitle ?? SCENE_PARAMS.cardSubtitle.value)}
           </div>
 
           <div style={{ display: "flex", gap: minDim * 0.02, alignItems: "flex-end", height: "45%" }}>
@@ -198,7 +198,7 @@ function Scene() {
                 <div key={i} style={{
                   width: "12%",
                   height: barHeight,
-                  background: "linear-gradient(180deg, " + SCENE_PARAMS.platinum.value + " 0%, " + SCENE_PARAMS.accentBlue.value + " 100%)",
+                  background: "linear-gradient(180deg, " + (props.platinum ?? SCENE_PARAMS.platinum.value) + " 0%, " + (props.accentBlue ?? SCENE_PARAMS.accentBlue.value) + " 100%)",
                   borderRadius: minDim * 0.02,
                   boxShadow: "0 10px 24px rgba(79,141,255,0.25)",
                   opacity: mainCard.progress
@@ -210,18 +210,18 @@ function Scene() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{
               fontSize: minDim * 0.022,
-              color: SCENE_PARAMS.mutedText.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif"
+              color: (props.mutedText ?? SCENE_PARAMS.mutedText.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif"
             }}>
-              {SCENE_PARAMS.statLabel.value}
+              {(props.statLabel ?? SCENE_PARAMS.statLabel.value)}
             </div>
             <div style={{
               fontSize: minDim * 0.036,
               fontWeight: 700,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif"
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif"
             }}>
-              {SCENE_PARAMS.statValuePrefix.value + statValue + SCENE_PARAMS.statValueSuffix.value}
+              {(props.statValuePrefix ?? SCENE_PARAMS.statValuePrefix.value) + statValue + (props.statValueSuffix ?? SCENE_PARAMS.statValueSuffix.value)}
             </div>
           </div>
         </div>
@@ -232,12 +232,12 @@ function Scene() {
           height: topRowHeight,
           top: topY,
           left: marginX + leftW + gapX,
-          backgroundColor: SCENE_PARAMS.glassTint.value,
+          backgroundColor: (props.glassTint ?? SCENE_PARAMS.glassTint.value),
           borderRadius: minDim * 0.035,
-          border: "1px solid " + SCENE_PARAMS.glassBorder.value,
+          border: "1px solid " + (props.glassBorder ?? SCENE_PARAMS.glassBorder.value),
           backdropFilter: "blur(16px)",
           boxShadow: glowShadow,
-          opacity: sideCard.progress * SCENE_PARAMS.opacity.value,
+          opacity: sideCard.progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + sideCard.translateY + "px) translateZ(" + sideCard.translateZ + "px) rotateX(" + sideCard.rotateX + "deg) rotateY(" + sideCard.rotateY + "deg)",
           padding: minDim * 0.03,
           display: "flex",
@@ -247,32 +247,32 @@ function Scene() {
           <div style={{
             fontSize: minDim * 0.026,
             fontWeight: 600,
-            color: SCENE_PARAMS.textColor.value,
-            fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif"
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif"
           }}>
-            {SCENE_PARAMS.sideTitle.value}
+            {(props.sideTitle ?? SCENE_PARAMS.sideTitle.value)}
           </div>
 
           <div style={{ height: "45%", display: "flex", flexDirection: "column", gap: minDim * 0.012 }}>
             <div style={{
               fontSize: minDim * 0.02,
-              color: SCENE_PARAMS.mutedText.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif"
+              color: (props.mutedText ?? SCENE_PARAMS.mutedText.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif"
             }}>
-              {SCENE_PARAMS.sideMetricLabel.value}
+              {(props.sideMetricLabel ?? SCENE_PARAMS.sideMetricLabel.value)}
             </div>
             <div style={{
               fontSize: minDim * 0.03,
               fontWeight: 700,
-              color: SCENE_PARAMS.accentBlue.value,
-              fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif"
+              color: (props.accentBlue ?? SCENE_PARAMS.accentBlue.value),
+              fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif"
             }}>
-              {SCENE_PARAMS.sideMetricPrefix.value + sideValue + SCENE_PARAMS.sideMetricSuffix.value}
+              {(props.sideMetricPrefix ?? SCENE_PARAMS.sideMetricPrefix.value) + sideValue + (props.sideMetricSuffix ?? SCENE_PARAMS.sideMetricSuffix.value)}
             </div>
             <svg style={{ width: "100%", height: "40%" }} viewBox="0 0 100 40">
               <path
                 d="M 0 30 Q 20 18 40 22 T 80 10 T 100 6"
-                stroke={SCENE_PARAMS.accentBlue.value}
+                stroke={(props.accentBlue ?? SCENE_PARAMS.accentBlue.value)}
                 strokeWidth={2}
                 fill="none"
                 strokeDasharray={200}
@@ -288,10 +288,10 @@ function Scene() {
           }}>
             <div style={{
               fontSize: minDim * 0.02,
-              color: SCENE_PARAMS.mutedText.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif"
+              color: (props.mutedText ?? SCENE_PARAMS.mutedText.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif"
             }}>
-              {SCENE_PARAMS.toggleLabel.value}
+              {(props.toggleLabel ?? SCENE_PARAMS.toggleLabel.value)}
             </div>
             <div style={{
               width: minDim * 0.07,
@@ -306,7 +306,7 @@ function Scene() {
                 width: minDim * 0.03,
                 height: minDim * 0.03,
                 borderRadius: "50%",
-                background: SCENE_PARAMS.textColor.value,
+                background: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 top: minDim * 0.002,
                 left: minDim * 0.004 + toggleX * (minDim * 0.03),
                 boxShadow: "0 6px 14px rgba(0,0,0,0.5)"
@@ -321,12 +321,12 @@ function Scene() {
           height: bottomRowHeight,
           top: bottomY,
           left: marginX,
-          backgroundColor: SCENE_PARAMS.glassTint.value,
+          backgroundColor: (props.glassTint ?? SCENE_PARAMS.glassTint.value),
           borderRadius: minDim * 0.035,
-          border: "1px solid " + SCENE_PARAMS.glassBorder.value,
+          border: "1px solid " + (props.glassBorder ?? SCENE_PARAMS.glassBorder.value),
           backdropFilter: "blur(16px)",
           boxShadow: glowShadow,
-          opacity: bottomCard.progress * SCENE_PARAMS.opacity.value,
+          opacity: bottomCard.progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + (bottomCard.translateY + scrollY) + "px) translateZ(" + bottomCard.translateZ + "px) rotateX(" + bottomCard.rotateX + "deg) rotateY(" + bottomCard.rotateY + "deg)",
           padding: minDim * 0.03,
           display: "flex",
@@ -334,18 +334,18 @@ function Scene() {
           gap: minDim * 0.02
         }}>
           {[
-            { title: SCENE_PARAMS.bottomItem1Label.value, value: SCENE_PARAMS.bottomItem1Value.value },
-            { title: SCENE_PARAMS.bottomItem2Label.value, value: SCENE_PARAMS.bottomItem2Value.value },
-            { title: SCENE_PARAMS.bottomItem3Label.value, value: SCENE_PARAMS.bottomItem3Value.value }
+            { title: (props.bottomItem1Label ?? SCENE_PARAMS.bottomItem1Label.value), value: (props.bottomItem1Value ?? SCENE_PARAMS.bottomItem1Value.value) },
+            { title: (props.bottomItem2Label ?? SCENE_PARAMS.bottomItem2Label.value), value: (props.bottomItem2Value ?? SCENE_PARAMS.bottomItem2Value.value) },
+            { title: (props.bottomItem3Label ?? SCENE_PARAMS.bottomItem3Label.value), value: (props.bottomItem3Value ?? SCENE_PARAMS.bottomItem3Value.value) }
           ].map((item, i) => (
             <div key={i} style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif"
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif"
             }}>
-              <div style={{ fontSize: minDim * 0.022, color: SCENE_PARAMS.mutedText.value }}>{item.title}</div>
+              <div style={{ fontSize: minDim * 0.022, color: (props.mutedText ?? SCENE_PARAMS.mutedText.value) }}>{item.title}</div>
               <div style={{ fontSize: minDim * 0.026, fontWeight: 600 }}>{item.value}</div>
             </div>
           ))}
@@ -360,18 +360,18 @@ function Scene() {
           background: "linear-gradient(135deg, rgba(79,141,255,0.2) 0%, rgba(213,216,222,0.6) 50%, rgba(79,141,255,0.2) 100%)",
           borderRadius: minDim * 0.03,
           boxShadow: "0 18px 50px rgba(79,141,255,0.25)",
-          opacity: buttonCard.progress * SCENE_PARAMS.opacity.value,
+          opacity: buttonCard.progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
           transform: "translateY(" + buttonCard.translateY + "px) translateZ(" + buttonCard.translateZ + "px) rotateX(" + buttonCard.rotateX + "deg) rotateY(" + buttonCard.rotateY + "deg) scale(" + buttonPulse + ")",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: SCENE_PARAMS.textColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           fontSize: minDim * 0.026,
           fontWeight: 700,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
           letterSpacing: 0.6
         }}>
-          {SCENE_PARAMS.buttonLabel.value}
+          {(props.buttonLabel ?? SCENE_PARAMS.buttonLabel.value)}
         </div>
       </div>
     </AbsoluteFill>

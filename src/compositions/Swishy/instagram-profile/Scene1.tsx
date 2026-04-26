@@ -23,12 +23,12 @@ const SCENE_PARAMS = {
   staggerDelay: { type: "number", label: "Stagger Delay", value: 6, min: 2, max: 15, step: 1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
 
   const fadeIn = (delay) => {
     const progress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
@@ -51,11 +51,11 @@ function Scene() {
   const avatarSize = minDim * 0.18;
   const containerWidth = minDim * 0.85;
 
-  const bioLines = SCENE_PARAMS.bio.value.split('\n');
+  const bioLines = (props.bio ?? SCENE_PARAMS.bio.value).split('\n');
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: containerWidth, padding: minDim * 0.05 }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: containerWidth, padding: minDim * 0.05 }}>
         
         {/* Header Row - Avatar + Name + Stats */}
         <div style={{ display: "flex", alignItems: "flex-start", gap: minDim * 0.04, marginBottom: minDim * 0.05 }}>
@@ -71,7 +71,7 @@ function Scene() {
             flexShrink: 0
           }}>
             <Img 
-              src={SCENE_PARAMS.profileImage.value}
+              src={(props.profileImage ?? SCENE_PARAMS.profileImage.value)}
               style={{
                 width: "100%",
                 height: "100%",
@@ -86,8 +86,8 @@ function Scene() {
             <div style={{
               fontSize: minDim * 0.038,
               fontWeight: 700,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               opacity: nameProgress,
               transform: "translateY(" + slideUp(stagger) + "px)",
               marginBottom: minDim * 0.02,
@@ -95,7 +95,7 @@ function Scene() {
               overflow: "hidden",
               textOverflow: "ellipsis"
             }}>
-              {SCENE_PARAMS.profileName.value}
+              {(props.profileName ?? SCENE_PARAMS.profileName.value)}
             </div>
             
             {/* Stats Row */}
@@ -106,24 +106,24 @@ function Scene() {
               transform: "translateY(" + slideUp(stagger * 2) + "px)"
             }}>
               {[
-                { num: SCENE_PARAMS.posts.value, label: "posts" },
-                { num: SCENE_PARAMS.followers.value, label: "followers" },
-                { num: SCENE_PARAMS.following.value, label: "following" }
+                { num: (props.posts ?? SCENE_PARAMS.posts.value), label: "posts" },
+                { num: (props.followers ?? SCENE_PARAMS.followers.value), label: "followers" },
+                { num: (props.following ?? SCENE_PARAMS.following.value), label: "following" }
               ].map((stat, i) => (
                 <div key={i} style={{ textAlign: "center" }}>
                   <div style={{
                     fontSize: minDim * 0.038,
                     fontWeight: 600,
-                    color: SCENE_PARAMS.textColor.value,
-                    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                   }}>
                     {stat.num}
                   </div>
                   <div style={{
                     fontSize: minDim * 0.026,
                     fontWeight: 400,
-                    color: SCENE_PARAMS.secondaryColor.value,
-                    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                    color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
+                    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                   }}>
                     {stat.label}
                   </div>
@@ -143,8 +143,8 @@ function Scene() {
             <div key={i} style={{
               fontSize: minDim * 0.032,
               fontWeight: 400,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               lineHeight: 1.5
             }}>
               {line}
@@ -160,9 +160,9 @@ function Scene() {
           transform: "translateY(" + slideUp(stagger * 6) + "px)"
         }}>
           {[
-            { text: "Follow", bg: SCENE_PARAMS.accentColor.value, color: "#ffffff" },
-            { text: "Message", bg: SCENE_PARAMS.buttonBgColor.value, color: SCENE_PARAMS.textColor.value },
-            { text: "Email", bg: SCENE_PARAMS.buttonBgColor.value, color: SCENE_PARAMS.textColor.value }
+            { text: "Follow", bg: (props.accentColor ?? SCENE_PARAMS.accentColor.value), color: "#ffffff" },
+            { text: "Message", bg: (props.buttonBgColor ?? SCENE_PARAMS.buttonBgColor.value), color: (props.textColor ?? SCENE_PARAMS.textColor.value) },
+            { text: "Email", bg: (props.buttonBgColor ?? SCENE_PARAMS.buttonBgColor.value), color: (props.textColor ?? SCENE_PARAMS.textColor.value) }
           ].map((btn, i) => (
             <div key={i} style={{
               flex: 1,
@@ -172,7 +172,7 @@ function Scene() {
               borderRadius: minDim * 0.015,
               fontSize: minDim * 0.03,
               fontWeight: 600,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               textAlign: "center"
             }}>
               {btn.text}

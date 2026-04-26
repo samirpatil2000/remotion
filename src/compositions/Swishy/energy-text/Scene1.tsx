@@ -21,11 +21,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   // Timings based on a 120-frame cycle (re-calibrated to clip duration)
@@ -55,23 +55,23 @@ function Scene() {
     { extrapolateRight: "clamp" }
   );
 
-  const displacementScale = noiseProgress * SCENE_PARAMS.disintegrationIntensity.value;
+  const displacementScale = noiseProgress * (props.disintegrationIntensity ?? SCENE_PARAMS.disintegrationIntensity.value);
   const turbulenceSeed = Math.floor(relativeFrame / 2); // Animate the noise texture
 
   // Text Style constants
   const secondaryFontSize = minDim * 0.045;
   const mainFontSize = minDim * 0.22;
-  const fontStack = SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif";
+  const fontStack = (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif";
 
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         fontFamily: fontStack,
-        color: SCENE_PARAMS.textColor.value,
+        color: (props.textColor ?? SCENE_PARAMS.textColor.value),
         overflow: "hidden",
       }}
     >
@@ -109,7 +109,7 @@ function Scene() {
           width: "90%",
           height: "60%",
           position: "relative",
-          transform: `scale(${SCENE_PARAMS.scale.value})`,
+          transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         }}
       >
         {/* Top Line */}
@@ -124,7 +124,7 @@ function Scene() {
             letterSpacing: "0.05em",
           }}
         >
-          {SCENE_PARAMS.beText.value}
+          {(props.beText ?? SCENE_PARAMS.beText.value)}
         </div>
         <div
           style={{
@@ -137,7 +137,7 @@ function Scene() {
             letterSpacing: "0.05em",
           }}
         >
-          {SCENE_PARAMS.theText.value}
+          {(props.theText ?? SCENE_PARAMS.theText.value)}
         </div>
 
         {/* Main Word "ENERGY" */}
@@ -156,7 +156,7 @@ function Scene() {
             lineHeight: 1,
           }}
         >
-          {SCENE_PARAMS.mainWord.value}
+          {(props.mainWord ?? SCENE_PARAMS.mainWord.value)}
         </div>
 
         {/* Bottom Line */}
@@ -174,10 +174,10 @@ function Scene() {
             padding: "0 2%",
           }}
         >
-          <span>{SCENE_PARAMS.youText.value}</span>
-          <span>{SCENE_PARAMS.wantText.value}</span>
-          <span>{SCENE_PARAMS.toText.value}</span>
-          <span>{SCENE_PARAMS.attractText.value}</span>
+          <span>{(props.youText ?? SCENE_PARAMS.youText.value)}</span>
+          <span>{(props.wantText ?? SCENE_PARAMS.wantText.value)}</span>
+          <span>{(props.toText ?? SCENE_PARAMS.toText.value)}</span>
+          <span>{(props.attractText ?? SCENE_PARAMS.attractText.value)}</span>
         </div>
       </div>
     </AbsoluteFill>

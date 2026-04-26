@@ -17,15 +17,15 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.6, min: 0, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const toggleWidth = minDim * (SCENE_PARAMS.toggleWidth.value / 1000) * 2;
+  const toggleWidth = minDim * ((props.toggleWidth ?? SCENE_PARAMS.toggleWidth.value) / 1000) * 2;
   const toggleHeight = toggleWidth * 0.55;
   const knobSize = toggleHeight * 0.8;
   const knobPadding = (toggleHeight - knobSize) / 2;
@@ -85,7 +85,7 @@ function Scene() {
   const trackColor = `rgb(${currentR}, ${currentG}, ${currentB})`;
   
   // Glow effect
-  const glowOpacity = interpolate(togglePosition, [0, 0.5, 1], [0, 0, SCENE_PARAMS.glowIntensity.value]);
+  const glowOpacity = interpolate(togglePosition, [0, 0.5, 1], [0, 0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)]);
   const glowScale = interpolate(togglePosition, [0, 0.5, 1], [1, 1, 1.15]);
   
   // Tap indicator (subtle press effect)
@@ -98,11 +98,11 @@ function Scene() {
     ? interpolate(tapProgress, [0, 0.5, 1], [1, 0.95, 1])
     : 1;
   
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
@@ -116,7 +116,7 @@ function Scene() {
           width: toggleWidth * 1.5,
           height: toggleHeight * 1.5,
           borderRadius: toggleHeight,
-          backgroundColor: SCENE_PARAMS.glowColor.value,
+          backgroundColor: (props.glowColor ?? SCENE_PARAMS.glowColor.value),
           filter: `blur(${toggleHeight * 0.6}px)`,
           opacity: glowOpacity,
           transform: `translate(-50%, -50%) scale(${glowScale})`,
@@ -143,7 +143,7 @@ function Scene() {
             width: knobSize,
             height: knobSize,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.knobColor.value,
+            backgroundColor: (props.knobColor ?? SCENE_PARAMS.knobColor.value),
             top: knobPadding,
             left: knobX,
             boxShadow: "0 2px 8px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)",
@@ -157,7 +157,7 @@ function Scene() {
           fontFamily: "Inter, system-ui, sans-serif",
           fontSize: minDim * 0.028,
           fontWeight: 500,
-          color: togglePosition > 0.5 ? SCENE_PARAMS.onColor.value : "#64748b",
+          color: togglePosition > 0.5 ? (props.onColor ?? SCENE_PARAMS.onColor.value) : "#64748b",
           opacity: entranceOpacity,
           letterSpacing: "0.05em",
           textTransform: "uppercase",

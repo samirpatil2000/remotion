@@ -50,14 +50,14 @@ const SCENE_PARAMS = {
   stagger: { type: "number", label: "Day Stagger", value: 23, min: 5, max: 40, step: 1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
-  const totalColWidth = SCENE_PARAMS.columnWidth.value * 3;
+  const totalColWidth = (props.columnWidth ?? SCENE_PARAMS.columnWidth.value) * 3;
   const containerWidth = width * (totalColWidth / 40);
   const containerHeight = height * 1.3;
 
@@ -75,12 +75,12 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
-      fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
+      fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
     }}>
-      {SCENE_PARAMS.backgroundImage.value && (
+      {(props.backgroundImage ?? SCENE_PARAMS.backgroundImage.value) && (
         <Img 
-          src={SCENE_PARAMS.backgroundImage.value}
+          src={(props.backgroundImage ?? SCENE_PARAMS.backgroundImage.value)}
           style={{
             position: "absolute",
             top: 0,
@@ -88,19 +88,19 @@ function Scene() {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            opacity: SCENE_PARAMS.bgOpacity.value,
+            opacity: (props.bgOpacity ?? SCENE_PARAMS.bgOpacity.value),
             zIndex: 0
           }}
         />
       )}
 
-      {SCENE_PARAMS.headerImage.value && (
+      {(props.headerImage ?? SCENE_PARAMS.headerImage.value) && (
         <div style={{
           position: "absolute",
-          top: SCENE_PARAMS.headerTop.value + "%",
+          top: (props.headerTop ?? SCENE_PARAMS.headerTop.value) + "%",
           left: "50%",
           width: "80%",
-          height: SCENE_PARAMS.headerHeight.value + "%",
+          height: (props.headerHeight ?? SCENE_PARAMS.headerHeight.value) + "%",
           opacity: logoProgress,
           transform: "translate(-50%, " + interpolate(logoProgress, [0, 1], [-30, 0], { extrapolateRight: "clamp" }) + "px)",
           zIndex: 15,
@@ -108,7 +108,7 @@ function Scene() {
           justifyContent: "center"
         }}>
           <Img 
-            src={SCENE_PARAMS.headerImage.value}
+            src={(props.headerImage ?? SCENE_PARAMS.headerImage.value)}
             style={{
               width: "100%",
               height: "100%",
@@ -123,9 +123,9 @@ function Scene() {
         width: containerWidth,
         height: containerHeight,
         position: "absolute",
-        top: SCENE_PARAMS.contentTop.value + "%",
+        top: (props.contentTop ?? SCENE_PARAMS.contentTop.value) + "%",
         left: "50%",
-        transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         display: "flex",
         flexDirection: "row",
         gap: minDim * 0.015,
@@ -133,45 +133,45 @@ function Scene() {
         alignItems: "flex-start",
         justifyContent: "center"
       }}>
-        <DayColumn 
+        <DayColumn props={props}  
           index={0} 
-          label={SCENE_PARAMS.fridayLabel.value} 
-          heads={[SCENE_PARAMS.fridayH1.value, SCENE_PARAMS.fridayH2.value, SCENE_PARAMS.fridayH3.value, SCENE_PARAMS.fridayH4.value]} 
-          body={SCENE_PARAMS.fridayBody.value} 
-          color={SCENE_PARAMS.fridayColor.value} 
+          label={(props.fridayLabel ?? SCENE_PARAMS.fridayLabel.value)} 
+          heads={[(props.fridayH1 ?? SCENE_PARAMS.fridayH1.value), (props.fridayH2 ?? SCENE_PARAMS.fridayH2.value), (props.fridayH3 ?? SCENE_PARAMS.fridayH3.value), (props.fridayH4 ?? SCENE_PARAMS.fridayH4.value)]} 
+          body={(props.fridayBody ?? SCENE_PARAMS.fridayBody.value)} 
+          color={(props.fridayColor ?? SCENE_PARAMS.fridayColor.value)} 
           adjustedFrame={adjustedFrame}
         />
-        <DayColumn 
+        <DayColumn props={props}  
           index={1} 
-          label={SCENE_PARAMS.saturdayLabel.value} 
-          heads={[SCENE_PARAMS.saturdayH1.value, SCENE_PARAMS.saturdayH2.value, SCENE_PARAMS.saturdayH3.value, SCENE_PARAMS.saturdayH4.value]} 
-          body={SCENE_PARAMS.saturdayBody.value} 
-          color={SCENE_PARAMS.saturdayColor.value} 
+          label={(props.saturdayLabel ?? SCENE_PARAMS.saturdayLabel.value)} 
+          heads={[(props.saturdayH1 ?? SCENE_PARAMS.saturdayH1.value), (props.saturdayH2 ?? SCENE_PARAMS.saturdayH2.value), (props.saturdayH3 ?? SCENE_PARAMS.saturdayH3.value), (props.saturdayH4 ?? SCENE_PARAMS.saturdayH4.value)]} 
+          body={(props.saturdayBody ?? SCENE_PARAMS.saturdayBody.value)} 
+          color={(props.saturdayColor ?? SCENE_PARAMS.saturdayColor.value)} 
           adjustedFrame={adjustedFrame}
         />
-        <DayColumn 
+        <DayColumn props={props}  
           index={2} 
-          label={SCENE_PARAMS.sundayLabel.value} 
-          heads={[SCENE_PARAMS.sundayH1.value, SCENE_PARAMS.sundayH2.value, SCENE_PARAMS.sundayH3.value, SCENE_PARAMS.sundayH4.value]} 
-          body={SCENE_PARAMS.sundayBody.value} 
-          color={SCENE_PARAMS.sundayColor.value} 
+          label={(props.sundayLabel ?? SCENE_PARAMS.sundayLabel.value)} 
+          heads={[(props.sundayH1 ?? SCENE_PARAMS.sundayH1.value), (props.sundayH2 ?? SCENE_PARAMS.sundayH2.value), (props.sundayH3 ?? SCENE_PARAMS.sundayH3.value), (props.sundayH4 ?? SCENE_PARAMS.sundayH4.value)]} 
+          body={(props.sundayBody ?? SCENE_PARAMS.sundayBody.value)} 
+          color={(props.sundayColor ?? SCENE_PARAMS.sundayColor.value)} 
           adjustedFrame={adjustedFrame}
         />
       </div>
 
-      {SCENE_PARAMS.footerImage.value && (
+      {(props.footerImage ?? SCENE_PARAMS.footerImage.value) && (
         <div style={{
           position: "absolute",
           bottom: 0,
           left: 0,
           width: "100%",
-          height: SCENE_PARAMS.footerHeight.value + "%",
-          opacity: SCENE_PARAMS.footerOpacity.value,
+          height: (props.footerHeight ?? SCENE_PARAMS.footerHeight.value) + "%",
+          opacity: (props.footerOpacity ?? SCENE_PARAMS.footerOpacity.value),
           transform: "translateY(" + interpolate(footerProgress, [0, 1], [100, 0], { extrapolateRight: "clamp" }) + "%)",
           zIndex: 10
         }}>
           <Img 
-            src={SCENE_PARAMS.footerImage.value}
+            src={(props.footerImage ?? SCENE_PARAMS.footerImage.value)}
             style={{
               width: "100%",
               height: "100%",
@@ -185,10 +185,10 @@ function Scene() {
   );
 }
 
-function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
+function DayColumn({ props, index, label, heads, body, color, adjustedFrame }: any) {
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const dayDelay = index * SCENE_PARAMS.stagger.value;
+  const dayDelay = index * (props.stagger ?? SCENE_PARAMS.stagger.value);
   
   const columnSpring = spring({
     frame: Math.max(0, adjustedFrame - dayDelay),
@@ -207,17 +207,17 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
 
   return (
     <div style={{
-      flex: "0 0 " + SCENE_PARAMS.columnWidth.value + "%",
-      height: SCENE_PARAMS.columnHeight.value + "%",
+      flex: "0 0 " + (props.columnWidth ?? SCENE_PARAMS.columnWidth.value) + "%",
+      height: (props.columnHeight ?? SCENE_PARAMS.columnHeight.value) + "%",
       minWidth: 0,
       display: "flex",
       flexDirection: "column",
-      border: (minDim * 0.005) + "px solid " + SCENE_PARAMS.navyColor.value,
+      border: (minDim * 0.005) + "px solid " + (props.navyColor ?? SCENE_PARAMS.navyColor.value),
       borderRadius: minDim * 0.05,
       opacity: columnSpring,
       transform: "translateY(" + interpolate(columnSpring, [0, 1], [30, 0], { extrapolateRight: "clamp" }) + "px)",
       position: "relative",
-      backgroundColor: "rgba(" + hexToRgb(SCENE_PARAMS.backgroundColor.value) + ", " + SCENE_PARAMS.colOpacity.value + ")",
+      backgroundColor: "rgba(" + hexToRgb((props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value)) + ", " + (props.colOpacity ?? SCENE_PARAMS.colOpacity.value) + ")",
       backdropFilter: "blur(8px)",
       overflow: "visible"
     }}>
@@ -226,7 +226,7 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
         top: -minDim * 0.02,
         left: "50%",
         transform: "translateX(-50%)",
-        backgroundColor: SCENE_PARAMS.navyColor.value,
+        backgroundColor: (props.navyColor ?? SCENE_PARAMS.navyColor.value),
         color: "white",
         padding: (minDim * 0.015) + "px " + (minDim * 0.07) + "px",
         borderRadius: minDim * 0.015,
@@ -235,7 +235,7 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
         letterSpacing: "0.25em",
         zIndex: 10,
         whiteSpace: "nowrap",
-        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
@@ -254,7 +254,7 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
           const isSunday = index === 2;
           const headSize = isSunday && i >= 2 ? 0.045 : (i === 0 ? 0.09 : i === 1 ? 0.07 : 0.055);
           return (
-            <HeadlinerText 
+            <HeadlinerText props={props}  
               key={i} 
               text={text} 
               color={color} 
@@ -273,7 +273,7 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
           gap: minDim * 0.003,
           flex: 1,
           justifyContent: "flex-start",
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
         }}>
           {lines.map((line, i) => {
             const lineOpacity = spring({
@@ -284,15 +284,15 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
 
             return (
               <div key={i} style={{
-                fontSize: minDim * SCENE_PARAMS.undercardSize.value,
-                color: SCENE_PARAMS.navyColor.value,
+                fontSize: minDim * (props.undercardSize ?? SCENE_PARAMS.undercardSize.value),
+                color: (props.navyColor ?? SCENE_PARAMS.navyColor.value),
                 fontWeight: 900,
                 opacity: lineOpacity,
                 transform: "scale(" + interpolate(lineOpacity, [0, 1], [0.98, 1], { extrapolateRight: "clamp" }) + ")",
-                lineHeight: SCENE_PARAMS.undercardLineHeight.value,
-                letterSpacing: SCENE_PARAMS.undercardLetterSpacing.value + "em",
+                lineHeight: (props.undercardLineHeight ?? SCENE_PARAMS.undercardLineHeight.value),
+                letterSpacing: (props.undercardLetterSpacing ?? SCENE_PARAMS.undercardLetterSpacing.value) + "em",
                 textTransform: "uppercase",
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 textAlign: "center",
                 width: "100%",
                 display: "block"
@@ -307,7 +307,7 @@ function DayColumn({ index, label, heads, body, color, adjustedFrame }) {
   );
 }
 
-function HeadlinerText({ text, color, size, delay, frame }) {
+function HeadlinerText({ props, text, color, size, delay, frame }: any) {
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
   const pop = spring({
@@ -315,7 +315,7 @@ function HeadlinerText({ text, color, size, delay, frame }) {
     fps,
     config: { damping: 12, stiffness: 180 }
   });
-  const outlineColor = SCENE_PARAMS.navyColor.value;
+  const outlineColor = (props.navyColor ?? SCENE_PARAMS.navyColor.value);
   const shadowSize = minDim * 0.005;
   return (
     <div style={{
@@ -323,7 +323,7 @@ function HeadlinerText({ text, color, size, delay, frame }) {
       opacity: pop,
       transform: "scale(" + interpolate(pop, [0, 1], [0.85, 1], { extrapolateRight: "clamp" }) + ")",
       margin: (minDim * 0.008) + "px 0",
-      fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+      fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
     }}>
       <div style={{
         fontSize: minDim * size,
@@ -335,7 +335,7 @@ function HeadlinerText({ text, color, size, delay, frame }) {
         textShadow: (minDim * 0.003) + "px " + (minDim * 0.003) + "px 0 " + outlineColor + ", " + "-" + (minDim * 0.0015) + "px -" + (minDim * 0.0015) + "px 0 " + outlineColor + ", " + (minDim * 0.0015) + "px -" + (minDim * 0.0015) + "px 0 " + outlineColor + ", " + "-" + (minDim * 0.0015) + "px " + (minDim * 0.0015) + "px 0 " + outlineColor + ", " + shadowSize + "px " + shadowSize + "px 0 " + outlineColor,
         wordBreak: "keep-all",
         whiteSpace: "nowrap",
-        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
       }}>
         {text}
       </div>

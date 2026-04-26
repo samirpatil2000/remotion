@@ -26,16 +26,16 @@ const SCENE_PARAMS = {
   video5: { type: "video", label: "Video 5", value: "blob:https://www.swishy.ai/99c2d426-33e8-4adb-af77-7a86c02b062a" },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const fanSpread = SCENE_PARAMS.fanSpread.value;
-  const cardOverlap = SCENE_PARAMS.cardOverlap.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const fanSpread = (props.fanSpread ?? SCENE_PARAMS.fanSpread.value);
+  const cardOverlap = (props.cardOverlap ?? SCENE_PARAMS.cardOverlap.value);
   
   const isPortrait = height > width;
   
@@ -44,11 +44,11 @@ function Scene() {
   const cardRadius = cardWidth * 0.06;
   
   const cards = [
-    { color: SCENE_PARAMS.cardColor1.value, rotation: -fanSpread * 2, video: SCENE_PARAMS.video1.value, content: "abstract" },
-    { color: SCENE_PARAMS.cardColor2.value, rotation: -fanSpread, video: SCENE_PARAMS.video2.value, content: "3d" },
-    { color: SCENE_PARAMS.cardColor3.value, rotation: 0, video: SCENE_PARAMS.video3.value, content: "portrait" },
-    { color: SCENE_PARAMS.cardColor4.value, rotation: fanSpread, video: SCENE_PARAMS.video4.value, content: "typo" },
-    { color: SCENE_PARAMS.cardColor5.value, rotation: fanSpread * 2, video: SCENE_PARAMS.video5.value, content: "logo" },
+    { color: (props.cardColor1 ?? SCENE_PARAMS.cardColor1.value), rotation: -fanSpread * 2, video: (props.video1 ?? SCENE_PARAMS.video1.value), content: "abstract" },
+    { color: (props.cardColor2 ?? SCENE_PARAMS.cardColor2.value), rotation: -fanSpread, video: (props.video2 ?? SCENE_PARAMS.video2.value), content: "3d" },
+    { color: (props.cardColor3 ?? SCENE_PARAMS.cardColor3.value), rotation: 0, video: (props.video3 ?? SCENE_PARAMS.video3.value), content: "portrait" },
+    { color: (props.cardColor4 ?? SCENE_PARAMS.cardColor4.value), rotation: fanSpread, video: (props.video4 ?? SCENE_PARAMS.video4.value), content: "typo" },
+    { color: (props.cardColor5 ?? SCENE_PARAMS.cardColor5.value), rotation: fanSpread * 2, video: (props.video5 ?? SCENE_PARAMS.video5.value), content: "logo" },
   ];
   
   const totalCardsWidth = cardWidth + (cards.length - 1) * cardWidth * cardOverlap;
@@ -58,13 +58,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         position: "relative",
         width: width,
@@ -235,14 +235,14 @@ function Scene() {
           );
         })}
         
-        {SCENE_PARAMS.showAccentLine.value && (
+        {(props.showAccentLine ?? SCENE_PARAMS.showAccentLine.value) && (
           <div style={{
             position: "absolute",
             left: "5%",
             top: "50%",
             width: (90 * lineProgress) + "%",
             height: 4,
-            backgroundColor: SCENE_PARAMS.accentLine.value,
+            backgroundColor: (props.accentLine ?? SCENE_PARAMS.accentLine.value),
             transform: "translateY(-50%)",
             zIndex: 10,
             opacity: lineProgress,

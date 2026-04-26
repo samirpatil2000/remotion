@@ -27,11 +27,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const chartLeft = width * 0.12;
   const chartRight = width * 0.9;
@@ -72,8 +72,8 @@ function Scene() {
   const labelOpacity = interpolate(adjustedFrame, [0, 20], [0, 1], { extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{
           position: "absolute",
           top: height * 0.06,
@@ -81,12 +81,12 @@ function Scene() {
           width: width * 0.88,
           fontSize: minDim * 0.032,
           fontWeight: 600,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           lineHeight: 1.2,
           opacity: labelOpacity
         }}>
-          {SCENE_PARAMS.title.value}
+          {(props.title ?? SCENE_PARAMS.title.value)}
         </div>
 
         <div style={{
@@ -97,19 +97,19 @@ function Scene() {
           transformOrigin: "left top",
           fontSize: minDim * 0.024,
           fontWeight: 400,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: labelOpacity
         }}>
-          {SCENE_PARAMS.yLabel.value}
+          {(props.yLabel ?? SCENE_PARAMS.yLabel.value)}
         </div>
 
         <svg width={width} height={height} style={{ position: "absolute", top: 0, left: 0 }}>
-          <line x1={chartLeft} y1={chartTop} x2={chartLeft} y2={chartBottom} stroke={SCENE_PARAMS.axisColor.value} strokeWidth={1} />
-          <line x1={chartLeft} y1={chartBottom} x2={chartRight} y2={chartBottom} stroke={SCENE_PARAMS.axisColor.value} strokeWidth={1} />
+          <line x1={chartLeft} y1={chartTop} x2={chartLeft} y2={chartBottom} stroke={(props.axisColor ?? SCENE_PARAMS.axisColor.value)} strokeWidth={1} />
+          <line x1={chartLeft} y1={chartBottom} x2={chartRight} y2={chartBottom} stroke={(props.axisColor ?? SCENE_PARAMS.axisColor.value)} strokeWidth={1} />
 
           {data.map((d, i) => {
-            const barDelay = i * SCENE_PARAMS.staggerDelay.value;
+            const barDelay = i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const progress = spring({ frame: Math.max(0, adjustedFrame - barDelay), fps, config: { damping: 20, stiffness: 90 } });
             const x = chartLeft + i * (barWidth + barGap);
             const h50_59 = (d.v50_59 / maxY) * chartHeight * progress;
@@ -124,17 +124,17 @@ function Scene() {
 
             return (
               <g key={i}>
-                <rect x={x} y={y50} width={barWidth} height={h50_59} fill={SCENE_PARAMS.green.value} />
-                <rect x={x} y={y60} width={barWidth} height={h60_69} fill={SCENE_PARAMS.purple.value} />
-                <rect x={x} y={y70} width={barWidth} height={h70_79} fill={SCENE_PARAMS.red.value} />
-                <rect x={x} y={y80} width={barWidth} height={h80} fill={SCENE_PARAMS.yellow.value} />
+                <rect x={x} y={y50} width={barWidth} height={h50_59} fill={(props.green ?? SCENE_PARAMS.green.value)} />
+                <rect x={x} y={y60} width={barWidth} height={h60_69} fill={(props.purple ?? SCENE_PARAMS.purple.value)} />
+                <rect x={x} y={y70} width={barWidth} height={h70_79} fill={(props.red ?? SCENE_PARAMS.red.value)} />
+                <rect x={x} y={y80} width={barWidth} height={h80} fill={(props.yellow ?? SCENE_PARAMS.yellow.value)} />
               </g>
             );
           })}
 
           <path
             d={buildLinePath()}
-            stroke={SCENE_PARAMS.blue.value}
+            stroke={(props.blue ?? SCENE_PARAMS.blue.value)}
             strokeWidth={3}
             fill="none"
             strokeDasharray={chartWidth * 2}
@@ -150,8 +150,8 @@ function Scene() {
           display: "flex",
           justifyContent: "space-between",
           fontSize: minDim * 0.018,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: labelOpacity
         }}>
           {years.map((y, i) => (
@@ -168,15 +168,15 @@ function Scene() {
           justifyContent: "center",
           gap: width * 0.03,
           fontSize: minDim * 0.022,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: labelOpacity
         }}>
-          <span style={{ color: SCENE_PARAMS.green.value, fontWeight: 600 }}>50-59</span>
-          <span style={{ color: SCENE_PARAMS.purple.value, fontWeight: 600 }}>60-69</span>
-          <span style={{ color: SCENE_PARAMS.red.value, fontWeight: 600 }}>70-79</span>
-          <span style={{ color: SCENE_PARAMS.yellow.value, fontWeight: 600 }}>80 years +</span>
-          <span style={{ color: SCENE_PARAMS.blue.value, fontWeight: 600 }}>0-49 years</span>
+          <span style={{ color: (props.green ?? SCENE_PARAMS.green.value), fontWeight: 600 }}>50-59</span>
+          <span style={{ color: (props.purple ?? SCENE_PARAMS.purple.value), fontWeight: 600 }}>60-69</span>
+          <span style={{ color: (props.red ?? SCENE_PARAMS.red.value), fontWeight: 600 }}>70-79</span>
+          <span style={{ color: (props.yellow ?? SCENE_PARAMS.yellow.value), fontWeight: 600 }}>80 years +</span>
+          <span style={{ color: (props.blue ?? SCENE_PARAMS.blue.value), fontWeight: 600 }}>0-49 years</span>
         </div>
 
         <div style={{
@@ -184,11 +184,11 @@ function Scene() {
           left: width * 0.06,
           bottom: height * 0.05,
           fontSize: minDim * 0.02,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: labelOpacity
         }}>
-          {SCENE_PARAMS.source.value}
+          {(props.source ?? SCENE_PARAMS.source.value)}
         </div>
       </div>
     </AbsoluteFill>

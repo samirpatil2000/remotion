@@ -22,21 +22,21 @@ const SCENE_PARAMS = {
   showStringLights: { type: "boolean", label: "Show String Lights", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const glow = SCENE_PARAMS.glowIntensity.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const glow = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   
   const lines = [
-    { text: SCENE_PARAMS.line1.value, rotation: -1.5 },
-    { text: SCENE_PARAMS.line2.value, rotation: 1 },
-    { text: SCENE_PARAMS.line3.value, rotation: -0.5 },
+    { text: (props.line1 ?? SCENE_PARAMS.line1.value), rotation: -1.5 },
+    { text: (props.line2 ?? SCENE_PARAMS.line2.value), rotation: 1 },
+    { text: (props.line3 ?? SCENE_PARAMS.line3.value), rotation: -0.5 },
   ];
   
   const fontSize = minDim * 0.13;
@@ -52,14 +52,14 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{
-      background: "radial-gradient(circle at center, " + SCENE_PARAMS.backgroundLight.value + " 0%, " + SCENE_PARAMS.backgroundDark.value + " 100%)",
+      background: "radial-gradient(circle at center, " + (props.backgroundLight ?? SCENE_PARAMS.backgroundLight.value) + " 0%, " + (props.backgroundDark ?? SCENE_PARAMS.backgroundDark.value) + " 100%)",
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
     }}>
       
       {/* Background Ambience: Hanging String Lights */}
-      {SCENE_PARAMS.showStringLights.value && (
+      {(props.showStringLights ?? SCENE_PARAMS.showStringLights.value) && (
         <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "30%" }}>
           {stringLights.map((light, i) => {
             const sway = Math.sin(adjustedFrame * 0.05 + light.delay) * 5;
@@ -72,8 +72,8 @@ function Scene() {
                 width: 12,
                 height: 12,
                 borderRadius: "50%",
-                backgroundColor: SCENE_PARAMS.bulbColor.value,
-                boxShadow: "0 0 " + (20 * glow) + "px " + SCENE_PARAMS.bulbColor.value,
+                backgroundColor: (props.bulbColor ?? SCENE_PARAMS.bulbColor.value),
+                boxShadow: "0 0 " + (20 * glow) + "px " + (props.bulbColor ?? SCENE_PARAMS.bulbColor.value),
                 opacity: flicker * 0.8,
               }} />
             );
@@ -81,7 +81,7 @@ function Scene() {
           <svg width="100%" height="300" style={{ position: "absolute", top: 0, left: 0, opacity: 0.2 }}>
              <path 
                d={`M 0 100 Q ${width/2} 250 ${width} 100`} 
-               stroke={SCENE_PARAMS.bulbColor.value} 
+               stroke={(props.bulbColor ?? SCENE_PARAMS.bulbColor.value)} 
                fill="none" 
                strokeWidth="2" 
              />
@@ -123,12 +123,12 @@ function Scene() {
               key={i}
               style={{
                 position: "relative",
-                backgroundColor: SCENE_PARAMS.blockColor.value,
+                backgroundColor: (props.blockColor ?? SCENE_PARAMS.blockColor.value),
                 padding: paddingV + "px " + paddingH + "px",
                 opacity: opacity,
                 transform: "translateY(" + slideY + "px) rotate(" + line.rotation + "deg) scale(" + scale + ")",
-                border: "3px solid " + SCENE_PARAMS.accentColor.value,
-                boxShadow: "0 0 " + (30 * entrance * glow) + "px " + SCENE_PARAMS.accentColor.value + "44",
+                border: "3px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+                boxShadow: "0 0 " + (30 * entrance * glow) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "44",
               }}
             >
               {/* Perimeter Light Bulbs */}
@@ -148,8 +148,8 @@ function Scene() {
                     width: 8,
                     height: 8,
                     borderRadius: "50%",
-                    backgroundColor: blink ? SCENE_PARAMS.accentColor.value : "#333",
-                    boxShadow: blink ? "0 0 10px " + SCENE_PARAMS.accentColor.value : "none",
+                    backgroundColor: blink ? (props.accentColor ?? SCENE_PARAMS.accentColor.value) : "#333",
+                    boxShadow: blink ? "0 0 10px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) : "none",
                     zIndex: 10,
                     ...pos
                   }} />
@@ -157,7 +157,7 @@ function Scene() {
               })}
 
               <span style={{
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 fontSize: fontSize,
                 fontWeight: 900,
                 fontFamily: "Impact, 'Arial Narrow Bold', sans-serif",
@@ -166,7 +166,7 @@ function Scene() {
                 display: "block",
                 lineHeight: 1,
                 opacity: neonOpacity,
-                textShadow: "0 0 " + (15 * glow) + "px " + SCENE_PARAMS.accentColor.value,
+                textShadow: "0 0 " + (15 * glow) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               }}>
                 {line.text}
               </span>
@@ -179,7 +179,7 @@ function Scene() {
                   bottom: -minDim * 0.04,
                   width: minDim * 0.15,
                   height: minDim * 0.15,
-                  backgroundColor: SCENE_PARAMS.bulbColor.value,
+                  backgroundColor: (props.bulbColor ?? SCENE_PARAMS.bulbColor.value),
                   borderRadius: "50%",
                   display: "flex",
                   justifyContent: "center",
@@ -209,7 +209,7 @@ function Scene() {
         position: "absolute",
         width: "100%",
         height: "20%",
-        background: "linear-gradient(to bottom, transparent, " + SCENE_PARAMS.accentColor.value + "22, transparent)",
+        background: "linear-gradient(to bottom, transparent, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "22, transparent)",
         top: (adjustedFrame % 200) / 2 + "%",
         pointerEvents: "none"
       }} />

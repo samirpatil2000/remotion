@@ -19,15 +19,15 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const logoSize = minDim * SCENE_PARAMS.logoSize.value;
+  const logoSize = minDim * (props.logoSize ?? SCENE_PARAMS.logoSize.value);
   
   // Logo entrance with smooth motion
   const logoEntrance = spring({
@@ -36,12 +36,12 @@ function Scene() {
     config: { damping: 20, stiffness: 90 }
   });
   const logoScale = interpolate(logoEntrance, [0, 1], [0.1, 1], { extrapolateRight: "clamp" });
-  const logoY = interpolate(logoEntrance, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const logoOpacity = interpolate(logoEntrance, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const logoY = interpolate(logoEntrance, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const logoOpacity = interpolate(logoEntrance, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
   
   // Gentle pulse after entrance (starts after frame 45)
   const pulseFrame = Math.max(0, adjustedFrame - 45);
-  const pulseAmount = SCENE_PARAMS.pulseAmount.value;
+  const pulseAmount = (props.pulseAmount ?? SCENE_PARAMS.pulseAmount.value);
   const pulse = 1 + Math.sin(pulseFrame * 0.08) * pulseAmount * interpolate(adjustedFrame, [45, 60], [0, 1], { extrapolateRight: "clamp" });
   
   // Glow entrance (slightly delayed)
@@ -51,25 +51,25 @@ function Scene() {
     config: { damping: 25, stiffness: 80 }
   });
   const glowScale = interpolate(glowEntrance, [0, 1], [0.5, 1.2], { extrapolateRight: "clamp" });
-  const glowOpacity = interpolate(glowEntrance, [0, 1], [0, SCENE_PARAMS.glowIntensity.value], { extrapolateRight: "clamp" });
+  const glowOpacity = interpolate(glowEntrance, [0, 1], [0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value)], { extrapolateRight: "clamp" });
   
   // Instagram gradient colors
   const gradientColors = "#FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5";
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         position: "relative",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+        filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
         opacity: logoOpacity,
       }}>
         {/* Gradient glow behind logo */}
@@ -105,7 +105,7 @@ function Scene() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          transform: "translateY(" + logoY + "px) scale(" + (logoScale * pulse) + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)",
+          transform: "translateY(" + logoY + "px) scale(" + (logoScale * pulse) + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
           boxShadow: "0 " + (logoSize * 0.05) + "px " + (logoSize * 0.3) + "px rgba(0, 0, 0, 0.4)",
         }}>
           {/* Camera body outline */}

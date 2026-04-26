@@ -23,24 +23,24 @@ const SCENE_PARAMS = {
   showSpikes: { type: "boolean", label: "Show Spikes", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const blobSize = minDim * SCENE_PARAMS.blobSize.value;
-  const complexity = SCENE_PARAMS.blobComplexity.value;
-  const morphIntensity = SCENE_PARAMS.morphIntensity.value;
-  const tension = SCENE_PARAMS.tensionAmount.value;
-  const spikeFreq = SCENE_PARAMS.spikeFrequency.value;
+  const blobSize = minDim * (props.blobSize ?? SCENE_PARAMS.blobSize.value);
+  const complexity = (props.blobComplexity ?? SCENE_PARAMS.blobComplexity.value);
+  const morphIntensity = (props.morphIntensity ?? SCENE_PARAMS.morphIntensity.value);
+  const tension = (props.tensionAmount ?? SCENE_PARAMS.tensionAmount.value);
+  const spikeFreq = (props.spikeFrequency ?? SCENE_PARAMS.spikeFrequency.value);
   
   const colors = [
-    SCENE_PARAMS.primaryColor.value,
-    SCENE_PARAMS.secondaryColor.value,
-    SCENE_PARAMS.tertiaryColor.value,
-    SCENE_PARAMS.quaternaryColor.value,
+    (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+    (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
+    (props.tertiaryColor ?? SCENE_PARAMS.tertiaryColor.value),
+    (props.quaternaryColor ?? SCENE_PARAMS.quaternaryColor.value),
   ];
   
   const entranceProgress = spring({ 
@@ -76,7 +76,7 @@ function Scene() {
       const elasticWave = elasticPulse(tensionPhase + i * 0.5 + offset, 0.8) * morphIntensity * 0.6;
       
       const spikePhase = (time * 0.06 + i * spikeFreq + offset) % (Math.PI * 2);
-      const spikeActive = SCENE_PARAMS.showSpikes.value && spikePhase < 0.8;
+      const spikeActive = (props.showSpikes ?? SCENE_PARAMS.showSpikes.value) && spikePhase < 0.8;
       const spike = spikeActive ? Math.pow(1 - spikePhase / 0.8, 2) * morphIntensity * 1.2 : 0;
       
       const jitter = Math.sin(time * 0.15 + i * 4.7) * 0.02 * tension;
@@ -161,7 +161,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
@@ -178,7 +178,7 @@ function Scene() {
       }} />
       
       <div style={{
-        transform: "scale(" + (SCENE_PARAMS.scale.value * entranceProgress * pulseScale) + ") translate(" + floatX + "px, " + floatY + "px)",
+        transform: "scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * entranceProgress * pulseScale) + ") translate(" + floatX + "px, " + floatY + "px)",
         transformOrigin: "center center",
       }}>
         <svg 
@@ -188,7 +188,7 @@ function Scene() {
           style={{ overflow: "visible" }}
         >
           <defs>
-            {SCENE_PARAMS.showGradient.value && (
+            {(props.showGradient ?? SCENE_PARAMS.showGradient.value) && (
               <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor={currentColor} />
                 <stop offset="40%" stopColor={interpolatedColor} />
@@ -207,12 +207,12 @@ function Scene() {
           <g transform={"rotate(" + rotation + ")"}>
             <path
               d={blobPath}
-              fill={SCENE_PARAMS.showGradient.value ? "url(#" + gradientId + ")" : interpolatedColor}
+              fill={(props.showGradient ?? SCENE_PARAMS.showGradient.value) ? "url(#" + gradientId + ")" : interpolatedColor}
               filter={"url(#" + glowId + ")"}
               opacity={0.95}
             />
             
-            {SCENE_PARAMS.showInnerGlow.value && (
+            {(props.showInnerGlow ?? SCENE_PARAMS.showInnerGlow.value) && (
               <path
                 d={innerBlobPath}
                 fill="none"
@@ -222,7 +222,7 @@ function Scene() {
               />
             )}
             
-            {SCENE_PARAMS.showInnerGlow.value && (
+            {(props.showInnerGlow ?? SCENE_PARAMS.showInnerGlow.value) && (
               <path
                 d={generateBlobPath(adjustedFrame, Math.PI * 1.4)}
                 fill="none"
@@ -274,7 +274,7 @@ function Scene() {
         );
       })}
       
-      {SCENE_PARAMS.showSpikes.value && [0, 1, 2].map((i) => {
+      {(props.showSpikes ?? SCENE_PARAMS.showSpikes.value) && [0, 1, 2].map((i) => {
         const burstPhase = (adjustedFrame * 0.03 + i * 2.5) % (Math.PI * 2);
         const burstActive = burstPhase < 0.6;
         const burstProgress = burstActive ? burstPhase / 0.6 : 0;

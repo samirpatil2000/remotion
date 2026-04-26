@@ -31,27 +31,27 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const items = [
-    { icon: SCENE_PARAMS.venue1Icon.value, label: SCENE_PARAMS.venue1Label.value },
-    { icon: SCENE_PARAMS.venue2Icon.value, label: SCENE_PARAMS.venue2Label.value },
-    { icon: SCENE_PARAMS.venue3Icon.value, label: SCENE_PARAMS.venue3Label.value },
-    { icon: SCENE_PARAMS.venue4Icon.value, label: SCENE_PARAMS.venue4Label.value }
+    { icon: (props.venue1Icon ?? SCENE_PARAMS.venue1Icon.value), label: (props.venue1Label ?? SCENE_PARAMS.venue1Label.value) },
+    { icon: (props.venue2Icon ?? SCENE_PARAMS.venue2Icon.value), label: (props.venue2Label ?? SCENE_PARAMS.venue2Label.value) },
+    { icon: (props.venue3Icon ?? SCENE_PARAMS.venue3Icon.value), label: (props.venue3Label ?? SCENE_PARAMS.venue3Label.value) },
+    { icon: (props.venue4Icon ?? SCENE_PARAMS.venue4Icon.value), label: (props.venue4Label ?? SCENE_PARAMS.venue4Label.value) }
   ];
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}>
           {items.map((item, i) => {
-            const delay = i * SCENE_PARAMS.staggerDelay.value;
+            const delay = i * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const progress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
-            const slideY = interpolate(progress, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
+            const slideY = interpolate(progress, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
             const scale = interpolate(progress, [0, 1], [0.95, 1], { extrapolateRight: "clamp" });
 
             return (
@@ -60,23 +60,23 @@ function Scene() {
                 alignItems: "center",
                 gap: minDim * 0.02,
                 marginBottom: minDim * 0.03,
-                opacity: progress * SCENE_PARAMS.opacity.value,
+                opacity: progress * (props.opacity ?? SCENE_PARAMS.opacity.value),
                 transform: "translateY(" + slideY + "px) scale(" + scale + ")",
-                filter: SCENE_PARAMS.blur.value > 0 ? "blur(" + SCENE_PARAMS.blur.value + "px)" : "none"
+                filter: (props.blur ?? SCENE_PARAMS.blur.value) > 0 ? "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)" : "none"
               }}>
                 <div style={{
                   fontSize: minDim * 0.06,
                   lineHeight: 1,
-                  color: SCENE_PARAMS.accentColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                  color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                 }}>
                   {item.icon}
                 </div>
                 <div style={{
                   fontSize: minDim * 0.045,
                   fontWeight: 600,
-                  color: SCENE_PARAMS.textColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
                 }}>
                   {item.label}
                 </div>

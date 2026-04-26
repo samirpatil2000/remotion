@@ -23,23 +23,23 @@ const SCENE_PARAMS = {
   noteSize: { type: "number", label: "Note Size", value: 0.12, min: 0.08, max: 0.2, step: 0.01 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const noteCount = Math.floor(SCENE_PARAMS.noteCount.value);
-  const noteSize = minDim * SCENE_PARAMS.noteSize.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const noteCount = Math.floor((props.noteCount ?? SCENE_PARAMS.noteCount.value));
+  const noteSize = minDim * (props.noteSize ?? SCENE_PARAMS.noteSize.value);
   
   const noteColors = [
-    SCENE_PARAMS.noteColor1.value,
-    SCENE_PARAMS.noteColor2.value,
-    SCENE_PARAMS.noteColor3.value,
-    SCENE_PARAMS.noteColor4.value,
-    SCENE_PARAMS.noteColor5.value,
+    (props.noteColor1 ?? SCENE_PARAMS.noteColor1.value),
+    (props.noteColor2 ?? SCENE_PARAMS.noteColor2.value),
+    (props.noteColor3 ?? SCENE_PARAMS.noteColor3.value),
+    (props.noteColor4 ?? SCENE_PARAMS.noteColor4.value),
+    (props.noteColor5 ?? SCENE_PARAMS.noteColor5.value),
   ];
   
   const generateNotes = () => {
@@ -87,13 +87,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         width: "100%",
         height: "100%",
@@ -151,7 +151,7 @@ function Scene() {
           zIndex: 100,
         }}>
           <div style={{
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             padding: minDim * 0.03 + "px " + minDim * 0.06 + "px",
             borderRadius: minDim * 0.015,
             boxShadow: "0 " + minDim * 0.015 + "px " + minDim * 0.04 + "px rgba(0,0,0,0.3)",
@@ -168,14 +168,14 @@ function Scene() {
               borderTopRightRadius: minDim * 0.015,
             }} />
             <h1 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.12,
               fontWeight: 800,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               margin: 0,
               letterSpacing: "-0.02em",
             }}>
-              {SCENE_PARAMS.logoText.value}
+              {(props.logoText ?? SCENE_PARAMS.logoText.value)}
             </h1>
           </div>
         </div>

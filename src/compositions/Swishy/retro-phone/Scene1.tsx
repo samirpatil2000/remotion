@@ -29,13 +29,13 @@ const SCENE_PARAMS = {
   messageDelay: { type: "number", label: "Message Delay (frames)", value: 20, min: 10, max: 40, step: 5 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const phoneHeight = isPortrait ? height * 0.6 : height * 0.8;
@@ -48,15 +48,15 @@ function Scene() {
   const phoneY = interpolate(phoneEntrance, [0, 1], [height * 0.2, 0]);
   
   const messages = [
-    { text: SCENE_PARAMS.message1.value, delay: SCENE_PARAMS.messageDelay.value, person: 1 },
-    { text: SCENE_PARAMS.message2.value, delay: SCENE_PARAMS.messageDelay.value + 25, person: 2 },
-    { text: SCENE_PARAMS.message3.value, delay: SCENE_PARAMS.messageDelay.value + 50, person: 1 },
-    { text: SCENE_PARAMS.message4.value, delay: SCENE_PARAMS.messageDelay.value + 75, person: 2 }
+    { text: (props.message1 ?? SCENE_PARAMS.message1.value), delay: (props.messageDelay ?? SCENE_PARAMS.messageDelay.value), person: 1 },
+    { text: (props.message2 ?? SCENE_PARAMS.message2.value), delay: (props.messageDelay ?? SCENE_PARAMS.messageDelay.value) + 25, person: 2 },
+    { text: (props.message3 ?? SCENE_PARAMS.message3.value), delay: (props.messageDelay ?? SCENE_PARAMS.messageDelay.value) + 50, person: 1 },
+    { text: (props.message4 ?? SCENE_PARAMS.message4.value), delay: (props.messageDelay ?? SCENE_PARAMS.messageDelay.value) + 75, person: 2 }
   ];
   
   return (
     <AbsoluteFill style={{
-      background: 'radial-gradient(circle at 30% 40%, ' + SCENE_PARAMS.gradientColor.value + ' 0%, ' + SCENE_PARAMS.backgroundColor.value + ' 70%)',
+      background: 'radial-gradient(circle at 30% 40%, ' + (props.gradientColor ?? SCENE_PARAMS.gradientColor.value) + ' 0%, ' + (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) + ' 70%)',
       justifyContent: "center",
       alignItems: "center"
     }}>
@@ -71,9 +71,9 @@ function Scene() {
         <div style={{
           width: "100%",
           height: "100%",
-          backgroundColor: SCENE_PARAMS.phoneColor.value,
+          backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
           borderRadius: finalPhoneWidth * 0.08,
-          border: "3px solid " + SCENE_PARAMS.phoneBorder.value,
+          border: "3px solid " + (props.phoneBorder ?? SCENE_PARAMS.phoneBorder.value),
           boxShadow: "0 20px 40px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.1)",
           display: "flex",
           flexDirection: "column",
@@ -86,7 +86,7 @@ function Scene() {
             right: finalPhoneWidth * 0.1,
             width: 3,
             height: finalPhoneHeight * 0.15,
-            backgroundColor: SCENE_PARAMS.antennaColor.value,
+            backgroundColor: (props.antennaColor ?? SCENE_PARAMS.antennaColor.value),
             borderRadius: "0 0 50px 50px"
           }} />
           
@@ -95,7 +95,7 @@ function Scene() {
             margin: finalPhoneWidth * 0.08,
             marginBottom: finalPhoneWidth * 0.05,
             height: finalPhoneHeight * 0.4,
-            backgroundColor: SCENE_PARAMS.screenColor.value,
+            backgroundColor: (props.screenColor ?? SCENE_PARAMS.screenColor.value),
             borderRadius: finalPhoneWidth * 0.04,
             border: "2px solid #1a1a1a",
             display: "flex",
@@ -112,14 +112,14 @@ function Scene() {
               alignItems: "center",
               marginBottom: finalPhoneWidth * 0.02,
               fontSize: finalPhoneWidth * 0.025,
-              color: SCENE_PARAMS.textColor.value
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value)
             }}>
               <span>📶 Nokia</span>
               <span>🔋 ██</span>
             </div>
             
             <div style={{
-              borderBottom: "1px solid " + SCENE_PARAMS.textColor.value,
+              borderBottom: "1px solid " + (props.textColor ?? SCENE_PARAMS.textColor.value),
               marginBottom: finalPhoneWidth * 0.03,
               opacity: 0.5
             }} />
@@ -131,7 +131,7 @@ function Scene() {
               flexDirection: "column",
               gap: finalPhoneWidth * 0.01,
               fontSize: finalPhoneWidth * 0.03,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               lineHeight: 1.2
             }}>
               {messages.map((msg, i) => {
@@ -144,7 +144,7 @@ function Scene() {
                 
                 const chars = msg.text.split('');
                 const visibleChars = Math.floor(msgProgress * chars.length);
-                const personEmoji = msg.person === 1 ? SCENE_PARAMS.person1Emoji.value : SCENE_PARAMS.person2Emoji.value;
+                const personEmoji = msg.person === 1 ? (props.person1Emoji ?? SCENE_PARAMS.person1Emoji.value) : (props.person2Emoji ?? SCENE_PARAMS.person2Emoji.value);
                 
                 return (
                   <div key={i} style={{ opacity: msgProgress > 0 ? 1 : 0 }}>
@@ -175,14 +175,14 @@ function Scene() {
               
               return (
                 <div key={i} style={{
-                  backgroundColor: SCENE_PARAMS.keypadColor.value,
-                  border: "2px solid " + SCENE_PARAMS.keypadBorder.value,
+                  backgroundColor: (props.keypadColor ?? SCENE_PARAMS.keypadColor.value),
+                  border: "2px solid " + (props.keypadBorder ?? SCENE_PARAMS.keypadBorder.value),
                   borderRadius: finalPhoneWidth * 0.02,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: finalPhoneWidth * 0.04,
-                  color: SCENE_PARAMS.keypadText.value,
+                  color: (props.keypadText ?? SCENE_PARAMS.keypadText.value),
                   fontFamily: "'Courier New', monospace",
                   fontWeight: "bold",
                   boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -204,7 +204,7 @@ function Scene() {
             <div style={{
               width: finalPhoneWidth * 0.15,
               height: finalPhoneWidth * 0.08,
-              backgroundColor: SCENE_PARAMS.callButtonColor.value,
+              backgroundColor: (props.callButtonColor ?? SCENE_PARAMS.callButtonColor.value),
               borderRadius: finalPhoneWidth * 0.02,
               border: "2px solid #2d4a35",
               display: "flex",
@@ -218,7 +218,7 @@ function Scene() {
             <div style={{
               width: finalPhoneWidth * 0.15,
               height: finalPhoneWidth * 0.08,
-              backgroundColor: SCENE_PARAMS.endButtonColor.value,
+              backgroundColor: (props.endButtonColor ?? SCENE_PARAMS.endButtonColor.value),
               borderRadius: finalPhoneWidth * 0.02,
               border: "2px solid #6b2c2c",
               display: "flex",
@@ -237,7 +237,7 @@ function Scene() {
             left: "50%",
             transform: "translateX(-50%)",
             fontSize: finalPhoneWidth * 0.025,
-            color: SCENE_PARAMS.brandColor.value,
+            color: (props.brandColor ?? SCENE_PARAMS.brandColor.value),
             fontWeight: "bold",
             fontFamily: "system-ui"
           }}>NOKIA</div>

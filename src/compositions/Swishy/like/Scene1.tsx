@@ -19,12 +19,12 @@ const SCENE_PARAMS = {
   heartCount: { type: "number", label: "Floating Hearts", value: 8, min: 4, max: 15, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   // Slide up animation with soft bounce
@@ -37,7 +37,7 @@ function Scene() {
   const slideY = interpolate(
     slideProgress,
     [0, 1],
-    [SCENE_PARAMS.slideDistance.value, 0],
+    [(props.slideDistance ?? SCENE_PARAMS.slideDistance.value), 0],
     { extrapolateRight: "clamp" }
   );
   
@@ -59,7 +59,7 @@ function Scene() {
   const glowOpacity = interpolate(
     adjustedFrame,
     [10, 25, 50, 80],
-    [0, SCENE_PARAMS.glowIntensity.value, SCENE_PARAMS.glowIntensity.value * 0.6, 0.2],
+    [0, (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value), (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * 0.6, 0.2],
     { extrapolateRight: "clamp" }
   );
   
@@ -67,7 +67,7 @@ function Scene() {
   const bubbleSize = minDim * 0.22;
   
   // Floating hearts configuration
-  const heartCount = SCENE_PARAMS.heartCount.value;
+  const heartCount = (props.heartCount ?? SCENE_PARAMS.heartCount.value);
   const floatingHearts = [];
   
   for (let i = 0; i < heartCount; i++) {
@@ -114,7 +114,7 @@ function Scene() {
             transform: "translate(calc(-50% + " + (xOffset + drift) + "px), calc(-50% + " + yPos + "px)) scale(" + heartScale + ")",
             opacity: opacity,
             fontSize: heartSize,
-            color: SCENE_PARAMS.floatingHeartColor.value,
+            color: (props.floatingHeartColor ?? SCENE_PARAMS.floatingHeartColor.value),
             filter: "blur(0.5px)",
             zIndex: 1,
           }}
@@ -126,7 +126,7 @@ function Scene() {
   }
   
   // Heart SVG path for the main bubble
-  const HeartIcon = ({ size, color }) => (
+  const HeartIcon = ({ props, size, color }: any) => (
     <svg
       width={size}
       height={size}
@@ -141,7 +141,7 @@ function Scene() {
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
@@ -153,7 +153,7 @@ function Scene() {
       {/* Main notification bubble container */}
       <div
         style={{
-          transform: "scale(" + (scaleValue * SCENE_PARAMS.scale.value) + ") translateY(" + slideY + "px)",
+          transform: "scale(" + (scaleValue * (props.scale ?? SCENE_PARAMS.scale.value)) + ") translateY(" + slideY + "px)",
           transformOrigin: "center center",
           position: "relative",
           zIndex: 10,
@@ -169,7 +169,7 @@ function Scene() {
             width: bubbleSize * 1.8,
             height: bubbleSize * 1.8,
             borderRadius: "50%",
-            background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + " 0%, transparent 65%)",
+            background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + " 0%, transparent 65%)",
             opacity: glowOpacity,
             filter: "blur(20px)",
             zIndex: -1,
@@ -182,7 +182,7 @@ function Scene() {
             width: bubbleSize,
             height: bubbleSize,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.bubbleColor.value,
+            backgroundColor: (props.bubbleColor ?? SCENE_PARAMS.bubbleColor.value),
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -192,15 +192,15 @@ function Scene() {
           }}
         >
           {/* White heart icon */}
-          <HeartIcon
+          <HeartIcon props={props} 
             size={bubbleSize * 0.4}
-            color={SCENE_PARAMS.heartColor.value}
+            color={(props.heartColor ?? SCENE_PARAMS.heartColor.value)}
           />
           
           {/* Number 1 */}
           <span
             style={{
-              color: SCENE_PARAMS.heartColor.value,
+              color: (props.heartColor ?? SCENE_PARAMS.heartColor.value),
               fontSize: bubbleSize * 0.22,
               fontWeight: 700,
               fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
@@ -208,7 +208,7 @@ function Scene() {
               marginTop: -minDim * 0.005,
             }}
           >
-            {SCENE_PARAMS.likeCount.value}
+            {(props.likeCount ?? SCENE_PARAMS.likeCount.value)}
           </span>
         </div>
       </div>

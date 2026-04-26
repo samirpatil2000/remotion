@@ -19,14 +19,14 @@ const SCENE_PARAMS = {
   tapFrame: { type: "number", label: "Tap Frame", value: 60, min: 30, max: 90, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const tapFrame = SCENE_PARAMS.tapFrame.value;
+  const tapFrame = (props.tapFrame ?? SCENE_PARAMS.tapFrame.value);
   
   // Button entrance animation
   const entranceProgress = spring({ 
@@ -49,7 +49,7 @@ function Scene() {
   const glowCycleDuration = 45;
   const glowFrame = Math.max(0, adjustedFrame - glowStartFrame);
   const glowPhase = (glowFrame % glowCycleDuration) / glowCycleDuration;
-  const glowIntensity = SCENE_PARAMS.glowIntensity.value * entranceProgress;
+  const glowIntensity = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * entranceProgress;
   const glowPulse = 0.5 + 0.5 * Math.sin(glowPhase * Math.PI * 2);
   const currentGlow = glowIntensity * (0.6 + 0.4 * glowPulse);
   
@@ -68,7 +68,7 @@ function Scene() {
   }
   
   // Combined scale
-  const finalScale = entranceScale * tapProgress * SCENE_PARAMS.scale.value;
+  const finalScale = entranceScale * tapProgress * (props.scale ?? SCENE_PARAMS.scale.value);
   
   // Button dimensions
   const buttonPaddingH = minDim * 0.08;
@@ -80,7 +80,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
@@ -94,13 +94,13 @@ function Scene() {
           alignItems: "center",
           justifyContent: "center",
           gap: minDim * 0.02,
-          backgroundColor: SCENE_PARAMS.buttonColor.value,
+          backgroundColor: (props.buttonColor ?? SCENE_PARAMS.buttonColor.value),
           paddingLeft: buttonPaddingH,
           paddingRight: buttonPaddingH,
           paddingTop: buttonPaddingV,
           paddingBottom: buttonPaddingV,
           borderRadius: borderRadius,
-          boxShadow: `0 0 ${glowSpread * currentGlow}px ${glowSpread * currentGlow * 0.8}px ${SCENE_PARAMS.glowColor.value}${Math.round(currentGlow * 80).toString(16).padStart(2, '0')}`,
+          boxShadow: `0 0 ${glowSpread * currentGlow}px ${glowSpread * currentGlow * 0.8}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}${Math.round(currentGlow * 80).toString(16).padStart(2, '0')}`,
           cursor: "pointer",
         }}>
           <span style={{
@@ -109,16 +109,16 @@ function Scene() {
             transform: `rotate(${waveRotation}deg)`,
             transformOrigin: "70% 70%",
           }}>
-            {SCENE_PARAMS.emoji.value}
+            {(props.emoji ?? SCENE_PARAMS.emoji.value)}
           </span>
           <span style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: fontSize,
             fontWeight: 600,
-            fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`,
+            fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`,
             letterSpacing: "-0.02em",
           }}>
-            {SCENE_PARAMS.buttonText.value}
+            {(props.buttonText ?? SCENE_PARAMS.buttonText.value)}
           </span>
         </div>
       </div>

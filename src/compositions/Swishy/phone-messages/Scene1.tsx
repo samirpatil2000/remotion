@@ -27,14 +27,14 @@ const SCENE_PARAMS = {
   messageDelay: { type: "number", label: "Message Delay", value: 20, min: 10, max: 40, step: 5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const msgDelay = SCENE_PARAMS.messageDelay.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const msgDelay = (props.messageDelay ?? SCENE_PARAMS.messageDelay.value);
   
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
@@ -52,20 +52,20 @@ function Scene() {
   const smallFont = finalPhoneWidth * 0.04;
   
   const messages = [
-    { text: SCENE_PARAMS.message1.value, sent: false, delay: 0 },
-    { text: SCENE_PARAMS.message2.value, sent: true, delay: msgDelay },
-    { text: SCENE_PARAMS.message3.value, sent: false, delay: msgDelay * 2.25 },
-    { text: SCENE_PARAMS.message4.value, sent: true, delay: msgDelay * 3.5 },
+    { text: (props.message1 ?? SCENE_PARAMS.message1.value), sent: false, delay: 0 },
+    { text: (props.message2 ?? SCENE_PARAMS.message2.value), sent: true, delay: msgDelay },
+    { text: (props.message3 ?? SCENE_PARAMS.message3.value), sent: false, delay: msgDelay * 2.25 },
+    { text: (props.message4 ?? SCENE_PARAMS.message4.value), sent: true, delay: msgDelay * 3.5 },
   ];
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center" }}>
         {/* Phone frame */}
         <div style={{
           width: finalPhoneWidth,
           height: finalPhoneHeight,
-          backgroundColor: SCENE_PARAMS.phoneColor.value,
+          backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
           borderRadius: borderRadius,
           border: "4px solid #2a2a2e",
           display: "flex",
@@ -90,7 +90,7 @@ function Scene() {
           {/* Status bar */}
           <div style={{
             height: finalPhoneHeight * 0.055,
-            backgroundColor: SCENE_PARAMS.phoneColor.value,
+            backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -121,15 +121,15 @@ function Scene() {
               width: finalPhoneWidth * 0.1,
               height: finalPhoneWidth * 0.1,
               borderRadius: "50%",
-              backgroundColor: SCENE_PARAMS.sentBubbleColor.value,
+              backgroundColor: (props.sentBubbleColor ?? SCENE_PARAMS.sentBubbleColor.value),
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}>
-              <span style={{ color: "#fff", fontSize: smallFont, fontWeight: 600 }}>{SCENE_PARAMS.contactName.value.charAt(0)}</span>
+              <span style={{ color: "#fff", fontSize: smallFont, fontWeight: 600 }}>{(props.contactName ?? SCENE_PARAMS.contactName.value).charAt(0)}</span>
             </div>
             <div>
-              <div style={{ fontSize: bubbleFontSize * 0.9, fontWeight: 600, color: "#000", fontFamily: "system-ui" }}>{SCENE_PARAMS.contactName.value}</div>
+              <div style={{ fontSize: bubbleFontSize * 0.9, fontWeight: 600, color: "#000", fontFamily: "system-ui" }}>{(props.contactName ?? SCENE_PARAMS.contactName.value)}</div>
               <div style={{ fontSize: smallFont * 0.85, color: "#8e8e93", fontFamily: "system-ui" }}>iMessage</div>
             </div>
           </div>
@@ -155,7 +155,7 @@ function Scene() {
                   transform: "scale(" + msgProgress + ") translateY(" + ((1 - msgProgress) * 15) + "px)",
                 }}>
                   <div style={{
-                    backgroundColor: msg.sent ? SCENE_PARAMS.sentBubbleColor.value : SCENE_PARAMS.receivedBubbleColor.value,
+                    backgroundColor: msg.sent ? (props.sentBubbleColor ?? SCENE_PARAMS.sentBubbleColor.value) : (props.receivedBubbleColor ?? SCENE_PARAMS.receivedBubbleColor.value),
                     color: msg.sent ? "#fff" : "#000",
                     padding: (padding * 0.5) + "px " + (padding * 0.9) + "px",
                     borderRadius: finalPhoneWidth * 0.055,

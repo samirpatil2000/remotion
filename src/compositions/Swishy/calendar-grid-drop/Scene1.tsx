@@ -17,15 +17,15 @@ const SCENE_PARAMS = {
   clutterIntensity: { type: "number", label: "Clutter Intensity", value: 1, min: 0.5, max: 1.5, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const gridCount = SCENE_PARAMS.gridCount.value;
-  const clutterIntensity = SCENE_PARAMS.clutterIntensity.value;
+  const gridCount = (props.gridCount ?? SCENE_PARAMS.gridCount.value);
+  const clutterIntensity = (props.clutterIntensity ?? SCENE_PARAMS.clutterIntensity.value);
   
   // Timing phases
   const stackPhaseEnd = 45;
@@ -50,7 +50,7 @@ function Scene() {
   }
   
   // Spreadsheet Grid Component
-  const SpreadsheetGrid = ({ config, index }) => {
+  const SpreadsheetGrid = ({ props, config, index }: any) => {
     const { offsetX, offsetY, rotation, scale: gridScale, stackDelay, fadeDelay } = config;
     
     // Stack-in animation
@@ -94,7 +94,7 @@ function Scene() {
     const finalX = offsetX + wobbleX + slideOutX;
     const finalY = currentY + wobbleY;
     const finalRotation = rotation + wobbleRotation;
-    const finalOpacity = stackProgress * fadeProgress * SCENE_PARAMS.gridOpacity.value;
+    const finalOpacity = stackProgress * fadeProgress * (props.gridOpacity ?? SCENE_PARAMS.gridOpacity.value);
     
     return (
       <div style={{
@@ -107,7 +107,7 @@ function Scene() {
         backgroundColor: "#1a1a2e",
         borderRadius: 4,
         boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
-        border: `1px solid ${SCENE_PARAMS.gridColor.value}40`,
+        border: `1px solid ${(props.gridColor ?? SCENE_PARAMS.gridColor.value)}40`,
       }}>
         {/* Grid lines */}
         <svg width={gridWidth} height={gridHeight} style={{ position: "absolute", top: 0, left: 0 }}>
@@ -119,7 +119,7 @@ function Scene() {
               y1={0}
               x2={i * cellWidth}
               y2={gridHeight}
-              stroke={SCENE_PARAMS.gridColor.value}
+              stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
               strokeWidth={i === 0 || i === cols ? 2 : 1}
               strokeOpacity={0.6}
             />
@@ -132,7 +132,7 @@ function Scene() {
               y1={i * cellHeight}
               x2={gridWidth}
               y2={i * cellHeight}
-              stroke={SCENE_PARAMS.gridColor.value}
+              stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)}
               strokeWidth={i === 0 || i === rows ? 2 : 1}
               strokeOpacity={0.6}
             />
@@ -153,7 +153,7 @@ function Scene() {
                 top: row * cellHeight + cellHeight * 0.35,
                 width: cellWidth * contentWidth,
                 height: cellHeight * 0.3,
-                backgroundColor: SCENE_PARAMS.gridColor.value,
+                backgroundColor: (props.gridColor ?? SCENE_PARAMS.gridColor.value),
                 opacity: 0.7,
                 borderRadius: 2,
               }}
@@ -187,13 +187,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
         position: "relative",
         width: "100%",
@@ -204,7 +204,7 @@ function Scene() {
       }}>
         {/* Grid layers */}
         {grids.map((config, index) => (
-          <SpreadsheetGrid key={config.id} config={config} index={index} />
+          <SpreadsheetGrid props={props}  key={config.id} config={config} index={index} />
         ))}
         
         {/* Checkmark */}
@@ -224,7 +224,7 @@ function Scene() {
             width: checkmarkSize * 2,
             height: checkmarkSize * 2,
             borderRadius: "50%",
-            background: `radial-gradient(circle, ${SCENE_PARAMS.glowColor.value}40 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)}40 0%, transparent 70%)`,
             opacity: glowIntensity,
           }} />
           
@@ -238,12 +238,12 @@ function Scene() {
             <path
               d="M20 50 L40 70 L80 30"
               fill="none"
-              stroke={SCENE_PARAMS.checkmarkColor.value}
+              stroke={(props.checkmarkColor ?? SCENE_PARAMS.checkmarkColor.value)}
               strokeWidth={8}
               strokeLinecap="round"
               strokeLinejoin="round"
               style={{
-                filter: `drop-shadow(0 0 ${10 * glowIntensity}px ${SCENE_PARAMS.glowColor.value})`,
+                filter: `drop-shadow(0 0 ${10 * glowIntensity}px ${(props.glowColor ?? SCENE_PARAMS.glowColor.value)})`,
               }}
             />
           </svg>

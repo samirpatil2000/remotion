@@ -18,14 +18,14 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.8, min: 0.3, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const convergenceFrame = SCENE_PARAMS.convergenceFrame.value;
+  const convergenceFrame = (props.convergenceFrame ?? SCENE_PARAMS.convergenceFrame.value);
   
   const panels = [
     { id: 0, startX: -width * 0.6, startY: -height * 0.4, startRotate: -25, delay: 0 },
@@ -50,7 +50,7 @@ function Scene() {
     : 0;
   
   const particles = [];
-  const particleCount = SCENE_PARAMS.particleCount.value;
+  const particleCount = (props.particleCount ?? SCENE_PARAMS.particleCount.value);
   
   if (mergeComplete) {
     for (let i = 0; i < particleCount; i++) {
@@ -69,7 +69,7 @@ function Scene() {
       particles.push({
         x: particleX,
         y: particleY,
-        opacity: particleOpacity * SCENE_PARAMS.glowIntensity.value,
+        opacity: particleOpacity * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
         size: particleSize,
         key: i,
       });
@@ -89,7 +89,7 @@ function Scene() {
         angle: streakAngle,
         radius: streakRadius,
         length: streakLength,
-        opacity: streakProgress * 0.6 * SCENE_PARAMS.glowIntensity.value,
+        opacity: streakProgress * 0.6 * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
         key: i,
       });
     }
@@ -97,13 +97,13 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
       overflow: "hidden",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         position: "relative",
         width: width,
@@ -119,8 +119,8 @@ function Scene() {
             width: minDim * 0.5,
             height: minDim * 0.5,
             borderRadius: "50%",
-            background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + "20 0%, transparent 70%)",
-            opacity: pulseProgress * glowPulse * SCENE_PARAMS.glowIntensity.value,
+            background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "20 0%, transparent 70%)",
+            opacity: pulseProgress * glowPulse * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value),
             transform: "scale(" + (1 + pulseProgress * 0.5) + ")",
           }} />
         )}
@@ -130,7 +130,7 @@ function Scene() {
             position: "absolute",
             width: streak.length,
             height: 2,
-            background: "linear-gradient(90deg, " + SCENE_PARAMS.accentColor.value + ", transparent)",
+            background: "linear-gradient(90deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + ", transparent)",
             opacity: streak.opacity,
             transform: "rotate(" + (streak.angle * 180 / Math.PI) + "deg) translateX(" + streak.radius + "px)",
             transformOrigin: "left center",
@@ -174,13 +174,13 @@ function Scene() {
                 position: "absolute",
                 width: panelWidth,
                 height: panelHeight,
-                backgroundColor: SCENE_PARAMS.panelColor.value + Math.round(SCENE_PARAMS.panelOpacity.value * 255).toString(16).padStart(2, '0'),
+                backgroundColor: (props.panelColor ?? SCENE_PARAMS.panelColor.value) + Math.round((props.panelOpacity ?? SCENE_PARAMS.panelOpacity.value) * 255).toString(16).padStart(2, '0'),
                 borderRadius: minDim * 0.015,
                 transform: "translate(" + finalX + "px, " + finalY + "px) rotate(" + finalRotate + "deg) scale(" + scaleZ + ")",
                 opacity: panelOpacity,
-                border: "1px solid " + SCENE_PARAMS.accentColor.value + Math.round(edgeGlow * 180).toString(16).padStart(2, '0'),
-                boxShadow: "0 0 " + (15 + edgeGlow * 20) + "px " + SCENE_PARAMS.accentColor.value + Math.round(edgeGlow * 100).toString(16).padStart(2, '0') + 
-                          ", inset 0 0 20px " + SCENE_PARAMS.accentColor.value + "10",
+                border: "1px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + Math.round(edgeGlow * 180).toString(16).padStart(2, '0'),
+                boxShadow: "0 0 " + (15 + edgeGlow * 20) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + Math.round(edgeGlow * 100).toString(16).padStart(2, '0') + 
+                          ", inset 0 0 20px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "10",
                 backdropFilter: "blur(4px)",
               }}
             >
@@ -190,7 +190,7 @@ function Scene() {
                 left: minDim * 0.015,
                 right: minDim * 0.015,
                 height: minDim * 0.008,
-                background: "linear-gradient(90deg, " + SCENE_PARAMS.accentColor.value + "60, transparent 60%)",
+                background: "linear-gradient(90deg, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "60, transparent 60%)",
                 borderRadius: minDim * 0.004,
               }} />
               
@@ -200,7 +200,7 @@ function Scene() {
                 left: minDim * 0.015,
                 width: "40%",
                 height: minDim * 0.004,
-                backgroundColor: SCENE_PARAMS.accentColor.value + "40",
+                backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40",
                 borderRadius: minDim * 0.002,
               }} />
               <div style={{
@@ -209,7 +209,7 @@ function Scene() {
                 left: minDim * 0.015,
                 width: "60%",
                 height: minDim * 0.004,
-                backgroundColor: SCENE_PARAMS.panelColor.value + "30",
+                backgroundColor: (props.panelColor ?? SCENE_PARAMS.panelColor.value) + "30",
                 borderRadius: minDim * 0.002,
               }} />
             </div>
@@ -224,10 +224,10 @@ function Scene() {
               width: particle.size,
               height: particle.size,
               borderRadius: "50%",
-              backgroundColor: SCENE_PARAMS.accentColor.value,
+              backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               transform: "translate(" + particle.x + "px, " + particle.y + "px)",
               opacity: particle.opacity,
-              boxShadow: "0 0 " + (particle.size * 2) + "px " + SCENE_PARAMS.accentColor.value,
+              boxShadow: "0 0 " + (particle.size * 2) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             }}
           />
         ))}
@@ -238,9 +238,9 @@ function Scene() {
             width: minDim * 0.35,
             height: minDim * 0.22,
             borderRadius: minDim * 0.02,
-            border: "2px solid " + SCENE_PARAMS.accentColor.value + Math.round(pulseProgress * glowPulse * 200).toString(16).padStart(2, '0'),
-            boxShadow: "0 0 30px " + SCENE_PARAMS.accentColor.value + Math.round(pulseProgress * glowPulse * 150).toString(16).padStart(2, '0') + 
-                      ", 0 0 60px " + SCENE_PARAMS.accentColor.value + Math.round(pulseProgress * glowPulse * 80).toString(16).padStart(2, '0'),
+            border: "2px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + Math.round(pulseProgress * glowPulse * 200).toString(16).padStart(2, '0'),
+            boxShadow: "0 0 30px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + Math.round(pulseProgress * glowPulse * 150).toString(16).padStart(2, '0') + 
+                      ", 0 0 60px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + Math.round(pulseProgress * glowPulse * 80).toString(16).padStart(2, '0'),
             opacity: pulseProgress,
             pointerEvents: "none",
           }} />

@@ -19,11 +19,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
   const lineDrawEnd = durationInFrames * 0.6;
@@ -53,20 +53,20 @@ function Scene() {
   const dotLight3 = interpolate(drawProgress, [0.7, 0.75], [0, 1], { extrapolateRight: "clamp" });
   const dotLight4 = interpolate(drawProgress, [0.9, 0.95], [0, 1], { extrapolateRight: "clamp" });
 
-  const strokeWidth = minDim * 0.003 * SCENE_PARAMS.lineThickness.value;
+  const strokeWidth = minDim * 0.003 * (props.lineThickness ?? SCENE_PARAMS.lineThickness.value);
   const dotSize = minDim * 0.012;
   const iconSize = minDim * 0.05;
 
-  const glow = SCENE_PARAMS.glowIntensity.value;
+  const glow = (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ width: "100%", height: "100%", transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ width: "100%", height: "100%", transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ position: "absolute", top: 0, left: 0 }}>
           <path
             d={pathD}
             fill="none"
-            stroke={SCENE_PARAMS.primaryColor.value}
+            stroke={(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
             pathLength={1}
@@ -76,33 +76,33 @@ function Scene() {
         </svg>
 
         <div style={{ position: "absolute", left: p1.x, top: p1.y, transform: "translate(-50%, -50%)" }}>
-          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: SCENE_PARAMS.highlightColor.value, opacity: dotLight1, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${SCENE_PARAMS.highlightColor.value}` }} />
+          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value), opacity: dotLight1, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)}` }} />
           <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" style={{ position: "absolute", left: "50%", top: "-140%", transform: `translate(-50%, 0) scale(${interpolate(iconProgress1, [0, 1], [0.6, 1], { extrapolateRight: "clamp" })})`, opacity: iconProgress1 }}>
-            <path d="M6 3v7a6 6 0 0 0 12 0V3" fill="none" stroke={SCENE_PARAMS.primaryColor.value} strokeWidth="2" strokeLinecap="round" />
-            <path d="M6 3h4M14 3h4" fill="none" stroke={SCENE_PARAMS.primaryColor.value} strokeWidth="2" strokeLinecap="round" />
+            <path d="M6 3v7a6 6 0 0 0 12 0V3" fill="none" stroke={(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)} strokeWidth="2" strokeLinecap="round" />
+            <path d="M6 3h4M14 3h4" fill="none" stroke={(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)} strokeWidth="2" strokeLinecap="round" />
           </svg>
         </div>
 
         <div style={{ position: "absolute", left: p2.x, top: p2.y, transform: "translate(-50%, -50%)" }}>
-          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: SCENE_PARAMS.highlightColor.value, opacity: dotLight2, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${SCENE_PARAMS.highlightColor.value}` }} />
+          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value), opacity: dotLight2, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)}` }} />
           <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" style={{ position: "absolute", left: "50%", top: "-140%", transform: `translate(-50%, 0) scale(${interpolate(iconProgress2, [0, 1], [0.6, 1], { extrapolateRight: "clamp" })})`, opacity: iconProgress2 }}>
-            <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="none" stroke={SCENE_PARAMS.primaryColor.value} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+            <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="none" stroke={(props.primaryColor ?? SCENE_PARAMS.primaryColor.value)} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
           </svg>
         </div>
 
         <div style={{ position: "absolute", left: p3.x, top: p3.y, transform: "translate(-50%, -50%)" }}>
-          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: SCENE_PARAMS.highlightColor.value, opacity: dotLight3, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${SCENE_PARAMS.highlightColor.value}` }} />
-          <div style={{ position: "absolute", left: "50%", top: "-145%", transform: `translate(-50%, 0) scale(${interpolate(iconProgress3, [0, 1], [0.6, 1], { extrapolateRight: "clamp" })})`, opacity: iconProgress3, color: SCENE_PARAMS.primaryColor.value, fontSize: iconSize * 0.9, fontWeight: 700, fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif" }}>
-            {SCENE_PARAMS.dollarIcon.value}
+          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value), opacity: dotLight3, boxShadow: `0 0 ${minDim * 0.01 * glow}px ${(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)}` }} />
+          <div style={{ position: "absolute", left: "50%", top: "-145%", transform: `translate(-50%, 0) scale(${interpolate(iconProgress3, [0, 1], [0.6, 1], { extrapolateRight: "clamp" })})`, opacity: iconProgress3, color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value), fontSize: iconSize * 0.9, fontWeight: 700, fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif" }}>
+            {(props.dollarIcon ?? SCENE_PARAMS.dollarIcon.value)}
           </div>
         </div>
 
         <div style={{ position: "absolute", left: end.x, top: end.y, transform: "translate(-50%, -50%)" }}>
-          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: SCENE_PARAMS.highlightColor.value, opacity: dotLight4, boxShadow: `0 0 ${minDim * 0.012 * glow}px ${SCENE_PARAMS.highlightColor.value}` }} />
+          <div style={{ width: dotSize, height: dotSize, borderRadius: "50%", backgroundColor: (props.highlightColor ?? SCENE_PARAMS.highlightColor.value), opacity: dotLight4, boxShadow: `0 0 ${minDim * 0.012 * glow}px ${(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)}` }} />
           <div style={{ position: "absolute", left: "50%", top: "-135%", transform: `translate(-50%, 0) scale(${interpolate(finalProgress, [0, 1], [0.6, 1], { extrapolateRight: "clamp" })})`, opacity: finalProgress }}>
-            <svg width={iconSize * 1.1} height={iconSize * 0.75} viewBox="0 0 48 32" style={{ filter: `drop-shadow(0 0 ${minDim * 0.008 * glow}px ${SCENE_PARAMS.highlightColor.value})` }}>
-              <rect x="1" y="1" width="46" height="30" rx="6" fill={SCENE_PARAMS.highlightColor.value} stroke={SCENE_PARAMS.accentColor.value} strokeWidth="1.5" />
-              <polygon points="20,9 34,16 20,23" fill={SCENE_PARAMS.playTriangleColor.value} />
+            <svg width={iconSize * 1.1} height={iconSize * 0.75} viewBox="0 0 48 32" style={{ filter: `drop-shadow(0 0 ${minDim * 0.008 * glow}px ${(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)})` }}>
+              <rect x="1" y="1" width="46" height="30" rx="6" fill={(props.highlightColor ?? SCENE_PARAMS.highlightColor.value)} stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} strokeWidth="1.5" />
+              <polygon points="20,9 34,16 20,23" fill={(props.playTriangleColor ?? SCENE_PARAMS.playTriangleColor.value)} />
             </svg>
           </div>
         </div>

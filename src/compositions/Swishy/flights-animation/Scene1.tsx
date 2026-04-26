@@ -38,11 +38,11 @@ const SCENE_PARAMS = {
   flipCycles: { type: "number", label: "Flip Cycles", value: 8, min: 3, max: 15, step: 1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   const padding = minDim * 0.05;
   const contentWidth = width - padding * 2;
@@ -61,9 +61,9 @@ function Scene() {
   const allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 :-.";
   
   const flights = [
-    { time: SCENE_PARAMS.time1.value, dest: SCENE_PARAMS.dest1.value, carrier: SCENE_PARAMS.carrier1.value, number: SCENE_PARAMS.number1.value },
-    { time: SCENE_PARAMS.time2.value, dest: SCENE_PARAMS.dest2.value, carrier: SCENE_PARAMS.carrier2.value, number: SCENE_PARAMS.number2.value },
-    { time: SCENE_PARAMS.time3.value, dest: SCENE_PARAMS.dest3.value, carrier: SCENE_PARAMS.carrier3.value, number: SCENE_PARAMS.number3.value },
+    { time: (props.time1 ?? SCENE_PARAMS.time1.value), dest: (props.dest1 ?? SCENE_PARAMS.dest1.value), carrier: (props.carrier1 ?? SCENE_PARAMS.carrier1.value), number: (props.number1 ?? SCENE_PARAMS.number1.value) },
+    { time: (props.time2 ?? SCENE_PARAMS.time2.value), dest: (props.dest2 ?? SCENE_PARAMS.dest2.value), carrier: (props.carrier2 ?? SCENE_PARAMS.carrier2.value), number: (props.number2 ?? SCENE_PARAMS.number2.value) },
+    { time: (props.time3 ?? SCENE_PARAMS.time3.value), dest: (props.dest3 ?? SCENE_PARAMS.dest3.value), carrier: (props.carrier3 ?? SCENE_PARAMS.carrier3.value), number: (props.number3 ?? SCENE_PARAMS.number3.value) },
     { time: "", dest: "", carrier: "", number: "" },
     { time: "", dest: "", carrier: "", number: "" }
   ];
@@ -72,9 +72,9 @@ function Scene() {
   const destChars = 10;
   const flightChars = 7;
   
-  const FlipTile = ({ targetChar, delay, charIndex }) => {
+  const FlipTile = ({ props, targetChar, delay, charIndex }: any) => {
     const flipDuration = 45;
-    const cycleCount = SCENE_PARAMS.flipCycles.value + charIndex;
+    const cycleCount = (props.flipCycles ?? SCENE_PARAMS.flipCycles.value) + charIndex;
     const localFrame = Math.max(0, adjustedFrame - delay);
     
     const totalFlipTime = flipDuration;
@@ -109,10 +109,10 @@ function Scene() {
         justifyContent: "center",
         width: tileWidth,
         height: tileHeight,
-        backgroundColor: SCENE_PARAMS.tileColor.value,
-        color: SCENE_PARAMS.textColor.value,
+        backgroundColor: (props.tileColor ?? SCENE_PARAMS.tileColor.value),
+        color: (props.textColor ?? SCENE_PARAMS.textColor.value),
         fontSize: tileFontSize,
-        fontFamily: SCENE_PARAMS.flipFont.value + ", monospace",
+        fontFamily: (props.flipFont ?? SCENE_PARAMS.flipFont.value) + ", monospace",
         fontWeight: 700,
         borderRadius: minDim * 0.004,
         position: "relative",
@@ -146,12 +146,12 @@ function Scene() {
     );
   };
   
-  const FlipRow = ({ text, maxChars, delay }) => {
+  const FlipRow = ({ props, text, maxChars, delay }: any) => {
     const paddedText = text.toUpperCase().padEnd(maxChars, " ").slice(0, maxChars);
     return (
       <div style={{ display: "flex", flexDirection: "row" }}>
         {paddedText.split("").map((char, i) => (
-          <FlipTile key={i} targetChar={char} delay={delay + i * 2} charIndex={i} />
+          <FlipTile props={props}  key={i} targetChar={char} delay={delay + i * 2} charIndex={i} />
         ))}
       </div>
     );
@@ -164,7 +164,7 @@ function Scene() {
   });
   const headerY = interpolate(headerProgress, [0, 1], [-30, 0]);
   
-  const PlaneIcon = ({ rotation }) => (
+  const PlaneIcon = ({ props, rotation }: any) => (
     <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: minDim * 0.05, height: minDim * 0.05, transform: "rotate(" + rotation + "deg)" }}>
       <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
     </svg>
@@ -176,8 +176,8 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
-      fontFamily: SCENE_PARAMS.headingFont.value + ", sans-serif",
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
+      fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", sans-serif",
       color: "white"
     }}>
       <div style={{
@@ -188,23 +188,23 @@ function Scene() {
         height: contentHeight,
         display: "flex",
         flexDirection: "column",
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "top left"
       }}>
         {/* Header */}
         <div style={{
           height: headerHeight,
-          backgroundColor: SCENE_PARAMS.backgroundColor.value,
+          backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottom: "3px solid " + SCENE_PARAMS.borderColor.value,
+          borderBottom: "3px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value),
           marginBottom: minDim * 0.018,
           opacity: headerProgress,
           transform: "translateY(" + headerY + "px)"
         }}>
           <div style={{ marginLeft: minDim * 0.01 }}>
-            <PlaneIcon rotation={-45} />
+            <PlaneIcon props={props}  rotation={-45} />
           </div>
           <h1 style={{
             fontSize: minDim * 0.075,
@@ -212,12 +212,12 @@ function Scene() {
             letterSpacing: minDim * 0.003,
             textTransform: "uppercase",
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.headingFont.value + ", sans-serif"
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", sans-serif"
           }}>
-            {SCENE_PARAMS.title.value}
+            {(props.title ?? SCENE_PARAMS.title.value)}
           </h1>
           <div style={{ marginRight: minDim * 0.01 }}>
-            <PlaneIcon rotation={45} />
+            <PlaneIcon props={props}  rotation={45} />
           </div>
         </div>
         
@@ -228,7 +228,7 @@ function Scene() {
           alignItems: "center",
           fontSize: minDim * 0.024,
           fontWeight: 600,
-          color: SCENE_PARAMS.labelColor.value,
+          color: (props.labelColor ?? SCENE_PARAMS.labelColor.value),
           paddingBottom: minDim * 0.008,
           marginBottom: minDim * 0.008
         }}>
@@ -245,7 +245,7 @@ function Scene() {
           gap: rowGap
         }}>
           {flights.map((flight, rowIndex) => {
-            const rowDelay = 10 + rowIndex * SCENE_PARAMS.staggerDelay.value;
+            const rowDelay = 10 + rowIndex * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
             const rowProgress = spring({
               frame: Math.max(0, adjustedFrame - rowDelay),
               fps,
@@ -264,13 +264,13 @@ function Scene() {
                 transform: "translateY(" + rowY + "px)"
               }}>
                 <div style={{ width: timeWidth }}>
-                  <FlipRow text={isEmpty ? "     " : flight.time} maxChars={timeChars} delay={rowDelay + 5} />
+                  <FlipRow props={props}  text={isEmpty ? "     " : flight.time} maxChars={timeChars} delay={rowDelay + 5} />
                 </div>
                 <div style={{ flex: 1, paddingLeft: minDim * 0.01 }}>
-                  <FlipRow text={isEmpty ? "          " : flight.dest} maxChars={destChars} delay={rowDelay + 8} />
+                  <FlipRow props={props}  text={isEmpty ? "          " : flight.dest} maxChars={destChars} delay={rowDelay + 8} />
                 </div>
                 <div style={{ width: flightWidth }}>
-                  <FlipRow text={isEmpty ? "       " : (flight.carrier + " " + flight.number)} maxChars={flightChars} delay={rowDelay + 12} />
+                  <FlipRow props={props}  text={isEmpty ? "       " : (flight.carrier + " " + flight.number)} maxChars={flightChars} delay={rowDelay + 12} />
                 </div>
               </div>
             );

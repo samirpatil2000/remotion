@@ -29,18 +29,18 @@ const SCENE_PARAMS = {
   showWindowButtons: { type: "boolean", label: "Show Window Buttons", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const typingSpeed = SCENE_PARAMS.typingSpeed.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const typingSpeed = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value);
   
   const minDim = Math.min(width, height);
   const editorScale = minDim * 0.0018;
   const editorWidth = Math.min(width * 0.85, 400 * editorScale);
   
-  const text = SCENE_PARAMS.typedText.value;
+  const text = (props.typedText ?? SCENE_PARAMS.typedText.value);
   const charsVisible = Math.floor(frame / typingSpeed);
   const displayText = text.substring(0, Math.min(charsVisible, text.length));
   
@@ -48,19 +48,19 @@ function Scene() {
   const showCursor = charsVisible <= text.length;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center", opacity: interpolate(frame, [0, 10], [0, 1], { extrapolateRight: "clamp" }) }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center", opacity: interpolate(frame, [0, 10], [0, 1], { extrapolateRight: "clamp" }) }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center" }}>
         <div style={{
           width: editorWidth,
-          backgroundColor: SCENE_PARAMS.editorColor.value,
+          backgroundColor: (props.editorColor ?? SCENE_PARAMS.editorColor.value),
           borderRadius: 8 * editorScale,
           overflow: "hidden",
           boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5)",
         }}>
-          {SCENE_PARAMS.showWindowButtons.value && (
+          {(props.showWindowButtons ?? SCENE_PARAMS.showWindowButtons.value) && (
             <div style={{
               height: 24 * editorScale,
-              backgroundColor: SCENE_PARAMS.headerColor.value,
+              backgroundColor: (props.headerColor ?? SCENE_PARAMS.headerColor.value),
               display: "flex",
               alignItems: "center",
               paddingLeft: 10 * editorScale,
@@ -74,11 +74,11 @@ function Scene() {
           
           <div style={{ padding: 16 * editorScale }}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <span style={{ color: SCENE_PARAMS.keywordColor.value, fontSize: 14 * editorScale, fontFamily: "monospace" }}>const</span>
-              <span style={{ color: SCENE_PARAMS.variableColor.value, fontSize: 14 * editorScale, fontFamily: "monospace", marginLeft: 6 * editorScale }}>{SCENE_PARAMS.variableName.value}</span>
+              <span style={{ color: (props.keywordColor ?? SCENE_PARAMS.keywordColor.value), fontSize: 14 * editorScale, fontFamily: "monospace" }}>const</span>
+              <span style={{ color: (props.variableColor ?? SCENE_PARAMS.variableColor.value), fontSize: 14 * editorScale, fontFamily: "monospace", marginLeft: 6 * editorScale }}>{(props.variableName ?? SCENE_PARAMS.variableName.value)}</span>
               <span style={{ color: "#d4d4d4", fontSize: 14 * editorScale, fontFamily: "monospace", marginLeft: 6 * editorScale }}>=</span>
-              <span style={{ color: SCENE_PARAMS.stringColor.value, fontSize: 14 * editorScale, fontFamily: "monospace", marginLeft: 6 * editorScale }}>"{displayText}"</span>
-              {showCursor && <span style={{ width: 2, height: 16 * editorScale, backgroundColor: SCENE_PARAMS.cursorColor.value, opacity: cursorOpacity, marginLeft: 1 }} />}
+              <span style={{ color: (props.stringColor ?? SCENE_PARAMS.stringColor.value), fontSize: 14 * editorScale, fontFamily: "monospace", marginLeft: 6 * editorScale }}>"{displayText}"</span>
+              {showCursor && <span style={{ width: 2, height: 16 * editorScale, backgroundColor: (props.cursorColor ?? SCENE_PARAMS.cursorColor.value), opacity: cursorOpacity, marginLeft: 1 }} />}
             </div>
           </div>
         </div>

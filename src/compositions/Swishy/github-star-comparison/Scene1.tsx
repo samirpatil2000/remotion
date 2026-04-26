@@ -20,11 +20,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const chartLeft = width * 0.22;
   const chartRight = width * 0.92;
@@ -105,8 +105,8 @@ function Scene() {
   const openclawEndPoint = getLastVisiblePoint(openclawData, openclawLineProgress);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center", width: "100%", height: "100%" }}>
         
         {/* Title */}
         <div style={{
@@ -116,11 +116,11 @@ function Scene() {
           transform: "translateX(-50%) translateY(" + interpolate(titleProgress, [0, 1], [20, 0]) + "px)",
           fontSize: minDim * 0.055,
           fontWeight: 700,
-          color: SCENE_PARAMS.textColor.value,
-          fontFamily: SCENE_PARAMS.headingFont.value + ", cursive",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", cursive",
           opacity: titleProgress,
         }}>
-          {SCENE_PARAMS.title.value}
+          {(props.title ?? SCENE_PARAMS.title.value)}
         </div>
 
         {/* Legend box - moved to left side */}
@@ -128,20 +128,20 @@ function Scene() {
           position: "absolute",
           top: chartTop + height * 0.02,
           left: chartLeft + minDim * 0.02,
-          border: "2px solid " + SCENE_PARAMS.textColor.value,
+          border: "2px solid " + (props.textColor ?? SCENE_PARAMS.textColor.value),
           borderRadius: minDim * 0.008,
           padding: minDim * 0.015,
-          backgroundColor: SCENE_PARAMS.backgroundColor.value,
+          backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
           opacity: legendProgress,
           transform: "translateY(" + interpolate(legendProgress, [0, 1], [10, 0]) + "px)",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.01, marginBottom: minDim * 0.008 }}>
-            <div style={{ width: minDim * 0.02, height: minDim * 0.02, backgroundColor: SCENE_PARAMS.openclawColor.value, borderRadius: minDim * 0.003 }} />
-            <span style={{ fontSize: minDim * 0.022, fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif", color: SCENE_PARAMS.textColor.value }}>🦀 {SCENE_PARAMS.repo1Name.value}</span>
+            <div style={{ width: minDim * 0.02, height: minDim * 0.02, backgroundColor: (props.openclawColor ?? SCENE_PARAMS.openclawColor.value), borderRadius: minDim * 0.003 }} />
+            <span style={{ fontSize: minDim * 0.022, fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif", color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>🦀 {(props.repo1Name ?? SCENE_PARAMS.repo1Name.value)}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: minDim * 0.01 }}>
-            <div style={{ width: minDim * 0.02, height: minDim * 0.02, backgroundColor: SCENE_PARAMS.linuxColor.value, borderRadius: minDim * 0.003 }} />
-            <span style={{ fontSize: minDim * 0.022, fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif", color: SCENE_PARAMS.textColor.value }}>🐧 {SCENE_PARAMS.repo2Name.value}</span>
+            <div style={{ width: minDim * 0.02, height: minDim * 0.02, backgroundColor: (props.linuxColor ?? SCENE_PARAMS.linuxColor.value), borderRadius: minDim * 0.003 }} />
+            <span style={{ fontSize: minDim * 0.022, fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif", color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>🐧 {(props.repo2Name ?? SCENE_PARAMS.repo2Name.value)}</span>
           </div>
         </div>
 
@@ -150,14 +150,14 @@ function Scene() {
           {/* Y-axis */}
           <line
             x1={chartLeft} y1={chartTop} x2={chartLeft} y2={chartBottom}
-            stroke={SCENE_PARAMS.gridColor.value} strokeWidth={2}
+            stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)} strokeWidth={2}
             strokeDasharray={chartHeight}
             strokeDashoffset={chartHeight * (1 - axisProgress)}
           />
           {/* X-axis */}
           <line
             x1={chartLeft} y1={chartBottom} x2={chartRight} y2={chartBottom}
-            stroke={SCENE_PARAMS.gridColor.value} strokeWidth={2}
+            stroke={(props.gridColor ?? SCENE_PARAMS.gridColor.value)} strokeWidth={2}
             strokeDasharray={chartWidth}
             strokeDashoffset={chartWidth * (1 - axisProgress)}
           />
@@ -165,7 +165,7 @@ function Scene() {
           {/* Linux line - smooth curve */}
           <path
             d={createSmoothPath(linuxData, linuxLineProgress)}
-            stroke={SCENE_PARAMS.linuxColor.value}
+            stroke={(props.linuxColor ?? SCENE_PARAMS.linuxColor.value)}
             strokeWidth={3}
             fill="none"
             strokeLinecap="round"
@@ -175,7 +175,7 @@ function Scene() {
           {/* Openclaw line - smooth curve */}
           <path
             d={createSmoothPath(openclawData, openclawLineProgress)}
-            stroke={SCENE_PARAMS.openclawColor.value}
+            stroke={(props.openclawColor ?? SCENE_PARAMS.openclawColor.value)}
             strokeWidth={3}
             fill="none"
             strokeLinecap="round"
@@ -194,8 +194,8 @@ function Scene() {
               top: y,
               transform: "translateY(-50%)",
               fontSize: minDim * 0.025,
-              fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif",
-              color: SCENE_PARAMS.textColor.value,
+              fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               opacity: labelOpacity,
               textAlign: "right",
               whiteSpace: "nowrap",
@@ -215,8 +215,8 @@ function Scene() {
               left: x,
               top: chartBottom + minDim * 0.02,
               fontSize: minDim * 0.025,
-              fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif",
-              color: SCENE_PARAMS.textColor.value,
+              fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               opacity: labelOpacity,
               transform: "translateX(-50%)",
             }}>
@@ -234,8 +234,8 @@ function Scene() {
           transformOrigin: "center center",
           fontSize: minDim * 0.028,
           fontWeight: 600,
-          fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: axisProgress,
           whiteSpace: "nowrap",
         }}>
@@ -248,8 +248,8 @@ function Scene() {
           top: chartBottom + minDim * 0.07,
           fontSize: minDim * 0.028,
           fontWeight: 600,
-          fontFamily: SCENE_PARAMS.labelFont.value + ", sans-serif",
-          color: SCENE_PARAMS.textColor.value,
+          fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", sans-serif",
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
           opacity: axisProgress,
           transform: "translateX(-50%)",
         }}>

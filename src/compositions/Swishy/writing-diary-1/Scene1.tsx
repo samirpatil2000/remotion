@@ -35,32 +35,32 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
 
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
 
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   const isPortrait = height > width;
 
   const bookWidth = width * (isPortrait ? 0.7 : 0.42);
   const bookHeight = bookWidth * 1.35;
 
   const bookEntrance = spring({ frame: adjustedFrame, fps, config: { damping: 20, stiffness: 90 } });
-  const bookY = interpolate(bookEntrance, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const bookOpacity = interpolate(bookEntrance, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const bookY = interpolate(bookEntrance, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const bookOpacity = interpolate(bookEntrance, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   const writingStart = 42;
   const wordGap = minDim * 0.006;
 
-  const tokens = SCENE_PARAMS.bodyText.value.replace(/\n/g, " \n ").split(" ").filter((t) => t.length > 0);
+  const tokens = (props.bodyText ?? SCENE_PARAMS.bodyText.value).replace(/\n/g, " \n ").split(" ").filter((t) => t.length > 0);
   let wordIndex = 0;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center" }}>
         <div style={{ position: "relative", width: bookWidth, height: bookHeight, perspective: minDim * 2 }}>
           {/* Pages */}
@@ -69,14 +69,14 @@ function Scene() {
               position: "absolute",
               width: "100%",
               height: "100%",
-              backgroundColor: SCENE_PARAMS.paperColor.value,
-              borderRadius: SCENE_PARAMS.borderRadius.value,
-              boxShadow: SCENE_PARAMS.shadowIntensity.value > 0
-                ? "0 " + (minDim * 0.012) + "px " + (minDim * 0.03) + "px rgba(0,0,0," + SCENE_PARAMS.shadowIntensity.value + ")"
+              backgroundColor: (props.paperColor ?? SCENE_PARAMS.paperColor.value),
+              borderRadius: (props.borderRadius ?? SCENE_PARAMS.borderRadius.value),
+              boxShadow: (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) > 0
+                ? "0 " + (minDim * 0.012) + "px " + (minDim * 0.03) + "px rgba(0,0,0," + (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) + ")"
                 : "none",
               opacity: bookOpacity,
-              transform: "translateY(" + bookY + "px) rotate(" + SCENE_PARAMS.rotation.value + "deg)",
-              filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+              transform: "translateY(" + bookY + "px) rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
+              filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
               overflow: "hidden",
               border: "2px solid rgba(255,255,255,0.08)",
             }}
@@ -88,7 +88,7 @@ function Scene() {
               top: 0,
               width: "12%",
               height: "100%",
-              backgroundColor: SCENE_PARAMS.bindingColor.value,
+              backgroundColor: (props.bindingColor ?? SCENE_PARAMS.bindingColor.value),
             }} />
 
             {/* Handwritten Text (word-by-word reveal) */}
@@ -97,8 +97,8 @@ function Scene() {
               left: "18%",
               top: "20%",
               width: "70%",
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.024,
               lineHeight: 1.5,
               display: "flex",
@@ -112,7 +112,7 @@ function Scene() {
                   );
                 }
 
-                const delay = writingStart + wordIndex * SCENE_PARAMS.staggerDelay.value;
+                const delay = writingStart + wordIndex * (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
                 const wordProgress = spring({ frame: Math.max(0, adjustedFrame - delay), fps, config: { damping: 20, stiffness: 90 } });
                 const wordOpacity = interpolate(wordProgress, [0, 1], [0, 1], { extrapolateRight: "clamp" });
                 const wordY = interpolate(wordProgress, [0, 1], [6, 0], { extrapolateRight: "clamp" });

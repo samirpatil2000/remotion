@@ -29,14 +29,14 @@ const SCENE_PARAMS = {
   staggerDelay: { type: "number", label: "Stagger Delay", value: 5, min: 2, max: 15, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   
   const isPortrait = height > width;
   const phoneHeight = isPortrait ? height * 0.82 : height * 0.9;
@@ -72,9 +72,9 @@ function Scene() {
   ];
   
   const shelves = [
-    { name: SCENE_PARAMS.category1.value, count: SCENE_PARAMS.category1Count.value, color: SCENE_PARAMS.shelf1Color.value, books: bookCovers[0], delay: 30 },
-    { name: SCENE_PARAMS.category2.value, count: SCENE_PARAMS.category2Count.value, color: SCENE_PARAMS.shelf2Color.value, books: bookCovers[1], delay: 60 },
-    { name: SCENE_PARAMS.category3.value, count: SCENE_PARAMS.category3Count.value, color: SCENE_PARAMS.shelf3Color.value, books: bookCovers[2], delay: 90 },
+    { name: (props.category1 ?? SCENE_PARAMS.category1.value), count: (props.category1Count ?? SCENE_PARAMS.category1Count.value), color: (props.shelf1Color ?? SCENE_PARAMS.shelf1Color.value), books: bookCovers[0], delay: 30 },
+    { name: (props.category2 ?? SCENE_PARAMS.category2.value), count: (props.category2Count ?? SCENE_PARAMS.category2Count.value), color: (props.shelf2Color ?? SCENE_PARAMS.shelf2Color.value), books: bookCovers[1], delay: 60 },
+    { name: (props.category3 ?? SCENE_PARAMS.category3.value), count: (props.category3Count ?? SCENE_PARAMS.category3Count.value), color: (props.shelf3Color ?? SCENE_PARAMS.shelf3Color.value), books: bookCovers[2], delay: 90 },
   ];
   
   const contentPadding = finalPhoneWidth * 0.05;
@@ -214,12 +214,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ") translateY(" + phoneY + "px)",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ") translateY(" + phoneY + "px)",
         opacity: phoneEntrance,
         transformOrigin: "center center",
       }}>
@@ -228,7 +228,7 @@ function Scene() {
           height: finalPhoneHeight,
           backgroundColor: "#FFFFFF",
           borderRadius: finalPhoneWidth * 0.1,
-          border: "8px solid " + SCENE_PARAMS.phoneColor.value,
+          border: "8px solid " + (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
@@ -246,7 +246,7 @@ function Scene() {
             <div style={{
               width: finalPhoneWidth * 0.3,
               height: finalPhoneHeight * 0.012,
-              backgroundColor: SCENE_PARAMS.phoneColor.value,
+              backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
               borderRadius: 20,
             }} />
           </div>
@@ -267,18 +267,18 @@ function Scene() {
               <p style={{
                 color: "#888888",
                 fontSize: finalPhoneWidth * 0.038,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 margin: 0,
                 fontWeight: 400,
                 opacity: headerSubProgress,
                 transform: "translateY(" + interpolate(headerSubProgress, [0, 1], [10, 0]) + "px)",
               }}>
-                {SCENE_PARAMS.headerSubtitle.value}
+                {(props.headerSubtitle ?? SCENE_PARAMS.headerSubtitle.value)}
               </p>
               <h1 style={{
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 fontSize: finalPhoneWidth * 0.12,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 margin: 0,
                 marginTop: 2,
                 fontWeight: 800,
@@ -288,7 +288,7 @@ function Scene() {
                 transformOrigin: "left center",
                 textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
               }}>
-                {SCENE_PARAMS.headerTitle.value}
+                {(props.headerTitle ?? SCENE_PARAMS.headerTitle.value)}
               </h1>
             </div>
             
@@ -326,9 +326,9 @@ function Scene() {
                         transform: "translateX(" + labelX + "px)",
                       }}>
                         <span style={{
-                          color: SCENE_PARAMS.textColor.value,
+                          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                           fontSize: finalPhoneWidth * 0.042,
-                          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                           fontWeight: 600,
                         }}>
                           {shelf.name}
@@ -336,7 +336,7 @@ function Scene() {
                         <span style={{
                           color: "#AAAAAA",
                           fontSize: finalPhoneWidth * 0.028,
-                          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                         }}>
                           {shelf.count}
                         </span>
@@ -443,7 +443,7 @@ function Scene() {
                                 <div style={{
                                   color: book.titleColor,
                                   fontSize: finalPhoneWidth * 0.02,
-                                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                                   fontWeight: 600,
                                   textAlign: "center",
                                   lineHeight: 1.15,
@@ -479,7 +479,7 @@ function Scene() {
                           width: 8,
                           height: 8,
                           borderRadius: "50%",
-                          backgroundColor: SCENE_PARAMS.accentColor.value,
+                          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                           boxShadow: "inset 1px 1px 2px rgba(255,255,255,0.5), inset -1px -1px 2px rgba(0,0,0,0.3)",
                           opacity: interpolate(adjustedFrame, [shelf.delay + 35, shelf.delay + 45], [0, 1], { extrapolateRight: "clamp" }),
                         }} />
@@ -491,7 +491,7 @@ function Scene() {
                           width: 8,
                           height: 8,
                           borderRadius: "50%",
-                          backgroundColor: SCENE_PARAMS.accentColor.value,
+                          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                           boxShadow: "inset 1px 1px 2px rgba(255,255,255,0.5), inset -1px -1px 2px rgba(0,0,0,0.3)",
                           opacity: interpolate(adjustedFrame, [shelf.delay + 35, shelf.delay + 45], [0, 1], { extrapolateRight: "clamp" }),
                         }} />
@@ -507,18 +507,18 @@ function Scene() {
                 marginTop: finalPhoneHeight * 0.015,
               }}>
                 <div style={{
-                  backgroundColor: SCENE_PARAMS.phoneColor.value,
+                  backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
                   color: "#FFFFFF",
                   padding: "12px 32px",
                   borderRadius: 30,
                   fontSize: finalPhoneWidth * 0.04,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   fontWeight: 600,
                   opacity: ctaProgress,
                   transform: "scale(" + ctaScale + ")",
                   boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
                 }}>
-                  {SCENE_PARAMS.ctaText.value}
+                  {(props.ctaText ?? SCENE_PARAMS.ctaText.value)}
                 </div>
               </div>
             </div>
@@ -534,7 +534,7 @@ function Scene() {
             <div style={{
               width: finalPhoneWidth * 0.35,
               height: 4,
-              backgroundColor: SCENE_PARAMS.phoneColor.value,
+              backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
               borderRadius: 10,
             }} />
           </div>

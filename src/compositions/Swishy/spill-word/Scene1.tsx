@@ -23,24 +23,24 @@ const SCENE_PARAMS = {
   maxRotation: { type: "number", label: "Max Rotation", value: 24, min: 8, max: 35, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
-  const entranceDuration = SCENE_PARAMS.entranceDuration.value;
-  const holdDuration = SCENE_PARAMS.holdDuration.value;
-  const fallStagger = SCENE_PARAMS.fallStagger.value;
-  const fallDistance = SCENE_PARAMS.fallDistance.value;
-  const blurIntensity = SCENE_PARAMS.blurIntensity.value;
-  const trailOpacity = SCENE_PARAMS.trailOpacity.value;
-  const anticipationAmount = SCENE_PARAMS.anticipationAmount.value;
-  const maxRotation = SCENE_PARAMS.maxRotation.value;
+  const entranceDuration = (props.entranceDuration ?? SCENE_PARAMS.entranceDuration.value);
+  const holdDuration = (props.holdDuration ?? SCENE_PARAMS.holdDuration.value);
+  const fallStagger = (props.fallStagger ?? SCENE_PARAMS.fallStagger.value);
+  const fallDistance = (props.fallDistance ?? SCENE_PARAMS.fallDistance.value);
+  const blurIntensity = (props.blurIntensity ?? SCENE_PARAMS.blurIntensity.value);
+  const trailOpacity = (props.trailOpacity ?? SCENE_PARAMS.trailOpacity.value);
+  const anticipationAmount = (props.anticipationAmount ?? SCENE_PARAMS.anticipationAmount.value);
+  const maxRotation = (props.maxRotation ?? SCENE_PARAMS.maxRotation.value);
   
-  const rawText = SCENE_PARAMS.text.value;
+  const rawText = (props.text ?? SCENE_PARAMS.text.value);
   const text = rawText.charAt(0).toUpperCase() + rawText.slice(1).toLowerCase();
   const letters = text.split("");
   const totalLetters = letters.length;
@@ -66,12 +66,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         position: "relative",
       }}>
@@ -167,10 +167,10 @@ function Scene() {
                       position: "absolute",
                       left: 0,
                       top: 0,
-                      fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                      fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                       fontSize: fontSize,
                       fontWeight: 700,
-                      color: SCENE_PARAMS.textColor.value,
+                      color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                       letterSpacing: "-0.02em",
                       transform: "translateY(" + trailY + "px) translateX(" + trailX + "px) rotate(" + trailRotation + "deg)",
                       opacity: trailOpacityValue,
@@ -197,10 +197,10 @@ function Scene() {
                 <span
                   style={{
                     position: "relative",
-                    fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                    fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                     fontSize: fontSize,
                     fontWeight: 700,
-                    color: SCENE_PARAMS.textColor.value,
+                    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                     letterSpacing: "-0.02em",
                     transform: "translateY(" + letterY + "px) translateX(" + letterX + "px) rotate(" + letterRotation + "deg)",
                     opacity: letterOpacity,
@@ -225,16 +225,16 @@ function Scene() {
                         <span style={{
                           width: dotSize,
                           height: dotSize,
-                          backgroundColor: SCENE_PARAMS.accentColor.value,
+                          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
                           borderRadius: fontSize * 0.012,
-                          boxShadow: "0 0 " + (dotSize * 0.35) + "px " + SCENE_PARAMS.accentColor.value + "50",
+                          boxShadow: "0 0 " + (dotSize * 0.35) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "50",
                           marginTop: fontSize * 0.08,
                           transform: "rotate(6deg)",
                         }} />
                         <span style={{
                           width: fontSize * 0.08,
                           height: fontSize * 0.52,
-                          backgroundColor: SCENE_PARAMS.textColor.value,
+                          backgroundColor: (props.textColor ?? SCENE_PARAMS.textColor.value),
                           borderRadius: fontSize * 0.02,
                           marginTop: fontSize * 0.04,
                         }} />

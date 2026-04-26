@@ -21,14 +21,14 @@ const SCENE_PARAMS = {
   showStripes: { type: "boolean", label: "Show Wood Grain", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const scaleValue = SCENE_PARAMS.scale.value;
-  const verticalPos = SCENE_PARAMS.verticalPosition.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
+  const verticalPos = (props.verticalPosition ?? SCENE_PARAMS.verticalPosition.value);
   
   const printDuration = 150;
   const adjustedFrame = frame * speed;
@@ -65,7 +65,7 @@ function Scene() {
   
   const stripeCount = 40;
   const stripes = [];
-  if (SCENE_PARAMS.showStripes.value) {
+  if ((props.showStripes ?? SCENE_PARAMS.showStripes.value)) {
     for (let i = 0; i < stripeCount; i++) {
       const x = (i / stripeCount) * 100;
       const opacity = 0.15 + Math.sin(i * 0.7) * 0.1;
@@ -87,9 +87,9 @@ function Scene() {
   }
   
   const photos = [
-    { image: SCENE_PARAMS.photo1.value, fallbackColor: "#4a5568" },
-    { image: SCENE_PARAMS.photo2.value, fallbackColor: "#5a6778" },
-    { image: SCENE_PARAMS.photo3.value, fallbackColor: "#3a4558" },
+    { image: (props.photo1 ?? SCENE_PARAMS.photo1.value), fallbackColor: "#4a5568" },
+    { image: (props.photo2 ?? SCENE_PARAMS.photo2.value), fallbackColor: "#5a6778" },
+    { image: (props.photo3 ?? SCENE_PARAMS.photo3.value), fallbackColor: "#3a4558" },
   ];
   
   const clipHeight = currentPaperHeight;
@@ -148,7 +148,7 @@ function Scene() {
   
   return React.createElement(AbsoluteFill, {
     style: {
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "flex-start",
       alignItems: "center",
       overflow: "hidden",
@@ -187,7 +187,7 @@ function Scene() {
           top: dispenserHeight * 0.5 - minDim * 0.01,
           width: paperWidth,
           height: currentPaperHeight,
-          backgroundColor: SCENE_PARAMS.paperColor.value,
+          backgroundColor: (props.paperColor ?? SCENE_PARAMS.paperColor.value),
           borderRadius: "0 0 " + minDim * 0.003 + "px " + minDim * 0.003 + "px",
           boxShadow: "2px 4px 15px rgba(0,0,0,0.25), -1px 0 3px rgba(0,0,0,0.1)",
           overflow: "hidden",
@@ -228,10 +228,10 @@ function Scene() {
                 fontFamily: "'Courier New', monospace",
                 fontSize: minDim * 0.022,
                 fontWeight: 500,
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 letterSpacing: 2,
               }
-            }, SCENE_PARAMS.dateText.value + " • " + SCENE_PARAMS.timeText.value)
+            }, (props.dateText ?? SCENE_PARAMS.dateText.value) + " • " + (props.timeText ?? SCENE_PARAMS.timeText.value))
           )
         ),
         
@@ -244,7 +244,7 @@ function Scene() {
             height: minDim * 0.008,
             background: "linear-gradient(90deg, " + 
               Array(20).fill(0).map(function(_, i) {
-                return SCENE_PARAMS.paperColor.value + " " + (i * 5) + "%, transparent " + (i * 5 + 2) + "%";
+                return (props.paperColor ?? SCENE_PARAMS.paperColor.value) + " " + (i * 5) + "%, transparent " + (i * 5 + 2) + "%";
               }).join(", ") + ")",
             opacity: paperProgress > 0.9 ? 1 : 0,
           }
@@ -267,7 +267,7 @@ function Scene() {
             position: "absolute",
             width: slotWidth + minDim * 0.08,
             height: dispenserHeight,
-            backgroundColor: SCENE_PARAMS.slotColor.value,
+            backgroundColor: (props.slotColor ?? SCENE_PARAMS.slotColor.value),
             borderRadius: minDim * 0.015,
             boxShadow: "0 4px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.3)",
           }

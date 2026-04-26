@@ -29,11 +29,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const effectiveFrame = (frame * speed) % durationInFrames;
 
   const segment = durationInFrames / 4;
@@ -45,10 +45,10 @@ function Scene() {
   const translateX = -currentPosition * width;
 
   const moodColors = [
-    SCENE_PARAMS.happyBg.value,
-    SCENE_PARAMS.confusedBg.value,
-    SCENE_PARAMS.calmBg.value,
-    SCENE_PARAMS.stressedBg.value
+    (props.happyBg ?? SCENE_PARAMS.happyBg.value),
+    (props.confusedBg ?? SCENE_PARAMS.confusedBg.value),
+    (props.calmBg ?? SCENE_PARAMS.calmBg.value),
+    (props.stressedBg ?? SCENE_PARAMS.stressedBg.value)
   ];
   const nextIndex = (currentIndex + 1) % moodColors.length;
 
@@ -74,16 +74,16 @@ function Scene() {
   const bgColor = mixColors(moodColors[currentIndex], moodColors[nextIndex], transition);
 
   const screens = [
-    SCENE_PARAMS.happyScreen.value,
-    SCENE_PARAMS.confusedScreen.value,
-    SCENE_PARAMS.calmScreen.value,
-    SCENE_PARAMS.stressedScreen.value,
-    SCENE_PARAMS.happyScreen.value
+    (props.happyScreen ?? SCENE_PARAMS.happyScreen.value),
+    (props.confusedScreen ?? SCENE_PARAMS.confusedScreen.value),
+    (props.calmScreen ?? SCENE_PARAMS.calmScreen.value),
+    (props.stressedScreen ?? SCENE_PARAMS.stressedScreen.value),
+    (props.happyScreen ?? SCENE_PARAMS.happyScreen.value)
   ];
 
   return (
     <AbsoluteFill style={{ backgroundColor: bgColor }}>
-      <div style={{ width: "100%", height: "100%", transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+      <div style={{ width: "100%", height: "100%", transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ position: "absolute", width: width * screens.length, height: "100%", transform: "translateX(" + translateX + "px)" }}>
           {screens.map((src, i) => {
             const distance = Math.abs(currentPosition - i);

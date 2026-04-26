@@ -41,11 +41,11 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   // Phase 1: Pixel click appears (0-15 frames)
   const clickPhaseEnd = 15;
@@ -68,7 +68,7 @@ function Scene() {
   });
   
   const panelScaleValue = interpolate(expandProgress, [0, 1], [0.02, 1], { extrapolateRight: "clamp" });
-  const panelOpacity = interpolate(expandProgress, [0, 0.1, 1], [0, 1, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const panelOpacity = interpolate(expandProgress, [0, 0.1, 1], [0, 1, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   // Phase 3: Zoom into cursor area (45-75 frames)
   const zoomStart = 50;
@@ -94,27 +94,27 @@ function Scene() {
 
   // Phase 5: Typing animation (80+ frames)
   const typingStart = 85;
-  const description = SCENE_PARAMS.description.value;
-  const charsPerFrame = SCENE_PARAMS.typingSpeed.value * 0.8;
+  const description = (props.description ?? SCENE_PARAMS.description.value);
+  const charsPerFrame = (props.typingSpeed ?? SCENE_PARAMS.typingSpeed.value) * 0.8;
   const typedChars = Math.floor(Math.max(0, (adjustedFrame - typingStart) * charsPerFrame));
   const displayedText = description.substring(0, Math.min(typedChars, description.length));
   const isTyping = adjustedFrame >= typingStart && typedChars < description.length;
 
   // Cursor blink
-  const blink = (Math.sin((adjustedFrame / fps) * Math.PI * 2 * SCENE_PARAMS.cursorBlinkSpeed.value) + 1) / 2;
+  const blink = (Math.sin((adjustedFrame / fps) * Math.PI * 2 * (props.cursorBlinkSpeed ?? SCENE_PARAMS.cursorBlinkSpeed.value)) + 1) / 2;
   const cursorOpacity = isTyping ? 1 : interpolate(blink, [0, 1], [0.1, 1], { extrapolateRight: "clamp" });
 
-  const gridSize = SCENE_PARAMS.gridSize.value;
-  const panelWidth = width * SCENE_PARAMS.panelWidth.value;
-  const panelHeight = height * SCENE_PARAMS.panelHeight.value;
+  const gridSize = (props.gridSize ?? SCENE_PARAMS.gridSize.value);
+  const panelWidth = width * (props.panelWidth ?? SCENE_PARAMS.panelWidth.value);
+  const panelHeight = height * (props.panelHeight ?? SCENE_PARAMS.panelHeight.value);
 
-  const macSize = minDim * SCENE_PARAMS.macButtonSize.value;
-  const macGap = minDim * SCENE_PARAMS.macButtonGap.value;
+  const macSize = minDim * (props.macButtonSize ?? SCENE_PARAMS.macButtonSize.value);
+  const macGap = minDim * (props.macButtonGap ?? SCENE_PARAMS.macButtonGap.value);
 
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
-      backgroundImage: "linear-gradient(to right, " + SCENE_PARAMS.gridColor.value + " 1px, transparent 1px), linear-gradient(to bottom, " + SCENE_PARAMS.gridColor.value + " 1px, transparent 1px)",
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
+      backgroundImage: "linear-gradient(to right, " + (props.gridColor ?? SCENE_PARAMS.gridColor.value) + " 1px, transparent 1px), linear-gradient(to bottom, " + (props.gridColor ?? SCENE_PARAMS.gridColor.value) + " 1px, transparent 1px)",
       backgroundSize: gridSize + "px " + gridSize + "px",
       justifyContent: "center",
       alignItems: "center",
@@ -128,7 +128,7 @@ function Scene() {
             width: minDim * 0.15,
             height: minDim * 0.15,
             borderRadius: "50%",
-            border: "2px solid " + SCENE_PARAMS.accentColor.value,
+            border: "2px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             opacity: rippleOpacity1,
             transform: "scale(" + rippleScale1 + ")"
           }} />
@@ -137,7 +137,7 @@ function Scene() {
             width: minDim * 0.15,
             height: minDim * 0.15,
             borderRadius: "50%",
-            border: "2px solid " + SCENE_PARAMS.accentColor.value,
+            border: "2px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             opacity: rippleOpacity2,
             transform: "scale(" + rippleScale2 + ")"
           }} />
@@ -146,7 +146,7 @@ function Scene() {
             width: minDim * 0.02,
             height: minDim * 0.02,
             borderRadius: "50%",
-            backgroundColor: SCENE_PARAMS.accentColor.value,
+            backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             opacity: clickFade,
             transform: "scale(" + clickProgress + ")"
           }} />
@@ -155,20 +155,20 @@ function Scene() {
 
       {/* Main zooming container */}
       <div style={{
-        transform: "scale(" + (SCENE_PARAMS.scale.value * zoomScale) + ") translateY(" + zoomOffsetY + "px)",
+        transform: "scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * zoomScale) + ") translateY(" + zoomOffsetY + "px)",
         transformOrigin: "center center"
       }}>
         {/* Panel */}
         <div style={{
           width: panelWidth,
           height: panelHeight,
-          backgroundColor: SCENE_PARAMS.panelColor.value,
+          backgroundColor: (props.panelColor ?? SCENE_PARAMS.panelColor.value),
           borderRadius: minDim * 0.03,
           padding: minDim * 0.05,
-          boxShadow: "0 " + SCENE_PARAMS.shadowOffset.value + "px " + SCENE_PARAMS.shadowBlur.value + "px rgba(0,0,0," + SCENE_PARAMS.shadowOpacity.value + ")",
+          boxShadow: "0 " + (props.shadowOffset ?? SCENE_PARAMS.shadowOffset.value) + "px " + (props.shadowBlur ?? SCENE_PARAMS.shadowBlur.value) + "px rgba(0,0,0," + (props.shadowOpacity ?? SCENE_PARAMS.shadowOpacity.value) + ")",
           opacity: panelOpacity,
-          transform: "scale(" + panelScaleValue + ") skew(" + SCENE_PARAMS.skewX.value + "deg, " + SCENE_PARAMS.skewY.value + "deg) rotate(" + SCENE_PARAMS.rotation.value + "deg)",
-          filter: "blur(" + SCENE_PARAMS.blur.value + "px)",
+          transform: "scale(" + panelScaleValue + ") skew(" + (props.skewX ?? SCENE_PARAMS.skewX.value) + "deg, " + (props.skewY ?? SCENE_PARAMS.skewY.value) + "deg) rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
+          filter: "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-start",
@@ -180,41 +180,41 @@ function Scene() {
             display: "flex",
             alignItems: "center",
             gap: macGap,
-            marginTop: minDim * SCENE_PARAMS.macRowOffset.value,
+            marginTop: minDim * (props.macRowOffset ?? SCENE_PARAMS.macRowOffset.value),
             opacity: expandProgress
           }}>
-            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: SCENE_PARAMS.macRed.value }} />
-            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: SCENE_PARAMS.macYellow.value }} />
-            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: SCENE_PARAMS.macGreen.value }} />
+            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: (props.macRed ?? SCENE_PARAMS.macRed.value) }} />
+            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: (props.macYellow ?? SCENE_PARAMS.macYellow.value) }} />
+            <div style={{ width: macSize, height: macSize, borderRadius: macSize, backgroundColor: (props.macGreen ?? SCENE_PARAMS.macGreen.value) }} />
           </div>
           
           {/* Title */}
           <div style={{
-            fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.055,
             fontWeight: 700,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             opacity: headlineOpacity,
             transform: "translateY(" + headlineY + "px)"
           }}>
-            {SCENE_PARAMS.title.value}
+            {(props.title ?? SCENE_PARAMS.title.value)}
           </div>
           
           {/* Typing area with cursor */}
           <div style={{
-            fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+            fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.032,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             lineHeight: 1.6,
             opacity: adjustedFrame >= typingStart - 5 ? 1 : 0,
             minHeight: minDim * 0.15
           }}>
-            <span style={{ color: SCENE_PARAMS.textColor.value }}>{displayedText}</span>
+            <span style={{ color: (props.textColor ?? SCENE_PARAMS.textColor.value) }}>{displayedText}</span>
             <span style={{
-              color: SCENE_PARAMS.accentColor.value,
+              color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
               opacity: cursorOpacity,
               fontWeight: 300
-            }}>{SCENE_PARAMS.cursorChar.value}</span>
+            }}>{(props.cursorChar ?? SCENE_PARAMS.cursorChar.value)}</span>
           </div>
         </div>
       </div>

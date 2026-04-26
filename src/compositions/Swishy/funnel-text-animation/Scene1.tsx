@@ -17,13 +17,13 @@ const SCENE_PARAMS = {
   scale: { type: "number", label: "Scale", value: 1, min: 0.5, max: 2, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   // Repeat text heavily to ensure it completely fills the long winding path seamlessly
-  const fullText = SCENE_PARAMS.text.value.repeat(150);
+  const fullText = (props.text ?? SCENE_PARAMS.text.value).repeat(150);
 
   // Calculate continuous sliding offset
   // Negative value makes it slide 'forward' along the path
@@ -32,7 +32,7 @@ function Scene() {
   // The core of this animation is the meticulously crafted SVG path 
   // that perfectly matches the loopy, swishy trajectory in the source image.
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div 
         style={{ 
           width: "100%", 
@@ -40,7 +40,7 @@ function Scene() {
           display: "flex", 
           justifyContent: "center", 
           alignItems: "center",
-          transform: `scale(${SCENE_PARAMS.scale.value})`,
+          transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
           transformOrigin: "center center"
         }}
       >
@@ -64,17 +64,17 @@ function Scene() {
               C 200, 1700, 150, 2100, 200, 2400
             "
             fill="none"
-            stroke={SCENE_PARAMS.pathColor.value}
-            strokeWidth={SCENE_PARAMS.pathThickness.value}
+            stroke={(props.pathColor ?? SCENE_PARAMS.pathColor.value)}
+            strokeWidth={(props.pathThickness ?? SCENE_PARAMS.pathThickness.value)}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
           <text
             style={{
-              fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`,
-              fontSize: `${SCENE_PARAMS.fontSize.value}px`,
+              fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`,
+              fontSize: `${(props.fontSize ?? SCENE_PARAMS.fontSize.value)}px`,
               fontWeight: 900,
-              fill: SCENE_PARAMS.textColor.value,
+              fill: (props.textColor ?? SCENE_PARAMS.textColor.value),
               letterSpacing: "0.02em",
               textTransform: "uppercase"
             }}

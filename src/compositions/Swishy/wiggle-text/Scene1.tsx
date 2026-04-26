@@ -21,22 +21,22 @@ const SCENE_PARAMS = {
   sketchyEffect: { type: "boolean", label: "Sketchy Effect", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.letterStagger.value;
+  const stagger = (props.letterStagger ?? SCENE_PARAMS.letterStagger.value);
   
-  const topText = SCENE_PARAMS.topText.value;
-  const bottomText = SCENE_PARAMS.bottomText.value;
+  const topText = (props.topText ?? SCENE_PARAMS.topText.value);
+  const bottomText = (props.bottomText ?? SCENE_PARAMS.bottomText.value);
   
   const gridSize = minDim * 0.04;
   const gridLines = [];
   
-  if (SCENE_PARAMS.showGrid.value) {
+  if ((props.showGrid ?? SCENE_PARAMS.showGrid.value)) {
     for (let x = 0; x < width; x += gridSize) {
       gridLines.push(
         React.createElement("div", {
@@ -47,7 +47,7 @@ function Scene() {
             top: 0,
             width: 1,
             height: "100%",
-            backgroundColor: SCENE_PARAMS.gridColor.value,
+            backgroundColor: (props.gridColor ?? SCENE_PARAMS.gridColor.value),
             opacity: 0.5,
           }
         })
@@ -63,7 +63,7 @@ function Scene() {
             top: y,
             width: "100%",
             height: 1,
-            backgroundColor: SCENE_PARAMS.gridColor.value,
+            backgroundColor: (props.gridColor ?? SCENE_PARAMS.gridColor.value),
             opacity: 0.5,
           }
         })
@@ -84,11 +84,11 @@ function Scene() {
       
       const drawProgress = interpolate(adjustedFrame, [letterDelay, letterDelay + 15], [0, 1], { extrapolateRight: "clamp" });
       const yOffset = interpolate(progress, [0, 1], [minDim * 0.05, 0]);
-      const rotation = SCENE_PARAMS.sketchyEffect.value 
+      const rotation = (props.sketchyEffect ?? SCENE_PARAMS.sketchyEffect.value) 
         ? interpolate(progress, [0, 1], [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 2])
         : 0;
       
-      const wobble = SCENE_PARAMS.sketchyEffect.value && progress > 0.9
+      const wobble = (props.sketchyEffect ?? SCENE_PARAMS.sketchyEffect.value) && progress > 0.9
         ? Math.sin(adjustedFrame * 0.3 + i) * 1
         : 0;
       
@@ -98,11 +98,11 @@ function Scene() {
           display: "inline-block",
           opacity: drawProgress,
           transform: "translateY(" + (yOffset + wobble) + "px) rotate(" + rotation + "deg)",
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", cursive",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", cursive",
           fontSize: fontSize,
           fontWeight: isTop ? 400 : 700,
-          color: SCENE_PARAMS.textColor.value,
-          textShadow: "0 0 " + (SCENE_PARAMS.glowIntensity.value * drawProgress) + "px " + SCENE_PARAMS.glowColor.value + ", 0 0 " + (SCENE_PARAMS.glowIntensity.value * 0.5 * drawProgress) + "px " + SCENE_PARAMS.glowColor.value,
+          color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+          textShadow: "0 0 " + ((props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * drawProgress) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + ", 0 0 " + ((props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * 0.5 * drawProgress) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value),
           letterSpacing: isTop ? minDim * 0.005 : minDim * 0.01,
           marginRight: letter === " " ? minDim * 0.02 : 0,
         }
@@ -119,7 +119,7 @@ function Scene() {
   
   return React.createElement(AbsoluteFill, {
     style: {
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
@@ -137,7 +137,7 @@ function Scene() {
     
     React.createElement("div", {
       style: {
-        transform: "scale(" + (SCENE_PARAMS.scale.value * containerScale) + ")",
+        transform: "scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * containerScale) + ")",
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",

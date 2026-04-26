@@ -73,11 +73,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, durationInFrames, fps } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   const total = durationInFrames * speed;
 
@@ -119,19 +119,19 @@ function Scene() {
   const labelOffset = minDim * 0.015;
 
   const gainers = [
-    { name: SCENE_PARAMS.g1Name.value, valueText: SCENE_PARAMS.g1ValueText.value, valueNum: SCENE_PARAMS.g1ValueNum.value },
-    { name: SCENE_PARAMS.g2Name.value, valueText: SCENE_PARAMS.g2ValueText.value, valueNum: SCENE_PARAMS.g2ValueNum.value },
-    { name: SCENE_PARAMS.g3Name.value, valueText: SCENE_PARAMS.g3ValueText.value, valueNum: SCENE_PARAMS.g3ValueNum.value },
-    { name: SCENE_PARAMS.g4Name.value, valueText: SCENE_PARAMS.g4ValueText.value, valueNum: SCENE_PARAMS.g4ValueNum.value },
-    { name: SCENE_PARAMS.g5Name.value, valueText: SCENE_PARAMS.g5ValueText.value, valueNum: SCENE_PARAMS.g5ValueNum.value }
+    { name: (props.g1Name ?? SCENE_PARAMS.g1Name.value), valueText: (props.g1ValueText ?? SCENE_PARAMS.g1ValueText.value), valueNum: (props.g1ValueNum ?? SCENE_PARAMS.g1ValueNum.value) },
+    { name: (props.g2Name ?? SCENE_PARAMS.g2Name.value), valueText: (props.g2ValueText ?? SCENE_PARAMS.g2ValueText.value), valueNum: (props.g2ValueNum ?? SCENE_PARAMS.g2ValueNum.value) },
+    { name: (props.g3Name ?? SCENE_PARAMS.g3Name.value), valueText: (props.g3ValueText ?? SCENE_PARAMS.g3ValueText.value), valueNum: (props.g3ValueNum ?? SCENE_PARAMS.g3ValueNum.value) },
+    { name: (props.g4Name ?? SCENE_PARAMS.g4Name.value), valueText: (props.g4ValueText ?? SCENE_PARAMS.g4ValueText.value), valueNum: (props.g4ValueNum ?? SCENE_PARAMS.g4ValueNum.value) },
+    { name: (props.g5Name ?? SCENE_PARAMS.g5Name.value), valueText: (props.g5ValueText ?? SCENE_PARAMS.g5ValueText.value), valueNum: (props.g5ValueNum ?? SCENE_PARAMS.g5ValueNum.value) }
   ];
 
   const losers = [
-    { name: SCENE_PARAMS.l1Name.value, valueText: SCENE_PARAMS.l1ValueText.value, valueNum: SCENE_PARAMS.l1ValueNum.value },
-    { name: SCENE_PARAMS.l2Name.value, valueText: SCENE_PARAMS.l2ValueText.value, valueNum: SCENE_PARAMS.l2ValueNum.value },
-    { name: SCENE_PARAMS.l3Name.value, valueText: SCENE_PARAMS.l3ValueText.value, valueNum: SCENE_PARAMS.l3ValueNum.value },
-    { name: SCENE_PARAMS.l4Name.value, valueText: SCENE_PARAMS.l4ValueText.value, valueNum: SCENE_PARAMS.l4ValueNum.value },
-    { name: SCENE_PARAMS.l5Name.value, valueText: SCENE_PARAMS.l5ValueText.value, valueNum: SCENE_PARAMS.l5ValueNum.value }
+    { name: (props.l1Name ?? SCENE_PARAMS.l1Name.value), valueText: (props.l1ValueText ?? SCENE_PARAMS.l1ValueText.value), valueNum: (props.l1ValueNum ?? SCENE_PARAMS.l1ValueNum.value) },
+    { name: (props.l2Name ?? SCENE_PARAMS.l2Name.value), valueText: (props.l2ValueText ?? SCENE_PARAMS.l2ValueText.value), valueNum: (props.l2ValueNum ?? SCENE_PARAMS.l2ValueNum.value) },
+    { name: (props.l3Name ?? SCENE_PARAMS.l3Name.value), valueText: (props.l3ValueText ?? SCENE_PARAMS.l3ValueText.value), valueNum: (props.l3ValueNum ?? SCENE_PARAMS.l3ValueNum.value) },
+    { name: (props.l4Name ?? SCENE_PARAMS.l4Name.value), valueText: (props.l4ValueText ?? SCENE_PARAMS.l4ValueText.value), valueNum: (props.l4ValueNum ?? SCENE_PARAMS.l4ValueNum.value) },
+    { name: (props.l5Name ?? SCENE_PARAMS.l5Name.value), valueText: (props.l5ValueText ?? SCENE_PARAMS.l5ValueText.value), valueNum: (props.l5ValueNum ?? SCENE_PARAMS.l5ValueNum.value) }
   ];
 
   const maxGainer = Math.max(...gainers.map(g => g.valueNum));
@@ -174,7 +174,7 @@ function Scene() {
             top: barTop,
             width: barWidth,
             height: barHeight,
-            backgroundColor: isNegative ? SCENE_PARAMS.lossColor.value : SCENE_PARAMS.gainColor.value,
+            backgroundColor: isNegative ? (props.lossColor ?? SCENE_PARAMS.lossColor.value) : (props.gainColor ?? SCENE_PARAMS.gainColor.value),
             opacity: chartOpacity,
             transform: "translateY(" + offsetY + "px)"
           }} />
@@ -185,8 +185,8 @@ function Scene() {
             transform: "translateX(-50%) translateY(" + offsetY + "px)",
             fontSize: minDim * 0.028,
             fontWeight: 700,
-            color: isNegative ? SCENE_PARAMS.lossColor.value : SCENE_PARAMS.gainColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            color: isNegative ? (props.lossColor ?? SCENE_PARAMS.lossColor.value) : (props.gainColor ?? SCENE_PARAMS.gainColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             opacity: chartOpacity
           }}>{d.valueText}</div>
           <div style={{
@@ -198,8 +198,8 @@ function Scene() {
             textAlign: "center",
             fontSize: minDim * 0.022,
             fontWeight: 600,
-            color: SCENE_PARAMS.labelColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            color: (props.labelColor ?? SCENE_PARAMS.labelColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             opacity: chartOpacity,
             whiteSpace: "normal",
             lineHeight: 1.15
@@ -213,15 +213,15 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
-      backgroundImage: "linear-gradient(to right, " + SCENE_PARAMS.gridColor.value + " 1px, transparent 1px), linear-gradient(to bottom, " + SCENE_PARAMS.gridColor.value + " 1px, transparent 1px)",
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
+      backgroundImage: "linear-gradient(to right, " + (props.gridColor ?? SCENE_PARAMS.gridColor.value) + " 1px, transparent 1px), linear-gradient(to bottom, " + (props.gridColor ?? SCENE_PARAMS.gridColor.value) + " 1px, transparent 1px)",
       backgroundSize: (minDim * 0.06) + "px " + (minDim * 0.06) + "px"
     }}>
       <div style={{
         position: "absolute",
         width: "100%",
         height: "100%",
-        transform: "scale(" + (overallZoom * SCENE_PARAMS.scale.value) + ")",
+        transform: "scale(" + (overallZoom * (props.scale ?? SCENE_PARAMS.scale.value)) + ")",
         transformOrigin: "center center"
       }}>
         {/* Intro */}
@@ -236,9 +236,9 @@ function Scene() {
           <div style={{
             fontSize: minDim * 0.055,
             fontWeight: 800,
-            color: SCENE_PARAMS.primaryColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-          }}>{SCENE_PARAMS.introTitle.value}</div>
+            color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+          }}>{(props.introTitle ?? SCENE_PARAMS.introTitle.value)}</div>
         </div>
 
         {/* Transition */}
@@ -253,9 +253,9 @@ function Scene() {
           <div style={{
             fontSize: minDim * 0.05,
             fontWeight: 800,
-            color: SCENE_PARAMS.primaryColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-          }}>{SCENE_PARAMS.transitionTitle.value}</div>
+            color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+          }}>{(props.transitionTitle ?? SCENE_PARAMS.transitionTitle.value)}</div>
         </div>
 
         {/* Outro */}
@@ -270,9 +270,9 @@ function Scene() {
           <div style={{
             fontSize: minDim * 0.055,
             fontWeight: 800,
-            color: SCENE_PARAMS.primaryColor.value,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif"
-          }}>{SCENE_PARAMS.outroTitle.value}</div>
+            color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif"
+          }}>{(props.outroTitle ?? SCENE_PARAMS.outroTitle.value)}</div>
         </div>
 
         {/* Baseline */}
@@ -282,7 +282,7 @@ function Scene() {
           top: baselineY,
           width: chartWidth,
           height: 2,
-          backgroundColor: SCENE_PARAMS.axisColor.value,
+          backgroundColor: (props.axisColor ?? SCENE_PARAMS.axisColor.value),
           opacity: baselineOpacity
         }} />
 
@@ -300,10 +300,10 @@ function Scene() {
           transform: "translateX(-50%) translateY(" + floatY + "px)",
           fontSize: minDim * 0.045,
           fontWeight: 800,
-          color: SCENE_PARAMS.primaryColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: phaseOpacity(gainersStart, gainersEnd)
-        }}>{SCENE_PARAMS.gainersTitle.value}</div>
+        }}>{(props.gainersTitle ?? SCENE_PARAMS.gainersTitle.value)}</div>
 
         <div style={{
           position: "absolute",
@@ -312,10 +312,10 @@ function Scene() {
           transform: "translateX(-50%) translateY(" + floatY + "px)",
           fontSize: minDim * 0.045,
           fontWeight: 800,
-          color: SCENE_PARAMS.primaryColor.value,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           opacity: phaseOpacity(losersStart, losersEnd)
-        }}>{SCENE_PARAMS.losersTitle.value}</div>
+        }}>{(props.losersTitle ?? SCENE_PARAMS.losersTitle.value)}</div>
       </div>
     </AbsoluteFill>
   );

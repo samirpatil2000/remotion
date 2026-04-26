@@ -23,14 +23,14 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Screen Glow Intensity", value: 0.6, min: 0, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const notificationDelay = SCENE_PARAMS.notificationDelay.value;
+  const notificationDelay = (props.notificationDelay ?? SCENE_PARAMS.notificationDelay.value);
   
   const isPortrait = height > width;
   
@@ -55,12 +55,12 @@ function Scene() {
   
   // Subtle phone vibration when notification appears
   const vibrationActive = notificationFrame > 0 && notificationFrame < 25;
-  const vibrationAmount = SCENE_PARAMS.vibrationIntensity.value * 1.5;
+  const vibrationAmount = (props.vibrationIntensity ?? SCENE_PARAMS.vibrationIntensity.value) * 1.5;
   const vibrationX = vibrationActive ? Math.sin(notificationFrame * 2.5) * vibrationAmount * (1 - notificationFrame / 25) : 0;
   
   // Soft screen glow when notification appears
   const glowProgress = interpolate(notificationFrame, [0, 30], [0, 1], { extrapolateRight: "clamp" });
-  const glowOpacity = glowProgress * SCENE_PARAMS.glowIntensity.value * 0.15;
+  const glowOpacity = glowProgress * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * 0.15;
   
   // Screen content dimensions
   const screenWidth = finalPhoneWidth - (bezelWidth * 2);
@@ -71,7 +71,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
@@ -80,13 +80,13 @@ function Scene() {
         position: "absolute",
         width: finalPhoneWidth * 1.5,
         height: finalPhoneHeight * 0.8,
-        background: `radial-gradient(ellipse at center, ${SCENE_PARAMS.accentColor.value}15 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse at center, ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)}15 0%, transparent 70%)`,
         filter: "blur(40px)",
         opacity: phoneEntrance * 0.6,
       }} />
       
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value}) translateY(${phoneY}px) translateX(${vibrationX}px)`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)}) translateY(${phoneY}px) translateX(${vibrationX}px)`,
         transformOrigin: "center center",
         opacity: phoneOpacity,
       }}>
@@ -94,7 +94,7 @@ function Scene() {
         <div style={{
           width: finalPhoneWidth,
           height: finalPhoneHeight,
-          backgroundColor: SCENE_PARAMS.phoneColor.value,
+          backgroundColor: (props.phoneColor ?? SCENE_PARAMS.phoneColor.value),
           borderRadius: cornerRadius,
           padding: bezelWidth,
           boxSizing: "border-box",
@@ -143,7 +143,7 @@ function Scene() {
           <div style={{
             width: "100%",
             height: "100%",
-            backgroundColor: SCENE_PARAMS.screenColor.value,
+            backgroundColor: (props.screenColor ?? SCENE_PARAMS.screenColor.value),
             borderRadius: cornerRadius - bezelWidth,
             overflow: "hidden",
             position: "relative",
@@ -155,7 +155,7 @@ function Scene() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: `radial-gradient(ellipse at center top, ${SCENE_PARAMS.accentColor.value} 0%, transparent 60%)`,
+              background: `radial-gradient(ellipse at center top, ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)} 0%, transparent 60%)`,
               opacity: glowOpacity,
               pointerEvents: "none",
               zIndex: 10,
@@ -186,12 +186,12 @@ function Scene() {
               height: screenHeight * 0.035,
               zIndex: 15,
             }}>
-              {SCENE_PARAMS.showTime.value && (
+              {(props.showTime ?? SCENE_PARAMS.showTime.value) && (
                 <span style={{
                   color: "#fff",
                   fontSize: screenHeight * 0.018,
                   fontWeight: 600,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 }}>
                   {currentTime}
                 </span>
@@ -248,7 +248,7 @@ function Scene() {
                 color: "#fff",
                 fontSize: screenHeight * 0.09,
                 fontWeight: 200,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 letterSpacing: "-2px",
               }}>
                 9:41
@@ -257,7 +257,7 @@ function Scene() {
                 color: "#94a3b8",
                 fontSize: screenHeight * 0.02,
                 fontWeight: 400,
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 marginTop: screenHeight * 0.01,
               }}>
                 Monday, January 15
@@ -274,7 +274,7 @@ function Scene() {
               opacity: notificationOpacity,
             }}>
               <div style={{
-                backgroundColor: SCENE_PARAMS.notificationBg.value,
+                backgroundColor: (props.notificationBg ?? SCENE_PARAMS.notificationBg.value),
                 borderRadius: screenWidth * 0.05,
                 padding: screenWidth * 0.04,
                 boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
@@ -292,7 +292,7 @@ function Scene() {
                     width: screenWidth * 0.1,
                     height: screenWidth * 0.1,
                     borderRadius: screenWidth * 0.022,
-                    background: `linear-gradient(135deg, #34d399 0%, ${SCENE_PARAMS.accentColor.value} 100%)`,
+                    background: `linear-gradient(135deg, #34d399 0%, ${(props.accentColor ?? SCENE_PARAMS.accentColor.value)} 100%)`,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -327,17 +327,17 @@ function Scene() {
                         color: "#1e293b",
                         fontSize: screenHeight * 0.016,
                         fontWeight: 600,
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                       }}>
-                        {SCENE_PARAMS.appName.value}
+                        {(props.appName ?? SCENE_PARAMS.appName.value)}
                       </span>
                       <span style={{
                         color: "#64748b",
                         fontSize: screenHeight * 0.014,
                         fontWeight: 400,
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                       }}>
                         now
                       </span>
@@ -350,10 +350,10 @@ function Scene() {
                   color: "#0f172a",
                   fontSize: screenHeight * 0.02,
                   fontWeight: 600,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   marginBottom: screenHeight * 0.005,
                 }}>
-                  {SCENE_PARAMS.senderName.value}
+                  {(props.senderName ?? SCENE_PARAMS.senderName.value)}
                 </div>
                 
                 {/* Message content */}
@@ -361,10 +361,10 @@ function Scene() {
                   color: "#475569",
                   fontSize: screenHeight * 0.018,
                   fontWeight: 400,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   lineHeight: 1.4,
                 }}>
-                  {SCENE_PARAMS.notificationMessage.value}
+                  {(props.notificationMessage ?? SCENE_PARAMS.notificationMessage.value)}
                 </div>
               </div>
             </div>

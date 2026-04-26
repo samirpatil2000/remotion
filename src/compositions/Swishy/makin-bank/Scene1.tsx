@@ -19,11 +19,11 @@ const SCENE_PARAMS = {
   countDuration: { type: "number", label: "Count Duration (frames)", value: 90, min: 30, max: 180, step: 10 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   // Card entrance animation
   const cardProgress = spring({
@@ -44,10 +44,10 @@ function Scene() {
 
   // Number count-up animation
   const countStart = 20;
-  const countEnd = countStart + SCENE_PARAMS.countDuration.value;
+  const countEnd = countStart + (props.countDuration ?? SCENE_PARAMS.countDuration.value);
   const countProgress = interpolate(adjustedFrame, [countStart, countEnd], [0, 1], { extrapolateRight: "clamp" });
   const eased = countProgress * countProgress * (3 - 2 * countProgress);
-  const currentVal = Math.floor(eased * SCENE_PARAMS.targetAmount.value);
+  const currentVal = Math.floor(eased * (props.targetAmount ?? SCENE_PARAMS.targetAmount.value));
 
   // Arrow blink animation (appears after count is done)
   const arrowVisible = adjustedFrame > countEnd + 10;
@@ -63,19 +63,19 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
-      fontFamily: SCENE_PARAMS.fontFamily.value + ", cursive, monospace"
+      fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", cursive, monospace"
     }}>
       <div style={{
-        transform: "scale(" + (SCENE_PARAMS.scale.value * cardScale) + ")",
+        transform: "scale(" + ((props.scale ?? SCENE_PARAMS.scale.value) * cardScale) + ")",
         opacity: cardOpacity,
         transformOrigin: "center center"
       }}>
         <div style={{
-          backgroundColor: SCENE_PARAMS.cardColor.value,
-          border: borderWidth + "px solid " + SCENE_PARAMS.borderColor.value,
+          backgroundColor: (props.cardColor ?? SCENE_PARAMS.cardColor.value),
+          border: borderWidth + "px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value),
           borderRadius: minDim * 0.004,
           padding: cardPadding,
           width: cardWidth,
@@ -87,7 +87,7 @@ function Scene() {
         }}>
           {/* Label */}
           <div style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: labelSize,
             textAlign: "left",
             opacity: labelProgress * 0.8,
@@ -95,18 +95,18 @@ function Scene() {
             marginBottom: minDim * 0.008,
             transform: "translateY(" + labelY + "px)"
           }}>
-            {SCENE_PARAMS.label.value}
+            {(props.label ?? SCENE_PARAMS.label.value)}
           </div>
 
           {/* Amount */}
           <div style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: amountSize,
             textAlign: "right",
             lineHeight: 1.5,
             textShadow: "2px 2px 0px rgba(0,0,0,0.1)"
           }}>
-            {SCENE_PARAMS.currencySymbol.value + currentVal}
+            {(props.currencySymbol ?? SCENE_PARAMS.currencySymbol.value) + currentVal}
           </div>
 
           {/* Arrow indicator */}
@@ -115,7 +115,7 @@ function Scene() {
             height: 0,
             borderLeft: (minDim * 0.009) + "px solid transparent",
             borderRight: (minDim * 0.009) + "px solid transparent",
-            borderTop: (minDim * 0.013) + "px solid " + SCENE_PARAMS.borderColor.value,
+            borderTop: (minDim * 0.013) + "px solid " + (props.borderColor ?? SCENE_PARAMS.borderColor.value),
             position: "absolute",
             bottom: minDim * 0.018,
             right: minDim * 0.018,

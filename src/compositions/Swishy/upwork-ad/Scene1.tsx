@@ -20,13 +20,13 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.8, min: 0, max: 1, step: 0.1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
   const adjustedFrame = frame * speed;
   
   const isPortrait = height > width;
@@ -76,12 +76,12 @@ function Scene() {
     Math.sin((adjustedFrame - 60) * 0.08),
     [-1, 1],
     [0.4, 1]
-  ) * SCENE_PARAMS.glowIntensity.value;
+  ) * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value);
   const showGlow = adjustedFrame > 60;
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
       overflow: "hidden",
@@ -93,7 +93,7 @@ function Scene() {
         left: 0,
         right: 0,
         height: gradientProgress + "%",
-        background: "linear-gradient(to top, " + SCENE_PARAMS.accentColor.value + " 0%, " + SCENE_PARAMS.accentColor.value + "40 40%, transparent 100%)",
+        background: "linear-gradient(to top, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + " 0%, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40 40%, transparent 100%)",
         opacity: gradientOpacity,
       }} />
       
@@ -105,13 +105,13 @@ function Scene() {
         transform: "translateX(-50%)",
         width: width * 1.5,
         height: height * 0.8,
-        background: "radial-gradient(ellipse at center, " + SCENE_PARAMS.accentColor.value + "30 0%, transparent 60%)",
+        background: "radial-gradient(ellipse at center, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "30 0%, transparent 60%)",
         opacity: gradientOpacity * 0.6,
       }} />
       
       {/* Main content container */}
       <div style={{
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -126,13 +126,13 @@ function Scene() {
           marginBottom: minDim * 0.12,
         }}>
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.065,
             fontWeight: 500,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             letterSpacing: "-0.02em",
           }}>
-            {SCENE_PARAMS.logoText.value}
+            {(props.logoText ?? SCENE_PARAMS.logoText.value)}
           </span>
         </div>
         
@@ -150,19 +150,19 @@ function Scene() {
               transform: "translate(-50%, -50%)",
               width: minDim * 0.5,
               height: minDim * 0.3,
-              background: "radial-gradient(ellipse at center, " + SCENE_PARAMS.accentColor.value + "40 0%, transparent 70%)",
+              background: "radial-gradient(ellipse at center, " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40 0%, transparent 70%)",
               opacity: glowPulse,
               filter: "blur(" + minDim * 0.03 + "px)",
             }} />
           )}
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.28,
             fontWeight: 700,
-            color: SCENE_PARAMS.accentColor.value,
+            color: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
             lineHeight: 1,
             position: "relative",
-            textShadow: showGlow ? "0 0 " + (minDim * 0.04 * glowPulse) + "px " + SCENE_PARAMS.accentColor.value + "60" : "none",
+            textShadow: showGlow ? "0 0 " + (minDim * 0.04 * glowPulse) + "px " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "60" : "none",
           }}>
             {displayPercent}%
           </span>
@@ -177,28 +177,28 @@ function Scene() {
           gap: minDim * 0.015,
         }}>
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.042,
             fontWeight: 400,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             opacity: stat1Progress * 0.85,
             transform: "translateY(" + stat1Y + "px)",
           }}>
-            {SCENE_PARAMS.statLine1.value}
+            {(props.statLine1 ?? SCENE_PARAMS.statLine1.value)}
           </span>
           
           <span style={{
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             fontSize: minDim * 0.048,
             fontWeight: 600,
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             opacity: stat2Progress,
             transform: "translateY(" + stat2Y + "px)",
             textAlign: "center",
             maxWidth: minDim * 0.75,
             lineHeight: 1.3,
           }}>
-            {SCENE_PARAMS.statLine2.value}
+            {(props.statLine2 ?? SCENE_PARAMS.statLine2.value)}
           </span>
         </div>
       </div>

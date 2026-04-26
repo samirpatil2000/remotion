@@ -24,17 +24,17 @@ const SCENE_PARAMS = {
   particleSpeed: { type: "number", label: "Particle Speed", value: 0.3, min: 0.1, max: 0.8, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const minDim = Math.min(width, height);
-  const particleCount = SCENE_PARAMS.particleCount.value;
-  const baseSpeed = SCENE_PARAMS.particleSpeed.value;
+  const particleCount = (props.particleCount ?? SCENE_PARAMS.particleCount.value);
+  const baseSpeed = (props.particleSpeed ?? SCENE_PARAMS.particleSpeed.value);
   
   const particles = [];
   for (let i = 0; i < particleCount; i++) {
@@ -50,7 +50,7 @@ function Scene() {
   const textOpacity = interpolate(adjustedFrame, [20, 40], [0, 1], { extrapolateRight: "clamp" });
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{ transform: "scale(" + scaleValue + ")", transformOrigin: "center center", position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
         {particles.map((p, i) => {
           const particleFrame = Math.max(0, adjustedFrame - p.delay);
@@ -78,21 +78,21 @@ function Scene() {
           width: minDim * 0.15,
           height: minDim * 0.15,
           borderRadius: "50%",
-          background: "linear-gradient(135deg, " + SCENE_PARAMS.centerGradient1.value + " 0%, " + SCENE_PARAMS.centerGradient2.value + " 100%)",
+          background: "linear-gradient(135deg, " + (props.centerGradient1 ?? SCENE_PARAMS.centerGradient1.value) + " 0%, " + (props.centerGradient2 ?? SCENE_PARAMS.centerGradient2.value) + " 100%)",
           transform: "scale(" + centerScale + ")",
-          boxShadow: "0 0 " + (minDim * 0.1) + "px " + SCENE_PARAMS.centerGradient1.value + "99",
+          boxShadow: "0 0 " + (minDim * 0.1) + "px " + (props.centerGradient1 ?? SCENE_PARAMS.centerGradient1.value) + "99",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}>
           <span style={{
-            color: SCENE_PARAMS.textColor.value,
+            color: (props.textColor ?? SCENE_PARAMS.textColor.value),
             fontSize: minDim * 0.04,
             fontWeight: 700,
             fontFamily: "system-ui, sans-serif",
             opacity: textOpacity,
           }}>
-            {SCENE_PARAMS.centerText.value}
+            {(props.centerText ?? SCENE_PARAMS.centerText.value)}
           </span>
         </div>
       </div>

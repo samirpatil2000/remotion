@@ -33,18 +33,18 @@ const SCENE_PARAMS = {
   rotationSpeedY: { type: "number", label: "Rotation Speed Y", value: 2, min: 0.5, max: 4, step: 0.5 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const minDim = Math.min(width, height);
   const cubeSize = minDim * 0.2;
   const half = cubeSize / 2;
   
-  const rotateX = (frame * SCENE_PARAMS.rotationSpeedX.value) * Math.PI / 180;
-  const rotateY = (frame * SCENE_PARAMS.rotationSpeedY.value) * Math.PI / 180;
+  const rotateX = (frame * (props.rotationSpeedX ?? SCENE_PARAMS.rotationSpeedX.value)) * Math.PI / 180;
+  const rotateY = (frame * (props.rotationSpeedY ?? SCENE_PARAMS.rotationSpeedY.value)) * Math.PI / 180;
   
   const introScale = spring({ frame, fps, config: { damping: 10, stiffness: 60 } });
   
@@ -54,12 +54,12 @@ function Scene() {
   ];
   
   const faces = [
-    { verts: [4, 5, 6, 7], color: SCENE_PARAMS.frontColor.value, label: SCENE_PARAMS.frontLabel.value },
-    { verts: [1, 0, 3, 2], color: SCENE_PARAMS.backColor.value, label: SCENE_PARAMS.backLabel.value },
-    { verts: [5, 1, 2, 6], color: SCENE_PARAMS.rightColor.value, label: SCENE_PARAMS.rightLabel.value },
-    { verts: [0, 4, 7, 3], color: SCENE_PARAMS.leftColor.value, label: SCENE_PARAMS.leftLabel.value },
-    { verts: [7, 6, 2, 3], color: SCENE_PARAMS.topColor.value, label: SCENE_PARAMS.topLabel.value },
-    { verts: [0, 1, 5, 4], color: SCENE_PARAMS.bottomColor.value, label: SCENE_PARAMS.bottomLabel.value },
+    { verts: [4, 5, 6, 7], color: (props.frontColor ?? SCENE_PARAMS.frontColor.value), label: (props.frontLabel ?? SCENE_PARAMS.frontLabel.value) },
+    { verts: [1, 0, 3, 2], color: (props.backColor ?? SCENE_PARAMS.backColor.value), label: (props.backLabel ?? SCENE_PARAMS.backLabel.value) },
+    { verts: [5, 1, 2, 6], color: (props.rightColor ?? SCENE_PARAMS.rightColor.value), label: (props.rightLabel ?? SCENE_PARAMS.rightLabel.value) },
+    { verts: [0, 4, 7, 3], color: (props.leftColor ?? SCENE_PARAMS.leftColor.value), label: (props.leftLabel ?? SCENE_PARAMS.leftLabel.value) },
+    { verts: [7, 6, 2, 3], color: (props.topColor ?? SCENE_PARAMS.topColor.value), label: (props.topLabel ?? SCENE_PARAMS.topLabel.value) },
+    { verts: [0, 1, 5, 4], color: (props.bottomColor ?? SCENE_PARAMS.bottomColor.value), label: (props.bottomLabel ?? SCENE_PARAMS.bottomLabel.value) },
   ];
   
   const cosX = Math.cos(rotateX), sinX = Math.sin(rotateX);
@@ -87,17 +87,17 @@ function Scene() {
   const sortedFaces = faceData.filter(f => f.visible).sort((a, b) => b.avgZ - a.avgZ);
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{
         position: "absolute",
         top: height * 0.08,
         fontSize: minDim * 0.04,
-        color: SCENE_PARAMS.textColor.value,
+        color: (props.textColor ?? SCENE_PARAMS.textColor.value),
         fontWeight: 600,
         fontFamily: "system-ui, sans-serif",
         opacity: interpolate(frame, [0, 20], [0, 1], { extrapolateRight: "clamp" }),
       }}>
-        {SCENE_PARAMS.title.value}
+        {(props.title ?? SCENE_PARAMS.title.value)}
       </div>
       
       <svg width={width} height={height} style={{ position: "absolute", top: 0, left: 0 }}>

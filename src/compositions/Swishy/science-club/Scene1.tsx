@@ -22,18 +22,18 @@ const SCENE_PARAMS = {
   showMotifs: { type: "boolean", label: "Show Pacific Motifs", value: true },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
   const isPortrait = height > width;
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const waveIntensity = SCENE_PARAMS.waveIntensity.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const waveIntensity = (props.waveIntensity ?? SCENE_PARAMS.waveIntensity.value);
   
-  const words = SCENE_PARAMS.mainText.value.split(" ");
+  const words = (props.mainText ?? SCENE_PARAMS.mainText.value).split(" ");
   
   const waveProgress = spring({ frame: adjustedFrame, fps, config: { damping: 30, stiffness: 40 } });
   
@@ -144,23 +144,23 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       overflow: "hidden",
     }}>
-      {renderWave(height * 0.7, 0, SCENE_PARAMS.oceanBlue.value, 30)}
-      {renderWave(height * 0.75, 10, SCENE_PARAMS.coralPink.value, 25)}
-      {renderWave(height * 0.8, 20, SCENE_PARAMS.palmGreen.value, 20)}
+      {renderWave(height * 0.7, 0, (props.oceanBlue ?? SCENE_PARAMS.oceanBlue.value), 30)}
+      {renderWave(height * 0.75, 10, (props.coralPink ?? SCENE_PARAMS.coralPink.value), 25)}
+      {renderWave(height * 0.8, 20, (props.palmGreen ?? SCENE_PARAMS.palmGreen.value), 20)}
       
-      {SCENE_PARAMS.showMotifs.value && (
+      {(props.showMotifs ?? SCENE_PARAMS.showMotifs.value) && (
         <>
-          {renderTapaPattern(width * 0.05, height * 0.08, minDim * 0.12, 15, SCENE_PARAMS.sandGold.value)}
-          {renderTapaPattern(width * 0.85, height * 0.12, minDim * 0.1, 25, SCENE_PARAMS.coralPink.value)}
-          {renderTapaPattern(width * 0.08, height * 0.75, minDim * 0.08, 35, SCENE_PARAMS.palmGreen.value)}
-          {renderTapaPattern(width * 0.82, height * 0.7, minDim * 0.11, 45, SCENE_PARAMS.sunsetOrange.value)}
+          {renderTapaPattern(width * 0.05, height * 0.08, minDim * 0.12, 15, (props.sandGold ?? SCENE_PARAMS.sandGold.value))}
+          {renderTapaPattern(width * 0.85, height * 0.12, minDim * 0.1, 25, (props.coralPink ?? SCENE_PARAMS.coralPink.value))}
+          {renderTapaPattern(width * 0.08, height * 0.75, minDim * 0.08, 35, (props.palmGreen ?? SCENE_PARAMS.palmGreen.value))}
+          {renderTapaPattern(width * 0.82, height * 0.7, minDim * 0.11, 45, (props.sunsetOrange ?? SCENE_PARAMS.sunsetOrange.value))}
           
-          {renderFlower(width * 0.75, height * 0.05, minDim * 0.15, 20, SCENE_PARAMS.coralPink.value, SCENE_PARAMS.sandGold.value)}
-          {renderFlower(width * 0.02, height * 0.55, minDim * 0.12, 40, SCENE_PARAMS.sunsetOrange.value, SCENE_PARAMS.coralPink.value)}
-          {renderFlower(width * 0.8, height * 0.45, minDim * 0.1, 55, SCENE_PARAMS.palmGreen.value, SCENE_PARAMS.sandGold.value)}
+          {renderFlower(width * 0.75, height * 0.05, minDim * 0.15, 20, (props.coralPink ?? SCENE_PARAMS.coralPink.value), (props.sandGold ?? SCENE_PARAMS.sandGold.value))}
+          {renderFlower(width * 0.02, height * 0.55, minDim * 0.12, 40, (props.sunsetOrange ?? SCENE_PARAMS.sunsetOrange.value), (props.coralPink ?? SCENE_PARAMS.coralPink.value))}
+          {renderFlower(width * 0.8, height * 0.45, minDim * 0.1, 55, (props.palmGreen ?? SCENE_PARAMS.palmGreen.value), (props.sandGold ?? SCENE_PARAMS.sandGold.value))}
         </>
       )}
       
@@ -175,7 +175,7 @@ function Scene() {
         justifyContent: "center",
         alignItems: "center",
         padding: minDim * 0.08,
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
       }}>
         <div style={{
           display: "flex",
@@ -195,20 +195,20 @@ function Scene() {
             const wordY = interpolate(wordProgress, [0, 1], [30, 0]);
             
             const colors = [
-              SCENE_PARAMS.textColor.value,
-              SCENE_PARAMS.sandGold.value,
-              SCENE_PARAMS.coralPink.value,
-              SCENE_PARAMS.palmGreen.value,
-              SCENE_PARAMS.sunsetOrange.value,
+              (props.textColor ?? SCENE_PARAMS.textColor.value),
+              (props.sandGold ?? SCENE_PARAMS.sandGold.value),
+              (props.coralPink ?? SCENE_PARAMS.coralPink.value),
+              (props.palmGreen ?? SCENE_PARAMS.palmGreen.value),
+              (props.sunsetOrange ?? SCENE_PARAMS.sunsetOrange.value),
             ];
             
             const isHighlight = word.toLowerCase() === "women" || word.toLowerCase() === "girls" || word.toLowerCase() === "science";
-            const wordColor = isHighlight ? colors[(i % 4) + 1] : SCENE_PARAMS.textColor.value;
+            const wordColor = isHighlight ? colors[(i % 4) + 1] : (props.textColor ?? SCENE_PARAMS.textColor.value);
             
             return (
               <span key={i} style={{
                 display: "inline-block",
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", serif",
                 fontSize: minDim * (isHighlight ? 0.085 : 0.065),
                 fontWeight: isHighlight ? 700 : 500,
                 color: wordColor,
@@ -229,7 +229,7 @@ function Scene() {
           gap: minDim * 0.02,
           alignItems: "center",
         }}>
-          {[SCENE_PARAMS.coralPink.value, SCENE_PARAMS.palmGreen.value, SCENE_PARAMS.sandGold.value, SCENE_PARAMS.sunsetOrange.value, SCENE_PARAMS.oceanBlue.value].map((color, i) => {
+          {[(props.coralPink ?? SCENE_PARAMS.coralPink.value), (props.palmGreen ?? SCENE_PARAMS.palmGreen.value), (props.sandGold ?? SCENE_PARAMS.sandGold.value), (props.sunsetOrange ?? SCENE_PARAMS.sunsetOrange.value), (props.oceanBlue ?? SCENE_PARAMS.oceanBlue.value)].map((color, i) => {
             const dotDelay = 70 + (i * 5);
             const dotProgress = spring({ 
               frame: Math.max(0, adjustedFrame - dotDelay), 
@@ -257,7 +257,7 @@ function Scene() {
         left: 0,
         right: 0,
         height: minDim * 0.15,
-        background: "linear-gradient(to top, " + SCENE_PARAMS.oceanBlue.value + "40, transparent)",
+        background: "linear-gradient(to top, " + (props.oceanBlue ?? SCENE_PARAMS.oceanBlue.value) + "40, transparent)",
         opacity: waveProgress,
       }} />
     </AbsoluteFill>

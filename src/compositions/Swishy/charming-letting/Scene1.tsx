@@ -18,13 +18,13 @@ const SCENE_PARAMS = {
   stopMotionFrameRate: { type: "number", label: "Stop Motion Feel", value: 8, min: 3, max: 12, step: 1 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
-  const stopMotionRate = SCENE_PARAMS.stopMotionFrameRate.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
+  const stopMotionRate = (props.stopMotionFrameRate ?? SCENE_PARAMS.stopMotionFrameRate.value);
   
   const quantizedFrame = Math.floor((frame * speed) / (fps / stopMotionRate)) * (fps / stopMotionRate);
   
@@ -144,12 +144,12 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
       <div style={{
-        transform: `scale(${SCENE_PARAMS.scale.value})`,
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`,
         transformOrigin: "center center",
         position: "relative",
         display: "flex",
@@ -162,7 +162,7 @@ function Scene() {
           position: "absolute",
           width: paperWidth,
           height: paperFullHeight,
-          backgroundColor: SCENE_PARAMS.paperColor.value,
+          backgroundColor: (props.paperColor ?? SCENE_PARAMS.paperColor.value),
           borderRadius: minDim * 0.008,
           boxShadow: `0 ${4 + paperProgress * 12}px ${12 + paperProgress * 18}px rgba(0,0,0,${0.06 + paperProgress * 0.08})`,
           transform: `translateY(${paperYOffset + floatOffset}px) scaleY(${paperScaleY}) rotate(${paperRotation}deg)`,
@@ -221,17 +221,17 @@ function Scene() {
             zIndex: 1,
           }}>
             <p style={{
-              fontFamily: `${SCENE_PARAMS.fontFamily.value}, Georgia, serif`,
+              fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, Georgia, serif`,
               fontSize: minDim * 0.032,
               fontWeight: 400,
-              color: SCENE_PARAMS.textColor.value,
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
               lineHeight: 1.7,
               margin: 0,
               maxWidth: "85%",
               marginLeft: "auto",
               marginRight: "auto",
             }}>
-              {SCENE_PARAMS.messageText.value}
+              {(props.messageText ?? SCENE_PARAMS.messageText.value)}
             </p>
             
             <span style={{
@@ -263,7 +263,7 @@ function Scene() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: SCENE_PARAMS.envelopeColor.value,
+            backgroundColor: (props.envelopeColor ?? SCENE_PARAMS.envelopeColor.value),
             borderRadius: minDim * 0.015,
             boxShadow: `0 4px 20px rgba(0,0,0,0.1)`,
           }}>
@@ -289,7 +289,7 @@ function Scene() {
               height: 0,
               borderLeft: `${envelopeWidth * 0.4}px solid transparent`,
               borderRight: `${envelopeWidth * 0.4}px solid transparent`,
-              borderBottom: `${envelopeHeight * 0.3}px solid ${SCENE_PARAMS.envelopeDark.value}`,
+              borderBottom: `${envelopeHeight * 0.3}px solid ${(props.envelopeDark ?? SCENE_PARAMS.envelopeDark.value)}`,
               opacity: 0.3,
             }} />
           </div>
@@ -303,7 +303,7 @@ function Scene() {
             height: 0,
             borderLeft: `${envelopeWidth * 0.5}px solid transparent`,
             borderRight: `${envelopeWidth * 0.5}px solid transparent`,
-            borderTop: `${flapHeight}px solid ${SCENE_PARAMS.envelopeColor.value}`,
+            borderTop: `${flapHeight}px solid ${(props.envelopeColor ?? SCENE_PARAMS.envelopeColor.value)}`,
             transform: `translateX(-50%) rotateX(${flapRotation}deg)`,
             transformOrigin: "center top",
             filter: `brightness(${flapRotation > 90 ? 1 : 0.95})`,
@@ -329,7 +329,7 @@ function Scene() {
             left: 0,
             width: "100%",
             height: "60%",
-            backgroundColor: SCENE_PARAMS.envelopeColor.value,
+            backgroundColor: (props.envelopeColor ?? SCENE_PARAMS.envelopeColor.value),
             borderRadius: `0 0 ${minDim * 0.015}px ${minDim * 0.015}px`,
             boxShadow: `inset 0 2px 8px rgba(0,0,0,0.05)`,
             zIndex: 2,

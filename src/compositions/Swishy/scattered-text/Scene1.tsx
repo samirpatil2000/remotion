@@ -16,18 +16,18 @@ const SCENE_PARAMS = {
   scale: { type: "number", label: "Global Scale", value: 1, min: 0.5, max: 2, step: 0.05 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
   
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   // Determine text properties
-  const text = SCENE_PARAMS.phrase.value.toUpperCase();
+  const text = (props.phrase ?? SCENE_PARAMS.phrase.value).toUpperCase();
   const chars = text.split("");
-  const rows = Math.floor(SCENE_PARAMS.rowCount.value);
+  const rows = Math.floor((props.rowCount ?? SCENE_PARAMS.rowCount.value));
   
   // Deterministic pseudo-random function
   const getCharRandom = (row, col) => {
@@ -47,7 +47,7 @@ function Scene() {
 
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -55,7 +55,7 @@ function Scene() {
       overflow: "hidden"
     }}>
       <div style={{ 
-        transform: `scale(${SCENE_PARAMS.scale.value})`, 
+        transform: `scale(${(props.scale ?? SCENE_PARAMS.scale.value)})`, 
         display: "flex", 
         flexDirection: "column",
         width: "100%",
@@ -80,10 +80,10 @@ function Scene() {
                 <span
                   key={charIndex}
                   style={{ 
-                    fontFamily: `${SCENE_PARAMS.fontFamily.value}, system-ui, sans-serif`, 
-                    fontSize: minDim * 0.06 * SCENE_PARAMS.fontSize.value,
+                    fontFamily: `${(props.fontFamily ?? SCENE_PARAMS.fontFamily.value)}, system-ui, sans-serif`, 
+                    fontSize: minDim * 0.06 * (props.fontSize ?? SCENE_PARAMS.fontSize.value),
                     fontWeight: 900,
-                    color: SCENE_PARAMS.textColor.value,
+                    color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                     opacity: isVisible ? 1 : 0,
                     // Fixed character width to ensure columns align perfectly like the image
                     width: char === " " ? "0.3em" : "0.6em",

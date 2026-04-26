@@ -35,25 +35,25 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const entrance = spring({
     frame: adjustedFrame,
     fps,
     config: { damping: 20, stiffness: 90 }
   });
-  const slideY = interpolate(entrance, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const opacity = interpolate(entrance, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const slideY = interpolate(entrance, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const opacity = interpolate(entrance, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
   const scale = interpolate(entrance, [0, 1], [0.96, 1], { extrapolateRight: "clamp" });
 
-  const totalDuration = SCENE_PARAMS.countDuration.value;
+  const totalDuration = (props.countDuration ?? SCENE_PARAMS.countDuration.value);
   const countProgress = interpolate(adjustedFrame, [0, totalDuration], [0, 1], { extrapolateRight: "clamp" });
   const eased = countProgress * countProgress * (3 - 2 * countProgress);
-  const currentValue = Math.max(0, Math.ceil((1 - eased) * SCENE_PARAMS.startValue.value));
+  const currentValue = Math.max(0, Math.ceil((1 - eased) * (props.startValue ?? SCENE_PARAMS.startValue.value)));
 
   const isPortrait = height > width;
   const numberSize = minDim * (isPortrait ? 0.16 : 0.12);
@@ -63,15 +63,15 @@ function Scene() {
   const gap = minDim * 0.03;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           opacity,
           transform: "translateY(" + slideY + "px) scale(" + scale + ")",
-          filter: SCENE_PARAMS.blur.value > 0 ? "blur(" + SCENE_PARAMS.blur.value + "px)" : "none"
+          filter: (props.blur ?? SCENE_PARAMS.blur.value) > 0 ? "blur(" + (props.blur ?? SCENE_PARAMS.blur.value) + "px)" : "none"
         }}>
           <div style={{
             display: "flex",
@@ -82,8 +82,8 @@ function Scene() {
             <div style={{
               fontSize: numberSize,
               fontWeight: 800,
-              color: SCENE_PARAMS.textColor.value,
-              fontFamily: SCENE_PARAMS.headingFont.value + ", system-ui, sans-serif",
+              color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+              fontFamily: (props.headingFont ?? SCENE_PARAMS.headingFont.value) + ", system-ui, sans-serif",
               letterSpacing: "-0.02em",
               lineHeight: 1
             }}>
@@ -93,23 +93,23 @@ function Scene() {
               marginTop: minDim * 0.01,
               fontSize: labelSize,
               fontWeight: 500,
-              color: SCENE_PARAMS.secondaryColor.value,
-              fontFamily: SCENE_PARAMS.bodyFont.value + ", system-ui, sans-serif",
+              color: (props.secondaryColor ?? SCENE_PARAMS.secondaryColor.value),
+              fontFamily: (props.bodyFont ?? SCENE_PARAMS.bodyFont.value) + ", system-ui, sans-serif",
               letterSpacing: "0.02em"
             }}>
-              {SCENE_PARAMS.label.value}
+              {(props.label ?? SCENE_PARAMS.label.value)}
             </div>
           </div>
 
           <div style={{
             width: barWidth,
             height: barHeight,
-            backgroundColor: SCENE_PARAMS.barBackgroundColor.value
+            backgroundColor: (props.barBackgroundColor ?? SCENE_PARAMS.barBackgroundColor.value)
           }}>
             <div style={{
               width: barWidth * eased,
               height: "100%",
-              backgroundColor: SCENE_PARAMS.barFillColor.value
+              backgroundColor: (props.barFillColor ?? SCENE_PARAMS.barFillColor.value)
             }} />
           </div>
         </div>

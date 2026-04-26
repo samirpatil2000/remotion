@@ -23,14 +23,14 @@ const SCENE_PARAMS = {
   opacity: { type: "number", label: "Max Opacity", value: 1, min: 0, max: 1, step: 0.05 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const adjustedFrame = frame * SCENE_PARAMS.animationSpeed.value;
+  const adjustedFrame = frame * (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
-  const startYear = parseInt(SCENE_PARAMS.startYear.value, 10);
-  const endYear = parseInt(SCENE_PARAMS.endYear.value, 10);
+  const startYear = parseInt((props.startYear ?? SCENE_PARAMS.startYear.value), 10);
+  const endYear = parseInt((props.endYear ?? SCENE_PARAMS.endYear.value), 10);
   const yearCount = Math.max(1, endYear - startYear + 1);
 
   const numberSize = minDim * 0.22;
@@ -42,26 +42,26 @@ function Scene() {
   const offset = eased * (yearCount - 1) * lineHeight;
 
   const entrance = spring({ frame: Math.max(0, adjustedFrame - 5), fps, config: { damping: 20, stiffness: 90 } });
-  const slideY = interpolate(entrance, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const opacity = interpolate(entrance, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const slideY = interpolate(entrance, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const opacity = interpolate(entrance, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
 
   const years = Array.from({ length: yearCount }, (_, i) => startYear + i);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: minDim * 0.02, opacity, transform: "translateY(" + slideY + "px)" }}>
           <div style={{ height: lineHeight, overflow: "hidden" }}>
             <div style={{ transform: "translateY(" + (-offset) + "px)", transition: "none" }}>
               {years.map((y, i) => (
-                <div key={i} style={{ height: lineHeight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: numberSize, fontWeight: 700, color: SCENE_PARAMS.textColor.value, fontFamily: SCENE_PARAMS.numberFont.value + ", system-ui, sans-serif", letterSpacing: -1 }}>
+                <div key={i} style={{ height: lineHeight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: numberSize, fontWeight: 700, color: (props.textColor ?? SCENE_PARAMS.textColor.value), fontFamily: (props.numberFont ?? SCENE_PARAMS.numberFont.value) + ", system-ui, sans-serif", letterSpacing: -1 }}>
                   {y}
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ fontSize: minDim * 0.04, fontWeight: 600, color: SCENE_PARAMS.accentColor.value, fontFamily: SCENE_PARAMS.labelFont.value + ", system-ui, sans-serif", letterSpacing: 1, textTransform: "lowercase" }}>
-            {SCENE_PARAMS.label.value}
+          <div style={{ fontSize: minDim * 0.04, fontWeight: 600, color: (props.accentColor ?? SCENE_PARAMS.accentColor.value), fontFamily: (props.labelFont ?? SCENE_PARAMS.labelFont.value) + ", system-ui, sans-serif", letterSpacing: 1, textTransform: "lowercase" }}>
+            {(props.label ?? SCENE_PARAMS.label.value)}
           </div>
         </div>
       </div>

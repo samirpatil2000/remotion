@@ -16,11 +16,11 @@ const SCENE_PARAMS = {
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { width, height, fps, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
 
   const animationWindow = durationInFrames * 0.7;
   const adjustedFrame = (frame / animationWindow) * 60 * speed;
@@ -36,12 +36,12 @@ function Scene() {
   const barWidth = nWidth * 0.28;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div style={{
         position: "absolute",
         left: "50%",
         top: "45%",
-        transform: "translate(-50%, -50%) scale(" + SCENE_PARAMS.scale.value + ")",
+        transform: "translate(-50%, -50%) scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
         transformOrigin: "center center",
         width: nWidth,
         height: nHeight
@@ -52,7 +52,7 @@ function Scene() {
           top: 0,
           width: barWidth,
           height: nHeight,
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           borderRadius: barWidth * 0.15,
           opacity: bar1,
           transform: "translateY(" + interpolate(bar1, [0,1], [nHeight * 0.15, 0], { extrapolateRight: "clamp" }) + "px)"
@@ -63,7 +63,7 @@ function Scene() {
           top: 0,
           width: barWidth,
           height: nHeight,
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           borderRadius: barWidth * 0.15,
           opacity: bar2,
           transform: "skewX(18deg) translateY(" + interpolate(bar2, [0,1], [nHeight * 0.2, 0], { extrapolateRight: "clamp" }) + "px)"
@@ -74,7 +74,7 @@ function Scene() {
           top: 0,
           width: barWidth,
           height: nHeight,
-          backgroundColor: SCENE_PARAMS.accentColor.value,
+          backgroundColor: (props.accentColor ?? SCENE_PARAMS.accentColor.value),
           borderRadius: barWidth * 0.15,
           opacity: bar3,
           transform: "translateY(" + interpolate(bar3, [0,1], [nHeight * 0.15, 0], { extrapolateRight: "clamp" }) + "px)"
@@ -85,7 +85,7 @@ function Scene() {
           top: nHeight * 0.04,
           width: nWidth * 0.88,
           height: nHeight * 0.92,
-          backgroundColor: SCENE_PARAMS.shadowColor.value,
+          backgroundColor: (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
           opacity: interpolate(bar3, [0,1], [0, 0.35], { extrapolateRight: "clamp" }),
           transform: "translate(" + (nWidth * 0.02) + "px, " + (nHeight * 0.02) + "px)"
         }} />
@@ -102,11 +102,11 @@ function Scene() {
         <div style={{
           fontSize: minDim * 0.07,
           letterSpacing: minDim * 0.004,
-          color: SCENE_PARAMS.primaryColor.value,
+          color: (props.primaryColor ?? SCENE_PARAMS.primaryColor.value),
           fontWeight: 600,
-          fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+          fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
           transform: "translateY(" + interpolate(textIn, [0,1], [12, 0], { extrapolateRight: "clamp" }) + "px)"
-        }}>{SCENE_PARAMS.logoText.value}</div>
+        }}>{(props.logoText ?? SCENE_PARAMS.logoText.value)}</div>
       </div>
     </AbsoluteFill>
   );

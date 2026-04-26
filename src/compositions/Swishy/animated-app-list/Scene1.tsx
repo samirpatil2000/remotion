@@ -50,31 +50,31 @@ const SCENE_PARAMS = {
   shadowIntensity: { type: "number", label: "Shadow Intensity", value: 0.08, min: 0, max: 0.3, step: 0.02 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
-  const stagger = SCENE_PARAMS.staggerDelay.value;
-  const entranceOffset = SCENE_PARAMS.entranceOffset.value;
-  const scrollAmount = SCENE_PARAMS.scrollAmount.value;
-  const scaleValue = SCENE_PARAMS.scale.value;
+  const stagger = (props.staggerDelay ?? SCENE_PARAMS.staggerDelay.value);
+  const entranceOffset = (props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value);
+  const scrollAmount = (props.scrollAmount ?? SCENE_PARAMS.scrollAmount.value);
+  const scaleValue = (props.scale ?? SCENE_PARAMS.scale.value);
   
   const isPortrait = height > width;
   const phoneWidth = isPortrait ? width * 0.85 : width * 0.35;
   const phoneHeight = isPortrait ? height * 0.8 : height * 0.9;
   
-  const profileSize = minDim * SCENE_PARAMS.profileSize.value;
+  const profileSize = minDim * (props.profileSize ?? SCENE_PARAMS.profileSize.value);
   
   const cards = [
-    { icon: "💬", title: SCENE_PARAMS.card1Title.value, subtitle: SCENE_PARAMS.card1Subtitle.value, color: "#3b82f6" },
-    { icon: "📅", title: SCENE_PARAMS.card2Title.value, subtitle: SCENE_PARAMS.card2Subtitle.value, color: "#ef4444" },
-    { icon: "📷", title: SCENE_PARAMS.card3Title.value, subtitle: SCENE_PARAMS.card3Subtitle.value, color: "#f59e0b" },
-    { icon: "🎵", title: SCENE_PARAMS.card4Title.value, subtitle: SCENE_PARAMS.card4Subtitle.value, color: "#ec4899" },
-    { icon: "🏃", title: SCENE_PARAMS.card5Title.value, subtitle: SCENE_PARAMS.card5Subtitle.value, color: "#10b981" },
-    { icon: "☀️", title: SCENE_PARAMS.card6Title.value, subtitle: SCENE_PARAMS.card6Subtitle.value, color: "#8b5cf6" },
+    { icon: "💬", title: (props.card1Title ?? SCENE_PARAMS.card1Title.value), subtitle: (props.card1Subtitle ?? SCENE_PARAMS.card1Subtitle.value), color: "#3b82f6" },
+    { icon: "📅", title: (props.card2Title ?? SCENE_PARAMS.card2Title.value), subtitle: (props.card2Subtitle ?? SCENE_PARAMS.card2Subtitle.value), color: "#ef4444" },
+    { icon: "📷", title: (props.card3Title ?? SCENE_PARAMS.card3Title.value), subtitle: (props.card3Subtitle ?? SCENE_PARAMS.card3Subtitle.value), color: "#f59e0b" },
+    { icon: "🎵", title: (props.card4Title ?? SCENE_PARAMS.card4Title.value), subtitle: (props.card4Subtitle ?? SCENE_PARAMS.card4Subtitle.value), color: "#ec4899" },
+    { icon: "🏃", title: (props.card5Title ?? SCENE_PARAMS.card5Title.value), subtitle: (props.card5Subtitle ?? SCENE_PARAMS.card5Subtitle.value), color: "#10b981" },
+    { icon: "☀️", title: (props.card6Title ?? SCENE_PARAMS.card6Title.value), subtitle: (props.card6Subtitle ?? SCENE_PARAMS.card6Subtitle.value), color: "#8b5cf6" },
   ];
   
   const cardHeight = minDim * 0.12;
@@ -112,7 +112,7 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{
-      backgroundColor: SCENE_PARAMS.backgroundColor.value,
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
       justifyContent: "center",
       alignItems: "center",
     }}>
@@ -124,7 +124,7 @@ function Scene() {
         <div style={{
           width: phoneWidth,
           height: phoneHeight,
-          backgroundColor: SCENE_PARAMS.cardBackground.value,
+          backgroundColor: (props.cardBackground ?? SCENE_PARAMS.cardBackground.value),
           borderRadius: minDim * 0.06,
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)",
           overflow: "hidden",
@@ -143,18 +143,18 @@ function Scene() {
             padding: "0 " + paddingHorizontal + "px",
           }}>
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.025,
               fontWeight: 600,
-              color: SCENE_PARAMS.titleColor.value,
+              color: (props.titleColor ?? SCENE_PARAMS.titleColor.value),
             }}>9:41</span>
             <div style={{
               display: "flex",
               gap: minDim * 0.015,
               alignItems: "center",
             }}>
-              <div style={{ width: minDim * 0.035, height: minDim * 0.02, backgroundColor: SCENE_PARAMS.titleColor.value, borderRadius: 2 }} />
-              <div style={{ width: minDim * 0.015, height: minDim * 0.015, backgroundColor: SCENE_PARAMS.titleColor.value, borderRadius: "50%" }} />
+              <div style={{ width: minDim * 0.035, height: minDim * 0.02, backgroundColor: (props.titleColor ?? SCENE_PARAMS.titleColor.value), borderRadius: 2 }} />
+              <div style={{ width: minDim * 0.015, height: minDim * 0.015, backgroundColor: (props.titleColor ?? SCENE_PARAMS.titleColor.value), borderRadius: "50%" }} />
             </div>
           </div>
           
@@ -169,14 +169,14 @@ function Scene() {
               width: profileSize,
               height: profileSize,
               borderRadius: "50%",
-              border: SCENE_PARAMS.profileBorderWidth.value + "px solid " + SCENE_PARAMS.profileBorderColor.value,
+              border: (props.profileBorderWidth ?? SCENE_PARAMS.profileBorderWidth.value) + "px solid " + (props.profileBorderColor ?? SCENE_PARAMS.profileBorderColor.value),
               boxShadow: "0 4px 15px rgba(0, 0, 0, 0.15)",
               overflow: "hidden",
               transform: "scale(" + profileScale + ") translateY(" + profileY + "px)",
               opacity: profileOpacity,
             }}>
               <Img
-                src={SCENE_PARAMS.profileImage.value}
+                src={(props.profileImage ?? SCENE_PARAMS.profileImage.value)}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -193,10 +193,10 @@ function Scene() {
             paddingBottom: minDim * 0.02,
           }}>
             <h1 style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.055,
               fontWeight: 700,
-              color: SCENE_PARAMS.titleColor.value,
+              color: (props.titleColor ?? SCENE_PARAMS.titleColor.value),
               margin: 0,
             }}>Apps</h1>
           </div>
@@ -228,9 +228,9 @@ function Scene() {
                     key={i}
                     style={{
                       height: cardHeight,
-                      backgroundColor: SCENE_PARAMS.cardBackground.value,
-                      borderRadius: SCENE_PARAMS.borderRadius.value,
-                      boxShadow: "0 4px 15px rgba(0, 0, 0, " + SCENE_PARAMS.shadowIntensity.value + "), 0 1px 3px rgba(0, 0, 0, 0.04)",
+                      backgroundColor: (props.cardBackground ?? SCENE_PARAMS.cardBackground.value),
+                      borderRadius: (props.borderRadius ?? SCENE_PARAMS.borderRadius.value),
+                      boxShadow: "0 4px 15px rgba(0, 0, 0, " + (props.shadowIntensity ?? SCENE_PARAMS.shadowIntensity.value) + "), 0 1px 3px rgba(0, 0, 0, 0.04)",
                       display: "flex",
                       alignItems: "center",
                       padding: "0 " + (minDim * 0.03) + "px",
@@ -263,16 +263,16 @@ function Scene() {
                       gap: minDim * 0.005,
                     }}>
                       <span style={{
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                         fontSize: minDim * 0.032,
                         fontWeight: 600,
-                        color: SCENE_PARAMS.titleColor.value,
+                        color: (props.titleColor ?? SCENE_PARAMS.titleColor.value),
                       }}>{card.title}</span>
                       <span style={{
-                        fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                        fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                         fontSize: minDim * 0.024,
                         fontWeight: 400,
-                        color: SCENE_PARAMS.subtitleColor.value,
+                        color: (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
                       }}>{card.subtitle}</span>
                     </div>
                     
@@ -280,8 +280,8 @@ function Scene() {
                     <div style={{
                       width: minDim * 0.015,
                       height: minDim * 0.015,
-                      borderRight: "2px solid " + SCENE_PARAMS.subtitleColor.value,
-                      borderBottom: "2px solid " + SCENE_PARAMS.subtitleColor.value,
+                      borderRight: "2px solid " + (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
+                      borderBottom: "2px solid " + (props.subtitleColor ?? SCENE_PARAMS.subtitleColor.value),
                       transform: "rotate(-45deg)",
                       opacity: 0.5,
                     }} />
@@ -302,7 +302,7 @@ function Scene() {
             <div style={{
               width: minDim * 0.2,
               height: minDim * 0.008,
-              backgroundColor: SCENE_PARAMS.titleColor.value,
+              backgroundColor: (props.titleColor ?? SCENE_PARAMS.titleColor.value),
               borderRadius: minDim * 0.004,
               opacity: 0.2,
             }} />

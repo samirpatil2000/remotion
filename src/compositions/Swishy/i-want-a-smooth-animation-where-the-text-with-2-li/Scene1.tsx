@@ -18,19 +18,19 @@ const SCENE_PARAMS = {
   jiggleIntensity: { type: "number", label: "Jiggle Intensity", value: 3, min: 1, max: 10, step: 0.5 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height, durationInFrames } = useVideoConfig();
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   
   const cycleLength = durationInFrames / 2;
   const currentCycle = Math.floor(frame / cycleLength) % 2;
   const cycleFrame = frame % cycleLength;
   
   const isFirstText = currentCycle === 0;
-  const line1 = isFirstText ? SCENE_PARAMS.line1Text1.value : SCENE_PARAMS.line1Text2.value;
-  const line2 = isFirstText ? SCENE_PARAMS.line2Text1.value : SCENE_PARAMS.line2Text2.value;
+  const line1 = isFirstText ? (props.line1Text1 ?? SCENE_PARAMS.line1Text1.value) : (props.line1Text2 ?? SCENE_PARAMS.line1Text2.value);
+  const line2 = isFirstText ? (props.line2Text1 ?? SCENE_PARAMS.line2Text1.value) : (props.line2Text2 ?? SCENE_PARAMS.line2Text2.value);
   
   const enterPhase = cycleLength * 0.3;
   const holdPhase = cycleLength * 0.4;
@@ -52,7 +52,7 @@ function Scene() {
   const getLetterAnimation = (index, total, isTopLine) => {
     const stagger = index * 2;
     const direction = isTopLine ? -1 : 1;
-    const jiggleOffset = SCENE_PARAMS.jiggleIntensity.value;
+    const jiggleOffset = (props.jiggleIntensity ?? SCENE_PARAMS.jiggleIntensity.value);
     
     let yOffset = 0;
     let opacity = 0;
@@ -93,9 +93,9 @@ function Scene() {
   const letterSpacing = fontSize * 0.02;
   
   return (
-    <AbsoluteFill style={{ backgroundColor: SCENE_PARAMS.backgroundColor.value, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), justifyContent: "center", alignItems: "center" }}>
       <div style={{ 
-        transform: "scale(" + SCENE_PARAMS.scale.value + ")", 
+        transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", 
         transformOrigin: "center center",
         display: "flex",
         flexDirection: "column",
@@ -112,8 +112,8 @@ function Scene() {
                   display: "inline-block",
                   fontSize: fontSize,
                   fontWeight: 600,
-                  color: SCENE_PARAMS.textColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   opacity: anim.opacity,
                   transform: "translateY(" + anim.yOffset + "px) translateX(" + anim.xJiggle + "px) rotate(" + anim.rotateZ + "deg)",
                   letterSpacing: letterSpacing,
@@ -135,8 +135,8 @@ function Scene() {
                   display: "inline-block",
                   fontSize: fontSize,
                   fontWeight: 600,
-                  color: SCENE_PARAMS.textColor.value,
-                  fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                  color: (props.textColor ?? SCENE_PARAMS.textColor.value),
+                  fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                   opacity: anim.opacity,
                   transform: "translateY(" + anim.yOffset + "px) translateX(" + anim.xJiggle + "px) rotate(" + anim.rotateZ + "deg)",
                   letterSpacing: letterSpacing,

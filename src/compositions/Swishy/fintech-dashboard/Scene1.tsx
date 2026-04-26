@@ -26,12 +26,12 @@ const SCENE_PARAMS = {
   borderRadius: { type: "number", label: "Border Radius", value: 16, min: 0, max: 40, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   const isPortrait = height > width;
   
@@ -39,10 +39,10 @@ function Scene() {
   const cardHeight = cardWidth * 0.7;
   const padding = cardWidth * 0.06;
   
-  const skeletonEnd = SCENE_PARAMS.skeletonDuration.value;
+  const skeletonEnd = (props.skeletonDuration ?? SCENE_PARAMS.skeletonDuration.value);
   const contentStart = skeletonEnd;
   const chartStart = contentStart + 15;
-  const chartEnd = chartStart + SCENE_PARAMS.chartDrawDuration.value;
+  const chartEnd = chartStart + (props.chartDrawDuration ?? SCENE_PARAMS.chartDrawDuration.value);
   const iconsStart = chartStart + 10;
   
   const cardEntrance = spring({ frame: adjustedFrame, fps, config: { damping: 22, stiffness: 85 } });
@@ -58,12 +58,12 @@ function Scene() {
     return isNaN(num) ? 0 : num;
   };
   
-  const targetValue = parseNumericValue(SCENE_PARAMS.mainValue.value);
+  const targetValue = parseNumericValue((props.mainValue ?? SCENE_PARAMS.mainValue.value));
   const countProgress = interpolate(adjustedFrame, [contentStart, contentStart + 45], [0, 1], { extrapolateRight: "clamp" });
   const currentValue = Math.floor(targetValue * countProgress);
   const formattedValue = "$" + currentValue.toLocaleString();
   
-  const targetPercent = parseNumericValue(SCENE_PARAMS.percentChange.value);
+  const targetPercent = parseNumericValue((props.percentChange ?? SCENE_PARAMS.percentChange.value));
   const currentPercent = (targetPercent * countProgress).toFixed(1);
   
   const chartProgress = interpolate(adjustedFrame, [chartStart, chartEnd], [0, 100], { extrapolateRight: "clamp" });
@@ -100,19 +100,19 @@ function Scene() {
   
   return (
     <AbsoluteFill style={{ 
-      backgroundColor: SCENE_PARAMS.backgroundColor.value, 
+      backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value), 
       justifyContent: "center", 
       alignItems: "center",
     }}>
-      <div style={{ transform: "scale(" + SCENE_PARAMS.scale.value + ")", transformOrigin: "center center" }}>
+      <div style={{ transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")", transformOrigin: "center center" }}>
         <div style={{
           width: cardWidth,
           height: cardHeight,
-          backgroundColor: SCENE_PARAMS.cardBackground.value + "cc",
-          backdropFilter: "blur(" + SCENE_PARAMS.glassBlur.value + "px)",
-          borderRadius: SCENE_PARAMS.borderRadius.value,
-          border: "1px solid " + SCENE_PARAMS.accentColor.value + "40",
-          boxShadow: "0 0 40px " + SCENE_PARAMS.neonGlow.value + "20, 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
+          backgroundColor: (props.cardBackground ?? SCENE_PARAMS.cardBackground.value) + "cc",
+          backdropFilter: "blur(" + (props.glassBlur ?? SCENE_PARAMS.glassBlur.value) + "px)",
+          borderRadius: (props.borderRadius ?? SCENE_PARAMS.borderRadius.value),
+          border: "1px solid " + (props.accentColor ?? SCENE_PARAMS.accentColor.value) + "40",
+          boxShadow: "0 0 40px " + (props.neonGlow ?? SCENE_PARAMS.neonGlow.value) + "20, 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
           padding: padding,
           position: "relative",
           overflow: "hidden",
@@ -133,7 +133,7 @@ function Scene() {
             <div style={{
               width: "40%",
               height: minDim * 0.018,
-              backgroundColor: SCENE_PARAMS.secondaryText.value + "30",
+              backgroundColor: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "30",
               borderRadius: 4,
               marginBottom: minDim * 0.015,
               position: "relative",
@@ -145,13 +145,13 @@ function Scene() {
                 left: shimmerX + "%",
                 width: "50%",
                 height: "100%",
-                background: "linear-gradient(90deg, transparent, " + SCENE_PARAMS.secondaryText.value + "40, transparent)",
+                background: "linear-gradient(90deg, transparent, " + (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "40, transparent)",
               }} />
             </div>
             <div style={{
               width: "70%",
               height: minDim * 0.035,
-              backgroundColor: SCENE_PARAMS.secondaryText.value + "30",
+              backgroundColor: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "30",
               borderRadius: 6,
               marginBottom: minDim * 0.025,
               position: "relative",
@@ -163,13 +163,13 @@ function Scene() {
                 left: shimmerX + "%",
                 width: "50%",
                 height: "100%",
-                background: "linear-gradient(90deg, transparent, " + SCENE_PARAMS.secondaryText.value + "40, transparent)",
+                background: "linear-gradient(90deg, transparent, " + (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "40, transparent)",
               }} />
             </div>
             <div style={{
               width: "100%",
               height: chartHeight,
-              backgroundColor: SCENE_PARAMS.secondaryText.value + "20",
+              backgroundColor: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "20",
               borderRadius: 8,
               position: "relative",
               overflow: "hidden",
@@ -180,7 +180,7 @@ function Scene() {
                 left: shimmerX + "%",
                 width: "50%",
                 height: "100%",
-                background: "linear-gradient(90deg, transparent, " + SCENE_PARAMS.secondaryText.value + "30, transparent)",
+                background: "linear-gradient(90deg, transparent, " + (props.secondaryText ?? SCENE_PARAMS.secondaryText.value) + "30, transparent)",
               }} />
             </div>
           </div>
@@ -193,14 +193,14 @@ function Scene() {
               marginBottom: minDim * 0.01,
             }}>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.022,
                 fontWeight: 500,
-                color: SCENE_PARAMS.secondaryText.value,
+                color: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
                 textTransform: "uppercase",
                 letterSpacing: 1,
               }}>
-                {SCENE_PARAMS.cardTitle.value}
+                {(props.cardTitle ?? SCENE_PARAMS.cardTitle.value)}
               </span>
               <div style={{ display: "flex", gap: minDim * 0.01 }}>
                 {icons.map((item, i) => {
@@ -230,20 +230,20 @@ function Scene() {
               marginBottom: minDim * 0.015,
             }}>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.055,
                 fontWeight: 700,
-                color: SCENE_PARAMS.textColor.value,
+                color: (props.textColor ?? SCENE_PARAMS.textColor.value),
                 letterSpacing: -1,
               }}>
                 {formattedValue}
               </span>
               <span style={{
-                fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+                fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
                 fontSize: minDim * 0.022,
                 fontWeight: 600,
-                color: SCENE_PARAMS.positiveColor.value,
-                backgroundColor: SCENE_PARAMS.positiveColor.value + "20",
+                color: (props.positiveColor ?? SCENE_PARAMS.positiveColor.value),
+                backgroundColor: (props.positiveColor ?? SCENE_PARAMS.positiveColor.value) + "20",
                 padding: minDim * 0.005 + "px " + minDim * 0.01 + "px",
                 borderRadius: 4,
               }}>
@@ -252,13 +252,13 @@ function Scene() {
             </div>
             
             <span style={{
-              fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+              fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
               fontSize: minDim * 0.018,
-              color: SCENE_PARAMS.secondaryText.value,
+              color: (props.secondaryText ?? SCENE_PARAMS.secondaryText.value),
               display: "block",
               marginBottom: minDim * 0.02,
             }}>
-              {SCENE_PARAMS.periodLabel.value}
+              {(props.periodLabel ?? SCENE_PARAMS.periodLabel.value)}
             </span>
             
             <div style={{
@@ -269,8 +269,8 @@ function Scene() {
               <svg width={chartWidth} height={chartHeight} style={{ overflow: "visible" }}>
                 <defs>
                   <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor={SCENE_PARAMS.accentColor.value} stopOpacity="0.3" />
-                    <stop offset="100%" stopColor={SCENE_PARAMS.accentColor.value} stopOpacity="0" />
+                    <stop offset="0%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} stopOpacity="0.3" />
+                    <stop offset="100%" stopColor={(props.accentColor ?? SCENE_PARAMS.accentColor.value)} stopOpacity="0" />
                   </linearGradient>
                   <filter id="glow">
                     <feGaussianBlur stdDeviation="3" result="coloredBlur" />
@@ -292,7 +292,7 @@ function Scene() {
                 <path
                   d={pathD}
                   fill="none"
-                  stroke={SCENE_PARAMS.accentColor.value}
+                  stroke={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -308,7 +308,7 @@ function Scene() {
                     cx={(chartPoints[chartPoints.length - 1].x / 100) * chartWidth}
                     cy={(chartPoints[chartPoints.length - 1].y / 100) * chartHeight}
                     r="6"
-                    fill={SCENE_PARAMS.accentColor.value}
+                    fill={(props.accentColor ?? SCENE_PARAMS.accentColor.value)}
                     filter="url(#glow)"
                   />
                 )}
@@ -322,7 +322,7 @@ function Scene() {
             left: padding,
             right: padding,
             height: 2,
-            background: "linear-gradient(90deg, transparent, " + SCENE_PARAMS.neonGlow.value + ", transparent)",
+            background: "linear-gradient(90deg, transparent, " + (props.neonGlow ?? SCENE_PARAMS.neonGlow.value) + ", transparent)",
             opacity: interpolate(adjustedFrame, [contentStart, contentStart + 20], [0, 0.8], { extrapolateRight: "clamp" }),
           }} />
         </div>

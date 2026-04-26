@@ -22,12 +22,12 @@ const SCENE_PARAMS = {
   glowIntensity: { type: "number", label: "Glow Intensity", value: 0.6, min: 0, max: 1, step: 0.1 }
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const logoSize = minDim * 0.35;
@@ -40,8 +40,8 @@ function Scene() {
   });
   
   const logoScale = interpolate(logoEntrance, [0, 1], [0.1, 1], { extrapolateRight: "clamp" });
-  const slideY = interpolate(logoEntrance, [0, 1], [SCENE_PARAMS.entranceOffset.value, 0], { extrapolateRight: "clamp" });
-  const logoOpacity = interpolate(logoEntrance, [0, 1], [0, SCENE_PARAMS.opacity.value], { extrapolateRight: "clamp" });
+  const slideY = interpolate(logoEntrance, [0, 1], [(props.entranceOffset ?? SCENE_PARAMS.entranceOffset.value), 0], { extrapolateRight: "clamp" });
+  const logoOpacity = interpolate(logoEntrance, [0, 1], [0, (props.opacity ?? SCENE_PARAMS.opacity.value)], { extrapolateRight: "clamp" });
   
   const pulsePhase = Math.max(0, adjustedFrame - 45);
   const pulse = 1 + Math.sin(pulsePhase * 0.08) * 0.02;
@@ -49,14 +49,14 @@ function Scene() {
   
   const glowEntrance = interpolate(adjustedFrame, [10, 35], [0, 1], { extrapolateRight: "clamp" });
   const glowPulse = 1 + Math.sin(pulsePhase * 0.06) * 0.15;
-  const glowOpacity = glowEntrance * SCENE_PARAMS.glowIntensity.value * glowPulse;
+  const glowOpacity = glowEntrance * (props.glowIntensity ?? SCENE_PARAMS.glowIntensity.value) * glowPulse;
   const glowSize = logoSize * 1.8;
   
   return React.createElement(
     AbsoluteFill,
     {
       style: {
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
@@ -67,7 +67,7 @@ function Scene() {
       {
         style: {
           position: "relative",
-          transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformOrigin: "center center",
         }
       },
@@ -77,12 +77,12 @@ function Scene() {
           width: glowSize,
           height: glowSize,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.glowColor.value + " 0%, transparent 70%)",
+          background: "radial-gradient(circle, " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + " 0%, transparent 70%)",
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
           opacity: glowOpacity,
-          filter: "blur(" + (30 + SCENE_PARAMS.blur.value) + "px)",
+          filter: "blur(" + (30 + (props.blur ?? SCENE_PARAMS.blur.value)) + "px)",
         }
       }),
       React.createElement("div", {
@@ -91,12 +91,12 @@ function Scene() {
           width: glowSize * 0.7,
           height: glowSize * 0.7,
           borderRadius: "50%",
-          background: "radial-gradient(circle, " + SCENE_PARAMS.logoTextColor.value + " 0%, transparent 60%)",
+          background: "radial-gradient(circle, " + (props.logoTextColor ?? SCENE_PARAMS.logoTextColor.value) + " 0%, transparent 60%)",
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
           opacity: glowOpacity * 0.4,
-          filter: "blur(" + (20 + SCENE_PARAMS.blur.value) + "px)",
+          filter: "blur(" + (20 + (props.blur ?? SCENE_PARAMS.blur.value)) + "px)",
         }
       }),
       React.createElement(
@@ -105,27 +105,27 @@ function Scene() {
           style: {
             width: logoSize,
             height: logoSize,
-            backgroundColor: SCENE_PARAMS.logoBoxColor.value,
+            backgroundColor: (props.logoBoxColor ?? SCENE_PARAMS.logoBoxColor.value),
             borderRadius: borderRadius,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            transform: "translateY(" + slideY + "px) scale(" + finalLogoScale + ") rotate(" + SCENE_PARAMS.rotation.value + "deg)",
-            boxShadow: "0 " + (logoSize * 0.05) + "px " + (logoSize * 0.15) + "px rgba(0,0,0,0.5), 0 0 " + (logoSize * 0.3) + "px " + SCENE_PARAMS.glowColor.value + "40",
+            transform: "translateY(" + slideY + "px) scale(" + finalLogoScale + ") rotate(" + (props.rotation ?? SCENE_PARAMS.rotation.value) + "deg)",
+            boxShadow: "0 " + (logoSize * 0.05) + "px " + (logoSize * 0.15) + "px rgba(0,0,0,0.5), 0 0 " + (logoSize * 0.3) + "px " + (props.glowColor ?? SCENE_PARAMS.glowColor.value) + "40",
             position: "relative",
             opacity: logoOpacity,
           }
         },
         React.createElement("span", {
           style: {
-            color: SCENE_PARAMS.logoTextColor.value,
+            color: (props.logoTextColor ?? SCENE_PARAMS.logoTextColor.value),
             fontSize: logoSize * 0.45,
             fontWeight: 700,
-            fontFamily: SCENE_PARAMS.fontFamily.value + ", system-ui, sans-serif",
+            fontFamily: (props.fontFamily ?? SCENE_PARAMS.fontFamily.value) + ", system-ui, sans-serif",
             letterSpacing: "-0.02em",
-            textShadow: "0 0 20px " + SCENE_PARAMS.logoTextColor.value + "60",
+            textShadow: "0 0 20px " + (props.logoTextColor ?? SCENE_PARAMS.logoTextColor.value) + "60",
           }
-        }, SCENE_PARAMS.logoText.value)
+        }, (props.logoText ?? SCENE_PARAMS.logoText.value))
       )
     )
   );

@@ -18,25 +18,25 @@ const SCENE_PARAMS = {
   borderRadius: { type: "number", label: "Border Radius", value: 28, min: 0, max: 60, step: 2 },
 };
 
-function Scene() {
+function Scene(props: any) {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   
   const minDim = Math.min(width, height);
-  const speed = SCENE_PARAMS.animationSpeed.value;
+  const speed = (props.animationSpeed ?? SCENE_PARAMS.animationSpeed.value);
   const adjustedFrame = frame * speed;
   
   const images = [
-    SCENE_PARAMS.image1.value,
-    SCENE_PARAMS.image2.value,
-    SCENE_PARAMS.image3.value,
-    SCENE_PARAMS.image4.value,
+    (props.image1 ?? SCENE_PARAMS.image1.value),
+    (props.image2 ?? SCENE_PARAMS.image2.value),
+    (props.image3 ?? SCENE_PARAMS.image3.value),
+    (props.image4 ?? SCENE_PARAMS.image4.value),
   ];
   
   const cardWidth = minDim * 0.65;
   const cardHeight = cardWidth * 1.2;
-  const spacing = SCENE_PARAMS.cardSpacing.value;
-  const borderRadius = SCENE_PARAMS.borderRadius.value;
+  const spacing = (props.cardSpacing ?? SCENE_PARAMS.cardSpacing.value);
+  const borderRadius = (props.borderRadius ?? SCENE_PARAMS.borderRadius.value);
   
   // Animation timing
   const entranceEnd = 35;
@@ -101,7 +101,7 @@ function Scene() {
             height: cardHeight,
             borderRadius: borderRadius,
             overflow: "hidden",
-            boxShadow: "0 10px 30px " + SCENE_PARAMS.shadowColor.value,
+            boxShadow: "0 10px 30px " + (props.shadowColor ?? SCENE_PARAMS.shadowColor.value),
             transform: "translateY(" + totalY + "px) rotate(" + totalRotate + "deg) scale(" + exitScale + ")",
             opacity: totalOpacity,
             zIndex: zIndex,
@@ -126,14 +126,14 @@ function Scene() {
   return (
     <AbsoluteFill
       style={{
-        backgroundColor: SCENE_PARAMS.backgroundColor.value,
+        backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value),
         justifyContent: "center",
         alignItems: "center",
       }}
     >
       <div
         style={{
-          transform: "scale(" + SCENE_PARAMS.scale.value + ")",
+          transform: "scale(" + (props.scale ?? SCENE_PARAMS.scale.value) + ")",
           transformOrigin: "center center",
           position: "relative",
           width: cardWidth,
