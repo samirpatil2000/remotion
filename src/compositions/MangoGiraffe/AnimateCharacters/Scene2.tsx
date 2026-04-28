@@ -2,7 +2,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  unicornImage: { type: "image", label: "Magical Horse", value: "blob:https://vm-syxpgt9t9xtdh4kycfzmnr.vusercontent.net/7b0a492f-177a-42f4-9c1d-7ac7412992b0" },
+  unicornImage: { type: "image", label: "Magical Horse", value: "https://images.unsplash.com/photo-1550747528-cdb45925b3f7?q=80&w=1000&auto=format&fit=crop" },
   titleText: { type: "text", label: "Title", value: "Part 2: The Mystery Forest" },
   subtitleText: { type: "text", label: "Subtitle", value: "A new adventure awaits..." },
   backgroundColor: { type: "color", label: "Background", value: "#0d1117" },
