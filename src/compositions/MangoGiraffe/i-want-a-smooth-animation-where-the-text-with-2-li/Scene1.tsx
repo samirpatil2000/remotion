@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  line1Text1: { type: "text", label: "Line 1 (First)", value: "Swishy" },
+  line1Text1: { type: "text", label: "Line 1 (First)", value: "Mango Giraffe" },
   line2Text1: { type: "text", label: "Line 2 (First)", value: "Design" },
   line1Text2: { type: "text", label: "Line 1 (Second)", value: "Creative" },
   line2Text2: { type: "text", label: "Line 2 (Second)", value: "Motion" },

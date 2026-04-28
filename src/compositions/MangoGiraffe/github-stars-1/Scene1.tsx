@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  repoName: { type: "text", label: "Repository Name", value: "Swishy/create" },
+  repoName: { type: "text", label: "Repository Name", value: "Mango Giraffe/create" },
   targetStars: { type: "text", label: "Target Stars", value: "27500" },
   backgroundColor: { type: "color", label: "Background", value: "#ffffff" },
   lineColor: { type: "color", label: "Line Color", value: "#e85d3b" },

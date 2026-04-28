@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  text: { type: "text", label: "Text", value: "SWISHY  " },
+  text: { type: "text", label: "Text", value: "MANGO GIRAFFE  " },
   fontFamily: { type: "font", label: "Font", value: "VT323" },
   backgroundColor: { type: "color", label: "Background", value: "#5634eb" },
   pathColor: { type: "color", label: "Path Color", value: "#ffffff" },
@@ -30,7 +30,7 @@ function Scene(props: any) {
   const offset = -(frame * speed * 6);
 
   // The core of this animation is the meticulously crafted SVG path 
-  // that perfectly matches the loopy, swishy trajectory in the source image.
+  // that perfectly matches the loopy, mango giraffe trajectory in the source image.
   return (
     <AbsoluteFill style={{ backgroundColor: (props.backgroundColor ?? SCENE_PARAMS.backgroundColor.value) }}>
       <div 
@@ -49,7 +49,7 @@ function Scene(props: any) {
           style={{ width: "100%", height: "100%", overflow: "visible" }}
         >
           <path
-            id="swishyPath"
+            id="mangoGiraffePath"
             d="
               M 100, -50
               C 200, 120, 500, 150, 800, 150
@@ -80,7 +80,7 @@ function Scene(props: any) {
             }}
           >
             <textPath
-              href="#swishyPath"
+              href="#mangoGiraffePath"
               startOffset={`${offset}px`}
               dominantBaseline="middle"
             >

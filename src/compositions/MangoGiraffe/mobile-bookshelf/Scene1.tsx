@@ -23,7 +23,7 @@ const SCENE_PARAMS = {
   shelf3Color: { type: "color", label: "Shelf 3 Color", value: "#2D5A45" },
   accentColor: { type: "color", label: "Accent", value: "#D4AF37" },
   textColor: { type: "color", label: "Text Color", value: "#1A1A1A" },
-  referenceImage: { type: "image", label: "Reference Image", value: "blob:https://www.swishy.ai/af95cdef-19ea-4320-8959-d08206db3710" },
+  referenceImage: { type: "image", label: "Reference Image", value: "blob:https://www.mangogiraffe.ai/af95cdef-19ea-4320-8959-d08206db3710" },
   scale: { type: "number", label: "Scale", value: 1, min: 0.5, max: 2, step: 0.05 },
   animationSpeed: { type: "number", label: "Animation Speed", value: 1, min: 0.5, max: 2, step: 0.1 },
   staggerDelay: { type: "number", label: "Stagger Delay", value: 5, min: 2, max: 15, step: 1 },

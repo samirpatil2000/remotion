@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  brandText: { type: "text", label: "Brand Text", value: "SWISHY" },
+  brandText: { type: "text", label: "Brand Text", value: "MANGO GIRAFFE" },
   fontFamily: { type: "font", label: "Font", value: "Inter" },
   backgroundColor: { type: "color", label: "Background", value: "#f3f4f6" },
   badgeColor: { type: "color", label: "Badge Color", value: "#000000" },

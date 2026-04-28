@@ -23,7 +23,7 @@ const SCENE_PARAMS = {
   video2: { type: "video", label: "Video 2", value: "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo1.mp4" },
   video3: { type: "video", label: "Video 3", value: "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo3.mp4" },
   video4: { type: "video", label: "Video 4", value: "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo4.mp4" },
-  video5: { type: "video", label: "Video 5", value: "blob:https://www.swishy.ai/99c2d426-33e8-4adb-af77-7a86c02b062a" },
+  video5: { type: "video", label: "Video 5", value: "blob:https://www.mangogiraffe.ai/99c2d426-33e8-4adb-af77-7a86c02b062a" },
 };
 
 function Scene(props: any) {

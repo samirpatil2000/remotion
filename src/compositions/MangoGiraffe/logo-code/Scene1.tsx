@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  mainWord: { type: "text", label: "Main Word", value: "Swishy" },
+  mainWord: { type: "text", label: "Main Word", value: "Mango Giraffe" },
   fontFamily: { type: "font", label: "Font", value: "Space Mono" },
   backgroundColor: { type: "color", label: "Background", value: "#0a0a0a" },
   textColor: { type: "color", label: "Text Color", value: "#ffffff" },

@@ -6,7 +6,7 @@ import { AbsoluteFill, spring, interpolate, useCurrentFrame, useVideoConfig, Img
 import React from "react";
 
 const SCENE_PARAMS = {
-  // Letters for 'SWISHY'
+  // Letters for 'MANGO GIRAFFE'
   letter1: { type: "text", label: "Letter 1", value: "S" },
   letter2: { type: "text", label: "Letter 2", value: "W" },
   letter3: { type: "text", label: "Letter 3", value: "I" },
@@ -74,7 +74,7 @@ function Scene(props: any) {
           const targetY = (ball.y / 100) * height;
           const currentY = interpolate(dropProgress, [0, 1], [startY, targetY]);
           
-          // Subtle sway for that 'swishy' feel
+          // Subtle sway for that 'mango giraffe' feel
           const swayAmount = interpolate(dropProgress, [0, 0.5, 1], [0, 50 * (i % 2 === 0 ? 1 : -1), 0]);
           const currentX = (ball.x / 100) * width + swayAmount;
 

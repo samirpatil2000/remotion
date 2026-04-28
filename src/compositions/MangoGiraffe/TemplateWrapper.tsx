@@ -1,13 +1,13 @@
 import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 
-export interface SwishySceneDef {
+export interface MangoGiraffeSceneDef {
   component: React.ComponentType<any>;
   durationInFrames: number;
 }
 
 export const TemplateWrapper: React.FC<{
-  scenes: SwishySceneDef[];
+  scenes: MangoGiraffeSceneDef[];
   props: any;
 }> = ({ scenes, props }) => {
   let currentFrameOffset = 0;
