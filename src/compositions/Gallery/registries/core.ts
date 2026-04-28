@@ -3,7 +3,32 @@ import { Scene as SpotifyScene, defaultSpotifyPlayerProps } from "../../SpotifyP
 import { Scene as FutureScene, defaultFutureOfDesignProps } from "../../FutureOfDesign/Scene";
 import { Scene as GoodMoodScene, defaultGoodMoodProps } from "../../GoodMood/Scene";
 
+import { Scene as EditorialScene, defaultEditorialDesignProps } from "../../EditorialDesign/Scene";
+
 export const CORE_REGISTRY: CompositionDef[] = [
+  {
+    id: "EditorialDesign",
+    title: "Editorial Minimalist",
+    description: "Premium asymmetric layout with masked reveals and tracking animations.",
+    color: "#000000",
+    icon: "📖",
+    category: "Miscellaneous",
+    loadComponent: () => Promise.resolve(EditorialScene),
+    defaultProps: defaultEditorialDesignProps as unknown as Record<string, unknown>,
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "smallText", label: "Small Text", type: "text", group: "Content" },
+      { key: "mainText",  label: "Main Text",  type: "text", group: "Content" },
+      { key: "subText",   label: "Sub Text",   type: "text", group: "Content" },
+
+      { key: "backgroundColor", label: "Background", type: "color", group: "Colors" },
+      { key: "textColor",       label: "Text",       type: "color", group: "Colors" },
+
+      { key: "scale",         label: "Scale",          type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",label: "Animation Speed",type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+    ],
+  },
   {
     id: "SpotifyPlayer",
     title: "Spotify Player",
