@@ -5,8 +5,51 @@ import { Scene as GoodMoodScene, defaultGoodMoodProps } from "../../GoodMood/Sce
 
 import { Scene as EditorialScene, defaultEditorialDesignProps } from "../../EditorialDesign/Scene";
 import { Scene as CinematicVinylScene, defaultCinematicVinylProps } from "../../CinematicVinyl/Scene";
+import { Scene as LiquidOrbScene, defaultLiquidOrbProps } from "../../LiquidOrb/Scene";
+import { Scene as KineticTunnelScene, defaultKineticTunnelProps } from "../../KineticTunnel/Scene";
 
 export const CORE_REGISTRY: CompositionDef[] = [
+  {
+    id: "LiquidOrb",
+    title: "Abstract Liquid Orb",
+    description: "Multi-layered glassmorphic liquid core with procedural movement.",
+    color: "#5856D6",
+    icon: "🔮",
+    category: "3D & Abstract",
+    loadComponent: () => Promise.resolve(LiquidOrbScene),
+    defaultProps: defaultLiquidOrbProps as unknown as Record<string, unknown>,
+    durationInFrames: 300,
+    fps: 30,
+    controls: [
+      { key: "backgroundColor", label: "Background", type: "color", group: "Colors" },
+      { key: "primaryColor",    label: "Primary",    type: "color", group: "Colors" },
+      { key: "secondaryColor",  label: "Secondary",  type: "color", group: "Colors" },
+      { key: "accentColor",     label: "Accent",     type: "color", group: "Colors" },
+      { key: "scale",           label: "Scale",      type: "number", group: "Animation", min: 0.5, max: 2, step: 0.05 },
+      { key: "animationSpeed",  label: "Speed",      type: "number", group: "Animation", min: 0.1, max: 3, step: 0.1 },
+      { key: "blobComplexity",  label: "Complexity", type: "number", group: "General", min: 4, max: 20, step: 1 },
+    ],
+  },
+  {
+    id: "KineticTunnel",
+    title: "Kinetic Typography Tunnel",
+    description: "Perspective-driven text tunnel with non-linear acceleration.",
+    color: "#007AFF",
+    icon: "🌀",
+    category: "Typography",
+    loadComponent: () => Promise.resolve(KineticTunnelScene),
+    defaultProps: defaultKineticTunnelProps as unknown as Record<string, unknown>,
+    durationInFrames: 300,
+    fps: 30,
+    controls: [
+      { key: "text",            label: "Text",       type: "text",  group: "Content" },
+      { key: "backgroundColor", label: "Background", type: "color", group: "Colors" },
+      { key: "textColor",       label: "Text Color", type: "color", group: "Colors" },
+      { key: "accentColor",     label: "Accent",     type: "color", group: "Colors" },
+      { key: "scale",           label: "Scale",      type: "number", group: "Animation", min: 0.5, max: 2, step: 0.05 },
+      { key: "animationSpeed",  label: "Speed",      type: "number", group: "Animation", min: 0.1, max: 5, step: 0.1 },
+    ],
+  },
   {
     id: "CinematicVinyl",
     title: "Cinematic Vinyl",

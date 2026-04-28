@@ -422,7 +422,8 @@ export default function Home() {
 
   const filteredTemplates = useMemo(() => {
     return REGISTRY.filter(def => {
-      const matchesSearch = def.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      const matchesSearch = def.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            def.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                             def.description.toLowerCase().includes(searchQuery.toLowerCase());
       // Handle missing categories gracefully
       const defCategory = (def as any).category || "Miscellaneous";
