@@ -2350,7 +2350,7 @@ export const MANGO_GIRAFFE_REGISTRY_3: CompositionDef[] = [
         "shelf3Color": "#2D5A45",
         "accentColor": "#D4AF37",
         "textColor": "#1A1A1A",
-        "referenceImage": "blob:https://www.mangogiraffe.ai/af95cdef-19ea-4320-8959-d08206db3710",
+        "referenceImage": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/17cef1e5-be63-4ec5-a952-8b8522239191/favicon.png",
         "scale": 1,
         "animationSpeed": 1,
         "staggerDelay": 5

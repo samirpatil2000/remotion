@@ -2629,7 +2629,7 @@ export const MANGO_GIRAFFE_REGISTRY_0: CompositionDef[] = [
         "video2": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo1.mp4",
         "video3": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo3.mp4",
         "video4": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo4.mp4",
-        "video5": "blob:https://www.mangogiraffe.ai/99c2d426-33e8-4adb-af77-7a86c02b062a"
+        "video5": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/87922316-72f9-483c-96b3-9d69034eaadc/demo1.mp4"
     },
     durationInFrames: 150,
     fps: 30,
