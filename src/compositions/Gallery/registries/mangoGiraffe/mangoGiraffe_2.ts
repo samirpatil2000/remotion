@@ -220,6 +220,176 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
     ],
   },
   {
+    id: "MangoGiraffeFinancialsSplit",
+    title: "financials-split",
+    description: "A premium split-layout variation of the Financials data visualization.",
+    color: "#12b981",
+    icon: "🎬",
+    category: "Data & Charts",
+    loadComponent: () => import("../../../MangoGiraffe/financials-split/Scene").then(m => m.Scene),
+    defaultProps: {
+        "headline": "Financial pulse",
+        "subtitle": "Q4 expense trajectory",
+        "maxDollarAmount": 2438,
+        "tooltipLabel": "Run rate",
+        "comparisonLabel": "vs forecast",
+        "comparisonValue": "+18.6%",
+        "backgroundColor": "#070b0f",
+        "panelColor": "#101820",
+        "textColorStart": "#f8fafc",
+        "textColorEnd": "#64748b",
+        "gridLineColor": "#20303a",
+        "curveColor": "#12b981",
+        "curveGlowColor": "#5eead4",
+        "tooltipBg": "#e8fff7",
+        "tooltipTextColor": "#07110d",
+        "tooltipLabelColor": "#4f6f65",
+        "scale": 1,
+        "animationSpeed": 1,
+        "backgroundTextOpacity": 0.16,
+        "gridLineCount": 5
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+        {
+            "key": "headline",
+            "label": "Headline",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "subtitle",
+            "label": "Subtitle",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "maxDollarAmount",
+            "label": "Max Dollar Amount",
+            "type": "number",
+            "group": "General",
+            "min": 100,
+            "max": 10000,
+            "step": 1
+        },
+        {
+            "key": "tooltipLabel",
+            "label": "Tooltip Label",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "comparisonLabel",
+            "label": "Comparison Label",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "comparisonValue",
+            "label": "Comparison Value",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "backgroundColor",
+            "label": "Background",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "panelColor",
+            "label": "Panel",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "textColorStart",
+            "label": "Text Gradient Start",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "textColorEnd",
+            "label": "Text Gradient End",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "gridLineColor",
+            "label": "Grid Lines",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "curveColor",
+            "label": "Curve Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "curveGlowColor",
+            "label": "Curve Glow",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "tooltipBg",
+            "label": "Tooltip Background",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "tooltipTextColor",
+            "label": "Tooltip Text",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "tooltipLabelColor",
+            "label": "Tooltip Label Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "scale",
+            "label": "Scale",
+            "type": "number",
+            "group": "General",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.05
+        },
+        {
+            "key": "animationSpeed",
+            "label": "Animation Speed",
+            "type": "number",
+            "group": "General",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.1
+        },
+        {
+            "key": "backgroundTextOpacity",
+            "label": "Background Text Opacity",
+            "type": "number",
+            "group": "General",
+            "min": 0.05,
+            "max": 0.4,
+            "step": 0.05
+        },
+        {
+            "key": "gridLineCount",
+            "label": "Grid Line Count",
+            "type": "number",
+            "group": "General",
+            "min": 3,
+            "max": 10,
+            "step": 1
+        }
+    ],
+  },
+  {
     id: "MangoGiraffeFintechDashboard",
     title: "fintech-dashboard",
     description: "A professional UI/UX animation showcasing Fintech Dashboard.",
