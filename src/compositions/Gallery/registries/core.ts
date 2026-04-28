@@ -4,8 +4,34 @@ import { Scene as FutureScene, defaultFutureOfDesignProps } from "../../FutureOf
 import { Scene as GoodMoodScene, defaultGoodMoodProps } from "../../GoodMood/Scene";
 
 import { Scene as EditorialScene, defaultEditorialDesignProps } from "../../EditorialDesign/Scene";
+import { Scene as CinematicVinylScene, defaultCinematicVinylProps } from "../../CinematicVinyl/Scene";
 
 export const CORE_REGISTRY: CompositionDef[] = [
+  {
+    id: "CinematicVinyl",
+    title: "Cinematic Vinyl",
+    description: "Macro-photography inspired vinyl showcase with glassmorphic info cards.",
+    color: "#FF2D55",
+    icon: "💿",
+    category: "Social & Media",
+    loadComponent: () => Promise.resolve(CinematicVinylScene),
+    defaultProps: defaultCinematicVinylProps as unknown as Record<string, unknown>,
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+      { key: "trackTitle", label: "Track Title", type: "text", group: "Content" },
+      { key: "artistName",  label: "Artist Name",  type: "text", group: "Content" },
+      { key: "vinylLabel",  label: "Vinyl Label (URL)", type: "url", group: "Content" },
+
+      { key: "backgroundColor", label: "Background", type: "color", group: "Colors" },
+      { key: "textColor",       label: "Text",       type: "color", group: "Colors" },
+      { key: "accentColor",     label: "Accent",     type: "color", group: "Colors" },
+
+      { key: "scale",         label: "Scale",          type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.05 },
+      { key: "animationSpeed",label: "Animation Speed",type: "number", group: "Animation", min: 0.5, max: 2,   step: 0.1  },
+      { key: "rotationSpeed", label: "Rotation Speed", type: "number", group: "Animation", min: 0.1, max: 3,   step: 0.1  },
+    ],
+  },
   {
     id: "EditorialDesign",
     title: "Editorial Minimalist",
