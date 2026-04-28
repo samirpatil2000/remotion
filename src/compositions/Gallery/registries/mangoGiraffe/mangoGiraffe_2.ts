@@ -4,7 +4,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeExtend",
     title: "extend",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Extend.",
     color: "#f280d8",
     icon: "🎬",
     category: "Miscellaneous",
@@ -87,10 +87,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFinancials",
     title: "financials",
-    description: "Mango Giraffe template",
+    description: "A clear and dynamic data visualization of Financials.",
     color: "#5d5e9d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Data & Charts",
     loadComponent: () => import("../../../MangoGiraffe/financials/Scene").then(m => m.Scene),
     defaultProps: {
         "maxDollarAmount": 1696,
@@ -222,10 +222,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFintechDashboard",
     title: "fintech-dashboard",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Fintech Dashboard.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/fintech-dashboard/Scene").then(m => m.Scene),
     defaultProps: {
         "cardTitle": "Portfolio Value",
@@ -381,10 +381,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFlightProgress",
     title: "flight-progress",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Flight Progress.",
     color: "#205b0d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/flight-progress/Scene").then(m => m.Scene),
     defaultProps: {
         "departureCode": "YYZ",
@@ -559,10 +559,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFlightsAnimation",
     title: "flights-animation",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Flights Animation.",
     color: "#63d2d2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/flights-animation/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "ARRIVALS",
@@ -754,7 +754,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFolderGallery1",
     title: "folder-gallery-1",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Folder Gallery 1.",
     color: "#15414f",
     icon: "🎬",
     category: "Miscellaneous",
@@ -937,7 +937,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFriendshipBeads1",
     title: "friendship-beads-1",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Friendship Beads 1.",
     color: "#869810",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1037,10 +1037,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeFunnelTextAnimation",
     title: "funnel-text-animation",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Funnel Text Animation.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/funnel-text-animation/Scene").then(m => m.Scene),
     defaultProps: {
         "text": "MANGO GIRAFFE  ",
@@ -1127,7 +1127,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGenerateAiVoiceAnimation",
     title: "generate-ai-voice-animation",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Generate Ai Voice Animation.",
     color: "#0981c2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1242,10 +1242,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGithubStarComparison",
     title: "github-star-comparison",
-    description: "Mango Giraffe template",
+    description: "A clear and dynamic data visualization of Github Star Comparison.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Data & Charts",
     loadComponent: () => import("../../../MangoGiraffe/github-star-comparison/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "Star History",
@@ -1347,7 +1347,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGithubStars1",
     title: "github-stars-1",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Github Stars 1.",
     color: "#f280d8",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1438,7 +1438,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGoals",
     title: "goals",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Goals.",
     color: "#5d5e9d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1542,10 +1542,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGoodMood",
     title: "good-mood",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Good Mood.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/good-mood/Scene").then(m => m.Scene),
     defaultProps: {
         "fontFamily": "Roboto",
@@ -1636,10 +1636,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeGravityThought",
     title: "gravity-thought",
-    description: "Mango Giraffe template",
+    description: "A visually stunning abstract motion graphic showcasing Gravity Thought.",
     color: "#205b0d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "3D & Abstract",
     loadComponent: () => import("../../../MangoGiraffe/gravity-thought/Scene").then(m => m.Scene),
     defaultProps: {
         "centerWord": "play",
@@ -1846,10 +1846,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeHeartCrushButton",
     title: "heart-crush-button",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Heart Crush Button.",
     color: "#63d2d2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/heart-crush-button/Scene").then(m => m.Scene),
     defaultProps: {
         "heartColor": "#e63950",
@@ -1939,10 +1939,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeIWantASmoothAnimationWhereTheTextWith2Li",
     title: "i-want-a-smooth-animation-where-the-text-with-2-li",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring I Want A Smooth Animation Where The Text With 2 Li.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/i-want-a-smooth-animation-where-the-text-with-2-li/Scene").then(m => m.Scene),
     defaultProps: {
         "line1Text1": "Mango Giraffe",
@@ -2033,7 +2033,7 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeImageShuffle1",
     title: "image-shuffle-1",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Image Shuffle 1.",
     color: "#869810",
     icon: "🎬",
     category: "Miscellaneous",
@@ -2130,10 +2130,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeInstagramLogoAnimation",
     title: "instagram-logo-animation",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Instagram Logo Animation.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/instagram-logo-animation/Scene").then(m => m.Scene),
     defaultProps: {
         "backgroundColor": "#0a0a0a",
@@ -2252,10 +2252,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeInstagramProfile",
     title: "instagram-profile",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Instagram Profile.",
     color: "#0981c2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/instagram-profile/Scene").then(m => m.Scene),
     defaultProps: {
         "profileImage": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIbGNtcwIQAABtbnRyUkdCIFhZWiAH4gADABQACQAOAB1hY3NwTVNGVAAAAABzYXdzY3RybAAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLWhhbmSdkQA9QICwPUB0LIGepSKOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAABxjcHJ0AAABDAAAAAx3dHB0AAABGAAAABRyWFlaAAABLAAAABRnWFlaAAABQAAAABRiWFlaAAABVAAAABRyVFJDAAABaAAAAGBnVFJDAAABaAAAAGBiVFJDAAABaAAAAGBkZXNjAAAAAAAAAAV1UkdCAAAAAAAAAAAAAAAAdGV4dAAAAABDQzAAWFlaIAAAAAAAAPNUAAEAAAABFslYWVogAAAAAAAAb6AAADjyAAADj1hZWiAAAAAAAABilgAAt4kAABjaWFlaIAAAAAAAACSgAAAPhQAAtsRjdXJ2AAAAAAAAACoAAAB8APgBnAJ1A4MEyQZOCBIKGAxiDvQRzxT2GGocLiBDJKwpai5+M+s5sz/WRldNNlR2XBdkHWyGdVZ+jYgskjacq6eMstu+mcrH12Xkd/H5\n  profileName: { type: ",
@@ -2374,10 +2374,10 @@ export const MANGO_GIRAFFE_REGISTRY_2: CompositionDef[] = [
   {
     id: "MangoGiraffeInstagramStories",
     title: "instagram-stories",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Instagram Stories.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/instagram-stories/Scene").then(m => m.Scene),
     defaultProps: {
         "profileImage": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/2f985369-7661-48a2-a549-e5f8345565ee/screenshot_2026-02-04_at_4.19.41_pm.png",

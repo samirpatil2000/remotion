@@ -4,7 +4,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeMoneyyyy",
     title: "moneyyyy",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Moneyyyy.",
     color: "#f280d8",
     icon: "🎬",
     category: "Miscellaneous",
@@ -107,10 +107,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeMorphBlocks",
     title: "morph-blocks",
-    description: "Mango Giraffe template",
+    description: "A visually stunning abstract motion graphic showcasing Morph Blocks.",
     color: "#5d5e9d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "3D & Abstract",
     loadComponent: () => import("../../../MangoGiraffe/morph-blocks/Scene").then(m => m.Scene),
     defaultProps: {
         "appTitle": "NEXA AI",
@@ -422,10 +422,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeNavalQuote",
     title: "naval-quote",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Naval Quote.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/naval-quote/Scene").then(m => m.Scene),
     defaultProps: {
         "displayName": "Navl",
@@ -569,7 +569,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeNewspaperAnimation",
     title: "newspaper-animation",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Newspaper Animation.",
     color: "#205b0d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -853,7 +853,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeNightStreetMarket",
     title: "night-street-market",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Night Street Market.",
     color: "#63d2d2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -978,10 +978,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeNotepad",
     title: "notepad",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Notepad.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/notepad/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "Note",
@@ -1284,10 +1284,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeNotionAnimatedHub",
     title: "notion-animated-hub",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Notion Animated Hub.",
     color: "#869810",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/notion-animated-hub/Scene").then(m => m.Scene),
     defaultProps: {
         "brandName": "Notion",
@@ -1509,10 +1509,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeOnOffToggle",
     title: "on-off-toggle",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing On Off Toggle.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/on-off-toggle/Scene").then(m => m.Scene),
     defaultProps: {
         "backgroundColor": "#f8fafc",
@@ -1599,7 +1599,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeOutsidelandsPoster",
     title: "outsidelands-poster",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Outsidelands Poster.",
     color: "#0981c2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1943,10 +1943,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffeParticleExplosion",
     title: "particle-explosion",
-    description: "Mango Giraffe template",
+    description: "A visually stunning abstract motion graphic showcasing Particle Explosion.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "3D & Abstract",
     loadComponent: () => import("../../../MangoGiraffe/particle-explosion/Scene").then(m => m.Scene),
     defaultProps: {
         "centerText": "BOOM",
@@ -2033,10 +2033,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhoneMessages",
     title: "phone-messages",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Phone Messages.",
     color: "#f280d8",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/phone-messages/Scene").then(m => m.Scene),
     defaultProps: {
         "contactName": "John",
@@ -2141,10 +2141,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhoneMessages1",
     title: "phone-messages-1",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Phone Messages 1.",
     color: "#5d5e9d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/phone-messages-1/Scene").then(m => m.Scene),
     defaultProps: {
         "contactName": "John",
@@ -2249,10 +2249,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhoneNotificationPopUp",
     title: "phone-notification-pop-up",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Phone Notification Pop Up.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/phone-notification-pop-up/Scene").then(m => m.Scene),
     defaultProps: {
         "notificationMessage": "hi how are you",
@@ -2384,7 +2384,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhotoboothAnimation1",
     title: "photobooth-animation-1",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Photobooth Animation 1.",
     color: "#205b0d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -2492,7 +2492,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhotosAnimation",
     title: "photos-animation",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Photos Animation.",
     color: "#63d2d2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -2626,10 +2626,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePhotoshopAnimation1",
     title: "photoshop-animation-1",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Photoshop Animation 1.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/photoshop-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
         "logoText": "Ps",
@@ -2736,7 +2736,7 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePins",
     title: "pins",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Pins.",
     color: "#869810",
     icon: "🎬",
     category: "Miscellaneous",
@@ -2861,10 +2861,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePopUpMessageBubble",
     title: "pop-up-message-bubble",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Pop Up Message Bubble.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/pop-up-message-bubble/Scene").then(m => m.Scene),
     defaultProps: {
         "brandText": "MANGO GIRAFFE",
@@ -2961,10 +2961,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePopulation",
     title: "population",
-    description: "Mango Giraffe template",
+    description: "A clear and dynamic data visualization of Population.",
     color: "#0981c2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Data & Charts",
     loadComponent: () => import("../../../MangoGiraffe/population/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "Population aged 0-49, 50-59, 60-69, 70-79 and 80 years and over, Brazil: 1950-2100",
@@ -3130,10 +3130,10 @@ export const MANGO_GIRAFFE_REGISTRY_4: CompositionDef[] = [
   {
     id: "MangoGiraffePremiereProAnimation",
     title: "premiere-pro-animation",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Premiere Pro Animation.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/premiere-pro-animation/Scene").then(m => m.Scene),
     defaultProps: {
         "logoText": "Pr",

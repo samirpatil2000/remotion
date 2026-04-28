@@ -4,10 +4,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeTheFutureOfDesign1",
     title: "the-future-of-design-1",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring The Future Of Design 1.",
     color: "#f280d8",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/the-future-of-design-1/Scene").then(m => m.Scene),
     defaultProps: {
         "smallText": "the",
@@ -114,7 +114,7 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeThinking",
     title: "thinking",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Thinking.",
     color: "#5d5e9d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -254,10 +254,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeTimeline",
     title: "timeline",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Timeline.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/timeline/Scene").then(m => m.Scene),
     defaultProps: {
         "fontFamily": "Space Grotesk",
@@ -358,10 +358,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeTypewriter",
     title: "typewriter",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Typewriter.",
     color: "#205b0d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/typewriter/Scene").then(m => m.Scene),
     defaultProps: {
         "typedText": "Hello World! This is a typewriter effect with animated keys and realistic paper movement.",
@@ -480,7 +480,7 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeTypingEffect",
     title: "typing-effect",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Typing Effect.",
     color: "#63d2d2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -585,7 +585,7 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeUpworkAd",
     title: "upwork-ad",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Upwork Ad.",
     color: "#15414f",
     icon: "🎬",
     category: "Miscellaneous",
@@ -696,10 +696,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeViewCartAnimation1",
     title: "view-cart-animation-1",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing View Cart Animation 1.",
     color: "#869810",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/view-cart-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
         "buttonText": "View Cart",
@@ -813,10 +813,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWebsiteReveal",
     title: "website-reveal",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Website Reveal.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/website-reveal/Scene").then(m => m.Scene),
     defaultProps: {
         "websiteImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop",
@@ -916,7 +916,7 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWeddingAnnouncement",
     title: "wedding-announcement",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Wedding Announcement.",
     color: "#0981c2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1048,10 +1048,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWellnessAppMoods",
     title: "wellness-app-moods",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Wellness App Moods.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/wellness-app-moods/Scene").then(m => m.Scene),
     defaultProps: {
         "happyScreen": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/template-1774215623575-204525e/prompt-1774213193808-create_account_4_.jpg",
@@ -1153,10 +1153,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWhatsappConvo",
     title: "whatsapp-convo",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Whatsapp Convo.",
     color: "#f280d8",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/whatsapp-convo/Scene").then(m => m.Scene),
     defaultProps: {
         "message1": "ready to do you?",
@@ -1363,10 +1363,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWiggleText",
     title: "wiggle-text",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Wiggle Text.",
     color: "#5d5e9d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/wiggle-text/Scene").then(m => m.Scene),
     defaultProps: {
         "topText": "Text",
@@ -1481,10 +1481,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWindows98Style",
     title: "windows-98-style",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Windows 98 Style.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/windows-98-style/Scene").then(m => m.Scene),
     defaultProps: {
         "windowTitle": "Camera",
@@ -1589,10 +1589,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWinsVsLosses",
     title: "wins-vs-losses",
-    description: "Mango Giraffe template",
+    description: "A clear and dynamic data visualization of Wins Vs Losses.",
     color: "#205b0d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Data & Charts",
     loadComponent: () => import("../../../MangoGiraffe/wins-vs-losses/Scene").then(m => m.Scene),
     defaultProps: {
         "introTitle": "NSE Market Highlights – 18 March 2026",
@@ -1962,7 +1962,7 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWorkingOnAComputer",
     title: "working-on-a-computer",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Working On A Computer.",
     color: "#63d2d2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -2073,10 +2073,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeWritingDiary1",
     title: "writing-diary-1",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Writing Diary 1.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/writing-diary-1/Scene").then(m => m.Scene),
     defaultProps: {
         "bodyText": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\\n\\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\\n\\nI have three dogs. One of them is called Downey, the other one is Mochi, youngest one's name is Pepper",
@@ -2227,10 +2227,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeYearsRollingText",
     title: "years-rolling-text",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Years Rolling Text.",
     color: "#869810",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/years-rolling-text/Scene").then(m => m.Scene),
     defaultProps: {
         "startYear": 1990,
@@ -2368,10 +2368,10 @@ export const MANGO_GIRAFFE_REGISTRY_6: CompositionDef[] = [
   {
     id: "MangoGiraffeYoutubeSubscribeButton",
     title: "youtube-subscribe-button",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Youtube Subscribe Button.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/youtube-subscribe-button/Scene").then(m => m.Scene),
     defaultProps: {
         "buttonText": "Subscribe",

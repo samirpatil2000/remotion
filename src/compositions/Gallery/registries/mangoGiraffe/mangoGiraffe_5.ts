@@ -4,7 +4,7 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeRetroPhone",
     title: "retro-phone",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Retro Phone.",
     color: "#f280d8",
     icon: "🎬",
     category: "Miscellaneous",
@@ -172,7 +172,7 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSaasSecurity",
     title: "saas-security",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Saas Security.",
     color: "#5d5e9d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -311,10 +311,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeScatteredText",
     title: "scattered-text",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Scattered Text.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/scattered-text/Scene").then(m => m.Scene),
     defaultProps: {
         "phrase": "HIP-HOP IN THE HOLY LAND",
@@ -394,7 +394,7 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeScienceClub",
     title: "science-club",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Science Club.",
     color: "#205b0d",
     icon: "🎬",
     category: "Miscellaneous",
@@ -519,10 +519,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSearchBox",
     title: "search-box",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Search Box.",
     color: "#63d2d2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/search-box/Scene").then(m => m.Scene),
     defaultProps: {
         "searchLine1": "Website Design",
@@ -688,10 +688,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSentenceReveal",
     title: "sentence-reveal",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Sentence Reveal.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/sentence-reveal/Scene").then(m => m.Scene),
     defaultProps: {
         "word1": "ui-design-system",
@@ -850,10 +850,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSimpleChart",
     title: "simple-chart",
-    description: "Mango Giraffe template",
+    description: "A clear and dynamic data visualization of Simple Chart.",
     color: "#869810",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Data & Charts",
     loadComponent: () => import("../../../MangoGiraffe/simple-chart/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "Chart",
@@ -991,7 +991,7 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSimpleTimelapse",
     title: "simple-timelapse",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Simple Timelapse.",
     color: "#387c04",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1044,7 +1044,7 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSimpleTimelapse2",
     title: "simple-timelapse-2",
-    description: "Mango Giraffe template",
+    description: "A versatile and high-quality motion design composition featuring Simple Timelapse 2.",
     color: "#0981c2",
     icon: "🎬",
     category: "Miscellaneous",
@@ -1154,10 +1154,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSimulationTerminated",
     title: "simulation-terminated",
-    description: "Mango Giraffe template",
+    description: "A visually stunning abstract motion graphic showcasing Simulation Terminated.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "3D & Abstract",
     loadComponent: () => import("../../../MangoGiraffe/simulation-terminated/Scene").then(m => m.Scene),
     defaultProps: {
         "mainText": "Simulation terminated",
@@ -1265,10 +1265,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSpillWord",
     title: "spill-word",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Spill Word.",
     color: "#f280d8",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/spill-word/Scene").then(m => m.Scene),
     defaultProps: {
         "text": "Spill",
@@ -1415,10 +1415,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSpinningVinylPlayer1",
     title: "spinning-vinyl-player-1",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Spinning Vinyl Player 1.",
     color: "#5d5e9d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/spinning-vinyl-player-1/Scene").then(m => m.Scene),
     defaultProps: {
         "recordImage": "https://miuzeaacksoumruaqxfv.supabase.co/storage/v1/object/public/input/template-1770879874733-mqhzj5x/f3c464b6-b031-4b03-b728-8f7286edfe16.png",
@@ -1546,10 +1546,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSpotifyPlayerAnimation1",
     title: "spotify-player-animation-1",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Spotify Player Animation 1.",
     color: "#505905",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/spotify-player-animation-1/Scene").then(m => m.Scene),
     defaultProps: {
         "trackTitle": "You've Got The Love (Jamie xx Rework feat. The xx)",
@@ -1702,10 +1702,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeStickyNotes",
     title: "sticky-notes",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Sticky Notes.",
     color: "#205b0d",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/sticky-notes/Scene").then(m => m.Scene),
     defaultProps: {
         "logoText": "Sticky",
@@ -1837,10 +1837,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeStickyNotesAnimation",
     title: "sticky-notes-animation",
-    description: "Mango Giraffe template",
+    description: "A functional and clean motion graphic for Sticky Notes Animation.",
     color: "#63d2d2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Utility",
     loadComponent: () => import("../../../MangoGiraffe/sticky-notes-animation/Scene").then(m => m.Scene),
     defaultProps: {
         "note1Text": "Don't forget!",
@@ -1962,10 +1962,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeSystem",
     title: "system",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing System.",
     color: "#15414f",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/system/Scene").then(m => m.Scene),
     defaultProps: {
         "backgroundColor": "#000000",
@@ -2055,10 +2055,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeTechYoutube1",
     title: "tech-youtube-1",
-    description: "Mango Giraffe template",
+    description: "An engaging social media-inspired animation for Tech Youtube 1.",
     color: "#869810",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Social & Media",
     loadComponent: () => import("../../../MangoGiraffe/tech-youtube-1/Scene").then(m => m.Scene),
     defaultProps: {
         "profileImage": "",
@@ -2207,10 +2207,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeTerminalShowcase",
     title: "terminal-showcase",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Terminal Showcase.",
     color: "#387c04",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/terminal-showcase/Scene").then(m => m.Scene),
     defaultProps: {
         "command": "npx skills add link-dev/skills",
@@ -2389,10 +2389,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeTerminalTyping",
     title: "terminal-typing",
-    description: "Mango Giraffe template",
+    description: "A professional UI/UX animation showcasing Terminal Typing.",
     color: "#0981c2",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "UI & App",
     loadComponent: () => import("../../../MangoGiraffe/terminal-typing/Scene").then(m => m.Scene),
     defaultProps: {
         "variableName": "greeting",
@@ -2518,10 +2518,10 @@ export const MANGO_GIRAFFE_REGISTRY_5: CompositionDef[] = [
   {
     id: "MangoGiraffeTextIntro",
     title: "text-intro",
-    description: "Mango Giraffe template",
+    description: "A dynamic typography design featuring Text Intro.",
     color: "#9003ba",
     icon: "🎬",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => import("../../../MangoGiraffe/text-intro/Scene").then(m => m.Scene),
     defaultProps: {
         "title": "Welcome",

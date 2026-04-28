@@ -9,10 +9,10 @@ export const CORE_REGISTRY: CompositionDef[] = [
   {
     id: "EditorialDesign",
     title: "Editorial Minimalist",
-    description: "Premium asymmetric layout with masked reveals and tracking animations.",
+    description: "A dynamic typography design featuring Editorial Minimalist.",
     color: "#000000",
     icon: "📖",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => Promise.resolve(EditorialScene),
     defaultProps: defaultEditorialDesignProps as unknown as Record<string, unknown>,
     durationInFrames: 150,
@@ -32,7 +32,7 @@ export const CORE_REGISTRY: CompositionDef[] = [
   {
     id: "SpotifyPlayer",
     title: "Spotify Player",
-    description: "Vinyl record animation with marquee text and playback controls.",
+    description: "An engaging social media-inspired animation for Spotify Player.",
     color: "#1DB954",
     icon: "🎵",
     category: "Social & Media",
@@ -68,10 +68,10 @@ export const CORE_REGISTRY: CompositionDef[] = [
   {
     id: "FutureOfDesign",
     title: "Future of Design",
-    description: "Physics-based typography animation with blur and glow effects.",
+    description: "A dynamic typography design featuring Future Of Design.",
     color: "#6366f1",
     icon: "✨",
-    category: "Miscellaneous",
+    category: "Typography",
     loadComponent: () => Promise.resolve(FutureScene),
     defaultProps: defaultFutureOfDesignProps as unknown as Record<string, unknown>,
     durationInFrames: 150,
@@ -96,7 +96,7 @@ export const CORE_REGISTRY: CompositionDef[] = [
   {
     id: "GoodMood",
     title: "Good Mood",
-    description: "Vibrant high-contrast typography with elastic spring-based animations.",
+    description: "A dynamic typography design featuring Good Mood.",
     color: "#ff1d1d",
     icon: "😊",
     category: "Typography",
