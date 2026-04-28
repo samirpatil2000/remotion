@@ -280,6 +280,162 @@ export const MANGO_GIRAFFE_REGISTRY_1: CompositionDef[] = [
     ],
   },
   {
+    id: "MangoGiraffeBarChart3",
+    title: "bar-chart-3",
+    description: "A premium, Apple-inspired dynamic bar chart visualization.",
+    color: "#3b82f6",
+    icon: "📊",
+    category: "Data & Charts",
+    loadComponent: () => import("../../../MangoGiraffe/bar-chart-3/Scene").then(m => m.Scene),
+    defaultProps: {
+        "title": "Annual Growth",
+        "label1": "2021",
+        "label2": "2022",
+        "label3": "2023",
+        "label4": "2024",
+        "value1": 42,
+        "value2": 68,
+        "value3": 54,
+        "value4": 89,
+        "backgroundColor": "#05070a",
+        "textColor": "#f8fafc",
+        "accentColor": "#3b82f6",
+        "barGradientStart": "#3b82f6",
+        "barGradientEnd": "#8b5cf6",
+        "gridLineColor": "#1e293b",
+        "scale": 1,
+        "animationSpeed": 1,
+        "staggerDelay": 6
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+        {
+            "key": "title",
+            "label": "Title",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "label1",
+            "label": "Label 1",
+            "type": "text",
+            "group": "Labels"
+        },
+        {
+            "key": "label2",
+            "label": "Label 2",
+            "type": "text",
+            "group": "Labels"
+        },
+        {
+            "key": "label3",
+            "label": "Label 3",
+            "type": "text",
+            "group": "Labels"
+        },
+        {
+            "key": "label4",
+            "label": "Label 4",
+            "type": "text",
+            "group": "Labels"
+        },
+        {
+            "key": "value1",
+            "label": "Value 1",
+            "type": "number",
+            "group": "Values",
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "key": "value2",
+            "label": "Value 2",
+            "type": "number",
+            "group": "Values",
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "key": "value3",
+            "label": "Value 3",
+            "type": "number",
+            "group": "Values",
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "key": "value4",
+            "label": "Value 4",
+            "type": "number",
+            "group": "Values",
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "key": "backgroundColor",
+            "label": "Background",
+            "type": "color",
+            "group": "Colors"
+        },
+        {
+            "key": "textColor",
+            "label": "Text Color",
+            "type": "color",
+            "group": "Colors"
+        },
+        {
+            "key": "barGradientStart",
+            "label": "Bar Start",
+            "type": "color",
+            "group": "Colors"
+        },
+        {
+            "key": "barGradientEnd",
+            "label": "Bar End",
+            "type": "color",
+            "group": "Colors"
+        },
+        {
+            "key": "gridLineColor",
+            "label": "Grid Lines",
+            "type": "color",
+            "group": "Colors"
+        },
+        {
+            "key": "scale",
+            "label": "Scale",
+            "type": "number",
+            "group": "Animation",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.05
+        },
+        {
+            "key": "animationSpeed",
+            "label": "Animation Speed",
+            "type": "number",
+            "group": "Animation",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.1
+        },
+        {
+            "key": "staggerDelay",
+            "label": "Stagger Delay",
+            "type": "number",
+            "group": "Animation",
+            "min": 2,
+            "max": 20,
+            "step": 1
+        }
+    ],
+  },
+  {
     id: "MangoGiraffeBouncingImage",
     title: "bouncing-image",
     description: "A versatile and high-quality motion design composition featuring Bouncing Image.",
