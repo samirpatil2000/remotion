@@ -436,6 +436,145 @@ export const MANGO_GIRAFFE_REGISTRY_1: CompositionDef[] = [
     ],
   },
   {
+    id: "MangoGiraffeBarChart4",
+    title: "bar-chart-4",
+    description: "An editorial minimalist bar chart visualization with premium motion.",
+    color: "#3b82f6",
+    icon: "📊",
+    category: "Data & Charts",
+    loadComponent: () => import("../../../MangoGiraffe/bar-chart-4/Scene").then(m => m.Scene),
+    defaultProps: {
+        "title": "Quarterly Results",
+        "label1": "Q1",
+        "label2": "Q2",
+        "label3": "Q3",
+        "label4": "Q4",
+        "backgroundColor": "#050505",
+        "textColor": "#FAFAFA",
+        "labelColor": "#A1A1AA",
+        "bar1Color": "#3b82f6",
+        "bar2Color": "#8b5cf6",
+        "bar3Color": "#ec4899",
+        "bar4Color": "#f59e0b",
+        "scale": 1,
+        "animationSpeed": 1,
+        "staggerDelay": 6,
+        "borderRadius": 4
+    },
+    durationInFrames: 150,
+    fps: 30,
+    controls: [
+        {
+            "key": "title",
+            "label": "Title",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "label1",
+            "label": "Label 1",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "label2",
+            "label": "Label 2",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "label3",
+            "label": "Label 3",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "label4",
+            "label": "Label 4",
+            "type": "text",
+            "group": "General"
+        },
+        {
+            "key": "backgroundColor",
+            "label": "Background",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "textColor",
+            "label": "Text Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "labelColor",
+            "label": "Label Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "bar1Color",
+            "label": "Bar 1 Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "bar2Color",
+            "label": "Bar 2 Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "bar3Color",
+            "label": "Bar 3 Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "bar4Color",
+            "label": "Bar 4 Color",
+            "type": "color",
+            "group": "General"
+        },
+        {
+            "key": "scale",
+            "label": "Scale",
+            "type": "number",
+            "group": "General",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.05
+        },
+        {
+            "key": "animationSpeed",
+            "label": "Animation Speed",
+            "type": "number",
+            "group": "General",
+            "min": 0.5,
+            "max": 2,
+            "step": 0.1
+        },
+        {
+            "key": "staggerDelay",
+            "label": "Stagger Delay",
+            "type": "number",
+            "group": "General",
+            "min": 2,
+            "max": 20,
+            "step": 1
+        },
+        {
+            "key": "borderRadius",
+            "label": "Border Radius",
+            "type": "number",
+            "group": "General",
+            "min": 0,
+            "max": 20,
+            "step": 2
+        }
+    ],
+  },
+  {
     id: "MangoGiraffeBouncingImage",
     title: "bouncing-image",
     description: "A versatile and high-quality motion design composition featuring Bouncing Image.",
