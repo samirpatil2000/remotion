@@ -31,8 +31,8 @@ export default function MyAnimation() {
 
 type UrlProvider = "claude" | "openai";
 
-function buildAiPrompt(url: string): string {
-  return `Visit and carefully read the page at this URL: **${url}**
+function buildAiPrompt(url: string, provider: UrlProvider): string {
+  const prompt = `Visit and carefully read the page at this URL: **${url}**
 
 Understand the product — what it does, its key features, its tone, and its target audience.
 
@@ -68,6 +68,14 @@ Then convert that script into a complete, self-contained Remotion component (.js
 - All visual elements must be pure CSS/SVG — no \`<img>\` tags, no external URLs
 
 Return ONLY the complete .jsx code — no explanation, no markdown fences. The file must be paste-ready to drop straight into a Remotion player.`;
+
+  if (provider === "openai") {
+    return `${prompt}
+
+Respond in canvas.`;
+  }
+
+  return prompt;
 }
 
 async function resolveUrl(raw: string): Promise<string> {
@@ -91,7 +99,7 @@ function ImportModal({ onClose }: { onClose: () => void }) {
     setOpeningProvider(provider);
     const finalUrl = await resolveUrl(url);
     setOpeningProvider(null);
-    const prompt = buildAiPrompt(finalUrl);
+    const prompt = buildAiPrompt(finalUrl, provider);
 
     if (provider === "claude") {
       window.open(`https://claude.ai/new?q=${encodeURIComponent(prompt)}`, "_blank");
