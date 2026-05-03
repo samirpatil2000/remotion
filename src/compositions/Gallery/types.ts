@@ -14,7 +14,7 @@ export interface Control {
 
 export interface CompositionDef {
   id: string;
-  category: string;
+  category?: string;
   title: string;
   description: string;
   color: string;
