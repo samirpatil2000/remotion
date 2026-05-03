@@ -1,8 +1,19 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import { Search, Upload, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Player } from "@remotion/player";
 import { REGISTRY, type CompositionDef } from "../compositions/Gallery/compositionRegistry";
+
+const CATEGORIES = [
+  "All",
+  "UI & App",
+  "Typography",
+  "Social & Media",
+  "3D & Abstract",
+  "Data & Charts",
+  "Utility",
+  "Miscellaneous",
+];
 
 // ── Import Modal ──────────────────────────────────────────────────────────────
 
@@ -18,8 +29,10 @@ export default function MyAnimation() {
   );
 }`;
 
-function buildClaudePrompt(url: string): string {
-  return `Visit and carefully read the page at this URL: **${url}**
+type UrlProvider = "claude" | "openai";
+
+function buildAiPrompt(url: string, provider: UrlProvider): string {
+  const prompt = `Visit and carefully read the page at this URL: **${url}**
 
 Understand the product — what it does, its key features, its tone, and its target audience.
 
@@ -55,6 +68,14 @@ Then convert that script into a complete, self-contained Remotion component (.js
 - All visual elements must be pure CSS/SVG — no \`<img>\` tags, no external URLs
 
 Return ONLY the complete .jsx code — no explanation, no markdown fences. The file must be paste-ready to drop straight into a Remotion player.`;
+
+  if (provider === "openai") {
+    return `${prompt}
+
+Respond in canvas.`;
+  }
+
+  return prompt;
 }
 
 async function resolveUrl(raw: string): Promise<string> {
@@ -70,16 +91,24 @@ async function resolveUrl(raw: string): Promise<string> {
 function ImportModal({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate();
   const [url, setUrl] = useState("");
-  const [resolving, setResolving] = useState(false);
+  const [openingProvider, setOpeningProvider] = useState<UrlProvider | null>(null);
   const [code, setCode] = useState("");
 
-  const handleReadUrl = async () => {
+  const handleReadUrl = async (provider: UrlProvider) => {
     if (!url.trim()) return;
-    setResolving(true);
+    setOpeningProvider(provider);
     const finalUrl = await resolveUrl(url);
-    setResolving(false);
-    const prompt = buildClaudePrompt(finalUrl);
-    window.open(`https://claude.ai/new?q=${encodeURIComponent(prompt)}`, "_blank");
+    setOpeningProvider(null);
+    const prompt = buildAiPrompt(finalUrl, provider);
+
+    if (provider === "claude") {
+      window.open(`https://claude.ai/new?q=${encodeURIComponent(prompt)}`, "_blank");
+      return;
+    }
+
+    // Best-effort deep link into ChatGPT with a prefilled prompt.
+    // If the URL param isn't supported, the user can still paste the prompt manually.
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(prompt)}`, "_blank");
   };
 
   const animate = () => {
@@ -158,7 +187,7 @@ function ImportModal({ onClose }: { onClose: () => void }) {
                 type="url"
                 value={url}
                 onChange={e => setUrl(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleReadUrl()}
+                onKeyDown={e => e.key === "Enter" && !openingProvider && handleReadUrl("claude")}
                 placeholder="https://yourproduct.com"
                 style={{
                   flex: 1, border: "none", outline: "none",
@@ -171,23 +200,23 @@ function ImportModal({ onClose }: { onClose: () => void }) {
               />
             </div>
             <button
-              onClick={handleReadUrl}
-              disabled={resolving || !url.trim()}
+              onClick={() => handleReadUrl("claude")}
+              disabled={!!openingProvider || !url.trim()}
               style={{
                 all: "unset",
-                cursor: url.trim() && !resolving ? "pointer" : "default",
+                cursor: url.trim() && !openingProvider ? "pointer" : "default",
                 padding: "0 16px",
                 borderRadius: 10,
                 fontSize: 12, fontWeight: 600,
-                background: url.trim() && !resolving ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)",
-                color: url.trim() && !resolving ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)",
+                background: url.trim() && !openingProvider ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)",
+                color: url.trim() && !openingProvider ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)",
                 transition: "background 0.15s, color 0.15s",
                 whiteSpace: "nowrap" as const,
                 height: 42,
                 display: "flex", alignItems: "center", gap: 6,
               }}
             >
-              {resolving ? (
+              {openingProvider === "claude" ? (
                 <>
                   <span style={{
                     width: 10, height: 10, borderRadius: "50%",
@@ -196,17 +225,50 @@ function ImportModal({ onClose }: { onClose: () => void }) {
                     display: "inline-block",
                     animation: "spin 0.7s linear infinite",
                   }} />
-                  Resolving…
+                  Opening...
                 </>
               ) : (
-                <>Read URL →</>
+                <>Claude →</>
+              )}
+            </button>
+
+            <button
+              onClick={() => handleReadUrl("openai")}
+              disabled={!!openingProvider || !url.trim()}
+              style={{
+                all: "unset",
+                cursor: url.trim() && !openingProvider ? "pointer" : "default",
+                padding: "0 16px",
+                borderRadius: 10,
+                fontSize: 12, fontWeight: 600,
+                background: url.trim() && !openingProvider ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)",
+                color: url.trim() && !openingProvider ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.2)",
+                transition: "background 0.15s, color 0.15s",
+                whiteSpace: "nowrap" as const,
+                height: 42,
+                display: "flex", alignItems: "center", gap: 6,
+              }}
+            >
+              {openingProvider === "openai" ? (
+                <>
+                  <span style={{
+                    width: 10, height: 10, borderRadius: "50%",
+                    border: "1.5px solid rgba(255,255,255,0.3)",
+                    borderTopColor: "rgba(255,255,255,0.8)",
+                    display: "inline-block",
+                    animation: "spin 0.7s linear infinite",
+                  }} />
+                  Opening...
+                </>
+              ) : (
+                <>OpenAI →</>
               )}
             </button>
           </div>
 
           {/* Helper text */}
           <div style={{ marginTop: 9, fontSize: 11.5, color: "rgba(255,255,255,0.22)", lineHeight: 1.5 }}>
-            Opens Claude with a prompt to generate a Remotion video script from your product page. Paste the returned code below.
+            Opens Claude or OpenAI with a prompt to generate a Remotion video script from your product page. Paste the returned code below.
           </div>
         </div>
 
@@ -299,7 +361,7 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
         if (entry.isIntersecting) {
           def.loadComponent().then(c => {
             if (isMounted) {
-              setComp(prev => prev || c);
+              setComp(c);
             }
           });
         }
@@ -348,12 +410,6 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
     </div>
   );
 };
-
-// Coming-soon placeholders
-const COMING_SOON = [
-  { id: "CinematicTitles", title: "Cinematic Titles",   description: "Dynamic text animations with cinematic lighting effects.", color: "#E50914", icon: "🎬" },
-  { id: "DataViz",         title: "Data Visualization", description: "Interactive charts and graphs for video dashboards.",       color: "#007AFF", icon: "📊" },
-];
 
 function TemplateCard({ def, navigate }: { def: CompositionDef; navigate: (path: string) => void }) {
   return (
@@ -418,7 +474,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const categories = ["All", "UI & App", "Typography", "Social & Media", "3D & Abstract", "Data & Charts", "Utility", "Miscellaneous"];
+  const categories = CATEGORIES;
 
   const filteredTemplates = useMemo(() => {
     return REGISTRY.filter(def => {
@@ -426,7 +482,7 @@ export default function Home() {
                             def.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                             def.description.toLowerCase().includes(searchQuery.toLowerCase());
       // Handle missing categories gracefully
-      const defCategory = (def as any).category || "Miscellaneous";
+      const defCategory = def.category ?? "Miscellaneous";
       const matchesCategory = selectedCategory === "All" || defCategory === selectedCategory;
       return matchesSearch && matchesCategory;
     });
@@ -436,11 +492,11 @@ export default function Home() {
     if (searchQuery || selectedCategory !== "All") return null;
     const groups: Record<string, typeof REGISTRY> = {};
     for (const cat of categories.slice(1)) {
-      const items = REGISTRY.filter(d => ((d as any).category || "Miscellaneous") === cat);
+      const items = REGISTRY.filter(d => (d.category ?? "Miscellaneous") === cat);
       if (items.length > 0) groups[cat] = items;
     }
     return groups;
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, categories]);
 
   return (
     <div style={{
@@ -466,9 +522,44 @@ export default function Home() {
           }}>▶</div>
           <span style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.01em" }}>Remotion</span>
         </div>
-        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: "0.04em" }}>
-          {REGISTRY.length} templates
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <button
+            onClick={() => setModalOpen(true)}
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 12px",
+              borderRadius: 12,
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: "rgba(255,255,255,0.75)",
+              fontSize: 13,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              transition: "background 0.15s, border-color 0.15s, color 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.09)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.14)";
+              (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.9)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.08)";
+              (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.75)";
+            }}
+          >
+            <Upload size={16} />
+            Import
+          </button>
+
+          <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: "0.04em" }}>
+            {REGISTRY.length} templates
+          </span>
+        </div>
       </header>
 
       {/* Hero */}
@@ -702,8 +793,10 @@ export default function Home() {
                 width: 52, height: 52, borderRadius: "50%",
                 border: "1.5px dashed rgba(255,255,255,0.2)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 26, color: "rgba(255,255,255,0.35)",
-              }}>+</div>
+                color: "rgba(255,255,255,0.35)",
+              }}>
+                <Upload size={22} />
+              </div>
               <span style={{ fontSize: 13, color: "rgba(255,255,255,0.28)", fontWeight: 500 }}>
                 Import component
               </span>
@@ -714,8 +807,10 @@ export default function Home() {
                   width: 28, height: 28, borderRadius: 8,
                   background: "rgba(255,255,255,0.06)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 14,
-                }}>+</div>
+                  color: "rgba(255,255,255,0.55)",
+                }}>
+                  <Upload size={14} />
+                </div>
                 <span style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.5)" }}>
                   Your Component
                 </span>
@@ -725,55 +820,6 @@ export default function Home() {
               </p>
             </div>
           </button>
-
-          {/* Coming soon */}
-          {COMING_SOON.map((c) => (
-            <div
-              key={c.id}
-              style={{
-                background: "#0a0a0a",
-                border: "1px solid rgba(255,255,255,0.04)",
-                borderRadius: 20,
-                overflow: "hidden",
-                opacity: 0.42,
-                cursor: "default",
-              }}
-            >
-              <div style={{
-                height: 240,
-                background: c.color + "0d",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 52, filter: "grayscale(1)",
-              }}>
-                {c.icon}
-              </div>
-              <div style={{ padding: "22px 24px 24px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{
-                      width: 28, height: 28, borderRadius: 8,
-                      backgroundColor: c.color,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 14, filter: "grayscale(1)",
-                    }}>
-                      {c.icon}
-                    </div>
-                    <span style={{ fontSize: 16, fontWeight: 600 }}>{c.title}</span>
-                  </div>
-                  <span style={{
-                    fontSize: 10, fontWeight: 600, letterSpacing: "0.08em",
-                    textTransform: "uppercase" as const,
-                    color: "rgba(255,255,255,0.3)",
-                  }}>
-                    Soon
-                  </span>
-                </div>
-                <p style={{ margin: "10px 0 0", fontSize: 13, color: "rgba(255,255,255,0.3)", lineHeight: 1.55 }}>
-                  {c.description}
-                </p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
