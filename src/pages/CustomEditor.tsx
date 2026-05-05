@@ -104,7 +104,7 @@ export default function CustomEditor() {
   }
 
   const fps = 30;
-  const durationInFrames = 150;
+  const durationInFrames = 300;
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: "#fff", display: "flex", flexDirection: "column" }}>
