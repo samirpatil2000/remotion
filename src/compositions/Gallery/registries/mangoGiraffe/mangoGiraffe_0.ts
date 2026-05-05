@@ -980,7 +980,7 @@ export const MANGO_GIRAFFE_REGISTRY_0: CompositionDef[] = [
     ],
   },
   {
-    id: "MangoGiraffeAStoryAboutTheWorld",
+    id: "MangoGiraffeAStoryAboutTheWorld2",
     title: "a-story-about-the-world",
     description: "An engaging social media-inspired animation for A Story About The World.",
     color: "#387c04",
@@ -1531,7 +1531,7 @@ export const MANGO_GIRAFFE_REGISTRY_0: CompositionDef[] = [
     ],
   },
   {
-    id: "MangoGiraffeAnimateCharacters",
+    id: "MangoGiraffeAnimateCharacters2",
     title: "animate-characters",
     description: "A dynamic typography design featuring Animate Characters.",
     color: "#f280d8",
@@ -2354,7 +2354,6 @@ export const MANGO_GIRAFFE_REGISTRY_0: CompositionDef[] = [
         "navBible": "Bible",
         "navSermons": "Sermons",
         "navProgress": "Progress",
-        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAb8AAAGxCAYAAADyGbgCAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAP+lSURBVHhe7P3Zr2VbvueFfUY751zd7iLinDxNtlUXrikuFGWMMLYQCBuBDZgHhKAAlShboqmSKaugMNjiPPvN737yf2HJMhIITBW4qHtv3nsz82SePE2ciB27X+1sxxh++I219o4de0d34mTlvZk/ae291mzGHHPMMX+/8eu+P/X\n\n  headingFont: { type: ",
         "serifFont": "Lora",
         "backgroundColor": "#ffffff",
         "textColor": "#111827",
