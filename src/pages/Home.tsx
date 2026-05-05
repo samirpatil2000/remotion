@@ -361,7 +361,7 @@ const CompositionPreview = ({ def }: { def: CompositionDef }) => {
         if (entry.isIntersecting) {
           def.loadComponent().then(c => {
             if (isMounted) {
-              setComp(c);
+              setComp(() => c);
             }
           });
         }
